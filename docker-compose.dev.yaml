@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  dev-nginx:
+    container_name: dev-nginx
+    build:
+      context: ./.docker/dev/nginx
+      args:
+        ENV: 'development'
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./client/public:/usr/share/nginx/html
+    depends_on:
+      - dev-server
+
+  dev-server:
+    container_name: dev-server
+    build:
+      context: ./.docker/dev/server
+    volumes:
+      - ./server:/server
+      - ./server/node_modules:/server/node_modules
+    command: npm run start
+
+  dev-client:
+    container_name: dev-client
+    build:
+      context: ./.docker/dev/client
+    volumes:
+      - ./client:/client
+      - ./client/node_modules:/client/node_modules
+    command: npm run serve
+    depends_on:
+      - dev-server
+
+  dev-geoserver:
+    container_name: dev-geoserver
+    build:
+      context: ./.docker/dev/geoserver
+    ports:
+      - 8080:8080
+    volumes:
+      - ./geoserver:/geoserver
+      - ./geoserver/data_dir:/var/local/geoserver

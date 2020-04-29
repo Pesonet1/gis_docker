@@ -1,0 +1,16 @@
+<layer>
+  <name>kunnat_2019</name>
+  <id>LayerInfoImpl--355b0e5d:171c4aa899a:-7ff8</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--38765108:171c4a8e212:-7ffe</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--355b0e5d:171c4aa899a:-7ff9</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2020-04-29 06:42:51.928 UTC</dateCreated>
+</layer>
