@@ -1,0 +1,6 @@
+seeds:
+  Taustakartta:
+    caches: [TaustakarttaCache]
+    grids: [JHS180]
+    levels:
+      to: 10

@@ -11,6 +11,7 @@ Build and run Docker containers
 Port 80
 
 ```
+/map -> mapproxy:8083
 /api -> server:8082
 / -> client:8081
 ```
@@ -26,3 +27,7 @@ Inner port 8081
 ### Geoserver (Tomcat)
 
 Outside port 8080
+
+### MapProxy
+
+Inner Port 8083

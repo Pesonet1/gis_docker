@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
-WORKDIR /server
+WORKDIR /app
 
-EXPOSE 3001
+EXPOSE 8082
 
 RUN npm install
