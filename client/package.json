@@ -18,6 +18,7 @@
   "dependencies": {
     "@types/ol": "^6.3.1",
     "@types/proj4": "^2.5.0",
+    "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "ol": "^6.3.1",
     "proj4": "^2.6.1",

@@ -9,10 +9,10 @@ module.exports = {
       poll: true
     },
     proxy: {
-      // '^/api': {
-      //   target: '0.0.0.0:8082',
-      //   changeOrigin: true
-      // },
+      '^/api': {
+        target: 'localhost:8082',
+        changeOrigin: true
+      },
       '^/mapproxy': {
         target: 'localhost:8083',
         changeOrigin: true
