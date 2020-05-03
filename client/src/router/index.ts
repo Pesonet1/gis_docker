@@ -1,25 +1,15 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
-import Home from '../views/Home.vue';
+import Map from '../views/Map.vue';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  },
-  {
-    path: '/map',
     name: 'Map',
-    component: () => import(/* webpackChunkName: "map" */ '../views/Map.vue'),
+    component: Map,
   },
 ];
 
