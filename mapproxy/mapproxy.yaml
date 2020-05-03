@@ -1,25 +1,3 @@
-caches:
-  TaustakarttaCache:
-    grids: [JHS180]
-    bulk_meta_tiles: true
-    sources: [TaustakarttaSource]
-    cache:
-      type: sqlite
-      directory: /mapproxy/Taustakartta
- 
-layers:
-  - name: Taustakartta
-    sources: [TaustakarttaCache]
-    title: Taustakartta
-
-grids:
-  JHS180:
-    bbox: [-548576, 6291456, 1548576, 8388608]
-    bbox_srs: EPSG:3067
-    res: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25]
-    origin: sw
-    srs: EPSG:3067
-
 services:
   wmts:
     md:
@@ -28,6 +6,28 @@ services:
         country: Finland
         organization: gis_docker
       title: gis_docker
+
+layers:
+  - name: Taustakartta
+    sources: [TaustakarttaCache]
+    title: Taustakartta
+
+caches:
+  TaustakarttaCache:
+    grids: [JHS180]
+    bulk_meta_tiles: true
+    sources: [TaustakarttaSource]
+    cache:
+      type: sqlite
+      directory: /mapproxy/Taustakartta
+
+grids:
+  JHS180:
+    bbox: [-548576, 6291456, 1548576, 8388608]
+    bbox_srs: EPSG:3067
+    res: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25]
+    origin: sw
+    srs: EPSG:3067
 
 sources:
   TaustakarttaSource:

@@ -25,6 +25,8 @@
 import createMap from '../util/map';
 import { wmts, wfs } from '../util/layer';
 
+import { getRequest } from '../util/axios';
+
 import 'ol/ol.css';
 
 export default {
@@ -32,10 +34,13 @@ export default {
   data: () => ({
     map: null,
   }),
-  mounted() {
+  async mounted() {
     const backgroundLayer = wmts();
     const wfsLayer = wfs();
     // const wmsLayer = wms();
+
+    const res = await getRequest('testi').catch((err) => console.error(err));
+    console.log(res);
 
     this.map = createMap(this.$refs.map, [backgroundLayer, wfsLayer]);
   },

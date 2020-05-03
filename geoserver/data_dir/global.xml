@@ -1,5 +1,6 @@
 <global>
   <settings>
+    <id>SettingsInfoImpl-4f272c84:171da47f089:-8000</id>
     <contact>
       <id>contact</id>
     </contact>
@@ -58,7 +59,7 @@
     <queueType>UNBOUNDED</queueType>
     <imageIOCacheThreshold>10240</imageIOCacheThreshold>
   </coverageAccess>
-  <updateSequence>8</updateSequence>
+  <updateSequence>10</updateSequence>
   <featureTypeCacheSize>0</featureTypeCacheSize>
   <globalServices>true</globalServices>
   <useHeadersProxyURL>false</useHeadersProxyURL>

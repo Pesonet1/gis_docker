@@ -3,4 +3,5 @@ seeds:
     caches: [TaustakarttaCache]
     grids: [JHS180]
     levels:
+      from: 0
       to: 10

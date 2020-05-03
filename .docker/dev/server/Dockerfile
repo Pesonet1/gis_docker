@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
-WORKDIR /app
+WORKDIR /server
 
-EXPOSE 8082
+EXPOSE 8085
 
-RUN npm install
+RUN npm install --no-progress --ignore-optional

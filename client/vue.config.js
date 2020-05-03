@@ -10,7 +10,7 @@ module.exports = {
     },
     proxy: {
       '^/api': {
-        target: 'localhost:8082',
+        target: 'localhost:8085',
         changeOrigin: true
       },
       '^/mapproxy': {

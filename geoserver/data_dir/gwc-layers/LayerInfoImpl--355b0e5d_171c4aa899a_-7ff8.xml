@@ -6,6 +6,7 @@
   <mimeFormats>
     <string>image/png</string>
     <string>image/jpeg</string>
+    <string>image/png8</string>
   </mimeFormats>
   <gridSubsets>
     <gridSubset>
