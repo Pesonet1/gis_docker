@@ -40,7 +40,7 @@ export default {
     // const wmsLayer = wms();
 
     const res = await getRequest('testi').catch((err) => console.error(err));
-    console.log(res);
+    const resPg = await getRequest('testi-pg').catch((err) => console.error(err));
 
     this.map = createMap(this.$refs.map, [backgroundLayer, wfsLayer]);
   },

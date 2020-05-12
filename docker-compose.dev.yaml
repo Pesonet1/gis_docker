@@ -15,23 +15,42 @@ services:
       - dev-mapproxy
       - dev-geoserver
 
+  dev-database:
+    container_name: dev-database
+    build:
+      context: './.docker/dev/database'
+    restart: always
+    environment:
+      POSTGRES_DBNAME: test_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_EXTENSIONS: postgis
+      ALLOW_IP_RANGE: 0.0.0.0/0
+    volumes:
+      # - ./postgres_data:/var/lib/postgresql/data
+      - ./database/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
+    ports:
+      - 5435:5432
+
   dev-server:
     container_name: dev-server
     build:
-      context: ./.docker/dev/server
+      context: ./server
     ports:
-      - "8085:8085"
+      - 8085:8085
     volumes:
-      - ./server:/server
+      # - ./server:/server
       - ./server/node_modules:/server/node_modules
     command: npm run start
+    depends_on:
+      - dev-database
 
   # dev-client:
   #   container_name: dev-client
   #   build:
   #     context: ./client
   #   ports:
-  #     - "8081:8081"
+  #     - 8081:8081
   #   environment:
   #     - CHOKIDAR_USEPOLLING=true
   #   volumes:
