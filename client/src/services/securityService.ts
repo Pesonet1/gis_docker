@@ -13,7 +13,7 @@ export default class SecurityService {
       authority: 'http://localhost:8085/oidc/',
       client_id: 'test_implicit_app', // eslint-disable-line
       redirect_uri: 'http://localhost:8082/static/callback.html', // eslint-disable-line
-      response_type: 'id_token token', // eslint-disable-line
+      response_type: 'id_token', // eslint-disable-line
       scope: 'openid profile', // add custom scope?
       post_logout_redirect_uri: 'http://localhost:8082', // eslint-disable-line
       silent_redirect_uri: 'http://localhost:8082/static/silent-renew.html', // eslint-disable-line

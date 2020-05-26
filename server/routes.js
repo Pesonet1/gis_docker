@@ -3,6 +3,11 @@ const router = express.Router();
 
 const db = require('./dbConnection').dbConnection;
 
+router.get('/', (req, res) => {
+  console.log('API ROOT');
+  res.send('api root');
+});
+
 router.get('/testi', (req, res) => {
   res.send('Hello test api!');
 });
