@@ -30,7 +30,6 @@ import { getRequest } from '../util/axios';
 import 'ol/ol.css';
 
 export default {
-  name: 'Map',
   data: () => ({
     map: null,
   }),
@@ -41,6 +40,8 @@ export default {
 
     const res = await getRequest('testi').catch((err) => console.error(err));
     const resPg = await getRequest('testi-pg').catch((err) => console.error(err));
+
+    console.log(res, resPg);
 
     this.map = createMap(this.$refs.map, [backgroundLayer, wfsLayer]);
   },
