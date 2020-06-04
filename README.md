@@ -6,9 +6,14 @@ Build and run Docker containers (geoserver, database, mapproxy, nginx)
 
 ## Containers
 
+Nginx 80:80
+Geoserver 8080:8080
+Database 5435:5432
+Mapproxy :8083
+
 ### Nginx
 
-Port 80
+Following proxying is used for Geoserver & Mapproxy
 
 ```
 /geoserver -> geoserver:8080
@@ -17,24 +22,44 @@ Port 80
 
 ### Geoserver (Tomcat)
 
-- 8080:8080
+Geoserver has kunnat_2019 geopackage automatically configured.
+
+TODO More configuration needed
 
 ### MapProxy
 
-- <>:8083
+Mapproxy is used for serving base map for client app. It loads, seeds & proxies a background map from kartat.kapsi tiles.
+
+By default mapproxy seeding process is not run. It needs to be run manually with following command inside container.
+
+```
+$ su $USER_NAME -c "mapproxy-seed -f mapproxy.yaml -s seed.yaml --progress-file .mapproxy_seed_progress"
+```
 
 ### Database (PostgresSQL)
 
-- 5435:5432
-
+TODO
 
 ## Client (Vue CLI)
 
-Inner port 8082
+Client app can be started with following command
+
+```
+$ yarn run serve
+```
+
+App is opened on localhost for port 8082
+
 
 ## Server (Node + Express)
 
-Inner port 8085
+Server can be start by running following command
+
+```
+$ npm run start
+```
+
+Server listens to port 8085 on localhost. Server listens automatically to file changes by using nodemon.
 
 ### Sequelize
 
