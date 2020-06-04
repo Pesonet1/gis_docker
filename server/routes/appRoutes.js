@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('./dbConnection').dbConnection;
+const SequelizeModels = require('../models').sequelize.models;
 
 router.get('/', (req, res) => {
-  console.log('API ROOT');
   res.send('api root');
 });
 
-router.get('/testi', (req, res) => {
-  res.send('Hello test api!');
-});
-
-router.get('/testi-pg', (req, res) => {
-  db.any('SELECT * FROM test_table').then((data) => {
+router.get('/users', (req, res) => {
+  SequelizeModels.Users.findAll().then((data) => {
     return res.json(data);
   }).catch((error) => {
     return res.sendStatus(404);

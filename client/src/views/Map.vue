@@ -25,7 +25,7 @@
 import createMap from '../util/map';
 import { wmts, wfs } from '../util/layer';
 
-import { getRequest } from '../util/axios';
+import { getRequest } from '../util/axios'; // eslint-disable-line
 
 import 'ol/ol.css';
 
@@ -38,10 +38,9 @@ export default {
     const wfsLayer = wfs();
     // const wmsLayer = wms();
 
-    const res = await getRequest('testi').catch((err) => console.error(err));
-    const resPg = await getRequest('testi-pg').catch((err) => console.error(err));
+    const users = await getRequest('users').catch((err) => console.error(err));
 
-    console.log(res, resPg);
+    console.log(users);
 
     this.map = createMap(this.$refs.map, [backgroundLayer, wfsLayer]);
   },

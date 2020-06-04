@@ -8,8 +8,8 @@ const cors = require('cors');
 const app = express();
 const port = 8085;
 
-const Account = require('./account');
-const configuration = require('./configuration');
+const Account = require('./oidcAccount');
+const configuration = require('./oidcConfiguration');
 
 app.use(cors());
 
@@ -29,26 +29,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-const routes = require('./routes');
-const authRoutes = require('./authRoutes');
+const appRoutes = require('./routes/appRoutes');
+const oidcRoutes = require('./routes/oidcRoutes');
 
-app.get('/', (req, res) => {
-  console.log('ROOT');
-  res.send('ROOT');
-})
-
-app.use('/api', routes);
+app.use('/api', appRoutes);
 
 configuration.findAccount = Account.findAccount;
 
 const run = async () => {
-  const adapter = require('./sequelize');
-  await adapter.connect();
-
+  const oidcAdapter = require('./oidcAdapter');
+  await oidcAdapter.connect();
 
   const authPrefix = '/oidc';
 
-  const oidc = new Provider(`http://localhost:${port}/${authPrefix}`, { adapter, ...configuration });
+  const oidc = new Provider(`http://localhost:${port}/${authPrefix}`, { oidcAdapter, ...configuration });
 
   /**
    * REMOVE THIS ON PRODUCTION ENVIRONMENT. THIS ONLY DISABLES FORCE USE OF HTTPS ON LOCALHOST
@@ -65,7 +59,7 @@ const run = async () => {
     orig.call(this, message);
   };
 
-  authRoutes(app, oidc);
+  oidcRoutes(app, oidc);
 
   app.use(authPrefix, oidc.callback);
   app.listen(port, () => {

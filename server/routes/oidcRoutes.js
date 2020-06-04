@@ -6,7 +6,7 @@ const { inspect } = require('util');
 const isEmpty = require('lodash/isEmpty');
 const { urlencoded } = require('express');
 
-const Account = require('./account');
+const Account = require('../oidcAccount');
 
 const body = urlencoded({ extended: false });
 

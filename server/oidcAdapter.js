@@ -7,13 +7,8 @@
  * migrations @see https://github.com/Rogger794/node-oidc-provider/tree/examples/example/migrations/sequelize
 */
 
-const Sequelize = require('sequelize');
-
-const sequelize = new Sequelize('test_db', 'postgres', 'postgres', {
-  host: 'localhost', // 'dev-database',
-  port: 5435, // 5432,
-  dialect: 'postgres',
-});
+const Sequelize = require('./models').Sequelize;
+const sequelize = require('./models').sequelize;
 
 const grantable = new Set([
   'AccessToken',

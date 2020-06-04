@@ -46,7 +46,7 @@ module.exports = {
       'nickname', 'picture', 'preferred_username', 'profile', 'updated_at', 'website', 'zoneinfo'],
   },
   features: {
-    devInteractions: { enabled: true }, // defaults to true
+    devInteractions: { enabled: false }, // defaults to true
 
     deviceFlow: { enabled: true }, // defaults to false
     introspection: { enabled: true }, // defaults to false
