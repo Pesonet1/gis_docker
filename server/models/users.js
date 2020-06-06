@@ -7,8 +7,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    value: {
+    username: {
       type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
+    },
+    email_verified: {
+      type: DataTypes.BOOLEAN
     },
     createdAt: {
       allowNull: false,
