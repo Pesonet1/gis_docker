@@ -1,21 +1,6 @@
-const { interactionPolicy: { Prompt, base: policy } } = require('oidc-provider');
-
-// copies the default policy, already has login and consent prompt policies
-const interactions = policy();
-
-// create a requestable prompt with no implicit checks
-const selectAccount = new Prompt({
-  name: 'select_account',
-  requestable: true,
-});
-
-// add to index 0, order goes select_account > login > consent
-interactions.add(selectAccount, 0);
-
 module.exports = {
   clients: [{
     client_id: 'test_implicit_app',
-    application_type: 'web',
     token_endpoint_auth_method: 'none',
     response_types: ['id_token'],
     grant_types: ['implicit'],
@@ -28,24 +13,22 @@ module.exports = {
     ],
   }],
   interactions: {
-    policy: interactions,
-    url(ctx, interaction) { // eslint-disable-line no-unused-vars
+    url(ctx) {
       return `/interaction/${ctx.oidc.uid}`;
     },
   },
   cookies: {
     long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
     short: { signed: true },
-    keys: ['some secret key', 'and also the old rotated away some time ago', 'and one more'],
+    keys: ['S0_S3CR3T_K3Y'],
   },
   claims: {
+    openid: ['sub'],
     email: ['email', 'email_verified'],
-    profile: ['username', 'updated_at'],
   },
   features: {
     devInteractions: { enabled: false }, // defaults to true
-
-    deviceFlow: { enabled: true }, // defaults to false
+    // deviceFlow: { enabled: true }, // defaults to false
     introspection: { enabled: true }, // defaults to false
     revocation: { enabled: true }, // defaults to false
   },
