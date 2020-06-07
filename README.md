@@ -36,6 +36,8 @@ By default mapproxy seeding process is not run. It needs to be run manually with
 $ su $USER_NAME -c "mapproxy-seed -f mapproxy.yaml -s seed.yaml --progress-file .mapproxy_seed_progress"
 ```
 
+This will take several hours to complete. After this background should be available on client app.
+
 ### Database (PostgresSQL)
 
 TODO
@@ -60,6 +62,10 @@ $ npm run start
 ```
 
 Server listens to port 8085 on localhost. Server listens automatically to file changes by using nodemon.
+
+### OIDC (provider)
+
+TODO
 
 ### Sequelize
 

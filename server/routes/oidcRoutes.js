@@ -52,9 +52,8 @@ module.exports = (app, provider) => {
           email: req.body.email,
           password: req.body.password
         }
-      }).then(async (user) => {
-
-        if (!user) {
+      }).then(async (account) => {
+        if (!account) {
           res.render('login', {
             client,
             uid,
@@ -71,7 +70,7 @@ module.exports = (app, provider) => {
 
         const result = {
           login: {
-            account: user.id.toString(),
+            account: account.id.toString(),
           },
         };
 

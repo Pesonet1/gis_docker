@@ -76,18 +76,6 @@
         display: inline-block;
         opacity: 0.6;
       }
-      .login-help {
-        width: 100%;
-        text-align: center;
-        font-size: 12px;
-      }
-      .login-client-image img {
-        margin-bottom: 20px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 20%;
-      }
       .login-card input[type=checkbox] {
         margin-bottom: 10px;
       }
@@ -119,15 +107,6 @@
 
         <button type="submit" class="login login-submit">Sign-in</button>
       </form>
-      <div class="login-help">
-        <a href="/interaction/<%= uid %>/abort">[ Cancel ]</a>
-        <% if (client.tosUri) { %>
-          <a href="<%= client.tosUri %>">[ Terms of Service ]</a>
-        <% } %>
-        <% if (client.policyUri) { %>
-          <a href="<%= client.policyUri %>">[ Privacy Policy ]</a>
-        <% } %>
-      </div>
     </div>
   </body>
 </html>
