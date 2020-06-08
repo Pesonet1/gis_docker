@@ -1,4 +1,5 @@
 const { urlencoded } = require('express');
+const { cryptCompare } = require('../utils/bcrypt');
 
 const SequelizeModels = require('../models').sequelize.models;
 
@@ -49,11 +50,27 @@ module.exports = (app, provider) => {
 
       SequelizeModels.Users.findOne({
         where: {
-          email: req.body.email,
-          password: req.body.password
+          email: req.body.email
         }
       }).then(async (account) => {
         if (!account) {
+          res.render('login', {
+            client,
+            uid,
+            details: prompt.details,
+            params: {
+              ...params,
+              login_hint: req.body.email,
+            },
+            title: 'Sign-in',
+            flash: 'Invalid email or password.',
+          });
+          return;
+        }
+        
+        const openHash = cryptCompare(req.body.password, account.password);
+
+        if (!openHash) {
           res.render('login', {
             client,
             uid,
