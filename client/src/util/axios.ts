@@ -19,12 +19,9 @@ export const createRepository = async () => {
   repository = axios.create({
     headers: {
       Pragma: 'no-cache',
-      Accept: 'application/json',
-      'Cache-Control': 'no-cache',
-      'Content-Type': 'application/json',
-      Cache: 'no-cache',
     },
-    baseURL: 'http://localhost:8085/api/',
+    baseURL: 'http://localhost:8085/api',
+    withCredentials: true,
   });
 
   await setAuthorizationHeader();

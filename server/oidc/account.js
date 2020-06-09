@@ -1,4 +1,4 @@
-const SequelizeModels = require('./models').sequelize.models;
+const SequelizeModels = require('../models').sequelize.models;
 
 class Account {
   static async findAccount(ctx, id) {

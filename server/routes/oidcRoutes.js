@@ -1,11 +1,8 @@
-const { urlencoded } = require('express');
 const { cryptCompare } = require('../utils/bcrypt');
 
 const SequelizeModels = require('../models').sequelize.models;
 
-const body = urlencoded({ extended: false });
-
-module.exports = (app, provider) => {
+module.exports = (authPrefix, app, provider) => {
   const { constructor: { errors: { SessionNotFound } } } = provider;
 
   function setNoCache(req, res, next) {
@@ -42,7 +39,7 @@ module.exports = (app, provider) => {
     }
   });
 
-  app.post('/interaction/:uid/login', setNoCache, body, async (req, res, next) => {
+  app.post('/interaction/:uid/login', setNoCache, async (req, res, next) => {
     try {
       const { uid, prompt, params } = await provider.interactionDetails(req, res);
 
@@ -53,24 +50,12 @@ module.exports = (app, provider) => {
           email: req.body.email
         }
       }).then(async (account) => {
-        if (!account) {
-          res.render('login', {
-            client,
-            uid,
-            details: prompt.details,
-            params: {
-              ...params,
-              login_hint: req.body.email,
-            },
-            title: 'Sign-in',
-            flash: 'Invalid email or password.',
-          });
-          return;
+        let validPassword = false;
+        if (account) {
+          validPassword = cryptCompare(req.body.password, account.password);
         }
-        
-        const openHash = cryptCompare(req.body.password, account.password);
 
-        if (!openHash) {
+        if (!account || !validPassword) {
           res.render('login', {
             client,
             uid,
@@ -87,7 +72,7 @@ module.exports = (app, provider) => {
 
         const result = {
           login: {
-            account: account.id.toString(),
+            account: account.id
           },
         };
 
@@ -98,7 +83,7 @@ module.exports = (app, provider) => {
     }
   });
 
-  app.post('/interaction/:uid/confirm', setNoCache, body, async (req, res, next) => {
+  app.post('/interaction/:uid/confirm', setNoCache, async (req, res, next) => {
     try {
       const result = {
         consent: {
@@ -119,6 +104,7 @@ module.exports = (app, provider) => {
         error: 'access_denied',
         error_description: 'End-User aborted interaction',
       };
+  
       await provider.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
 
       // TODO Redirect to login
@@ -133,4 +119,6 @@ module.exports = (app, provider) => {
     }
     next(err);
   });
+
+  app.use(authPrefix, provider.callback);
 };

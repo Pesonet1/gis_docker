@@ -14,7 +14,7 @@ export default class SecurityService {
       client_id: 'test_implicit_app', // eslint-disable-line
       redirect_uri: 'http://localhost:8082/static/callback.html', // eslint-disable-line
       response_type: 'id_token', // eslint-disable-line
-      scope: 'openid profile', // add custom scope?
+      scope: 'openid profile',
       post_logout_redirect_uri: 'http://localhost:8082', // eslint-disable-line
       silent_redirect_uri: 'http://localhost:8082/static/silent-renew.html', // eslint-disable-line
       accessTokenExpiringNotificationTime: 10,
@@ -23,7 +23,7 @@ export default class SecurityService {
       loadUserInfo: true,
     });
 
-    // this.userManager.events.addUserLoaded(() => {});
+    this.userManager.events.addUserLoaded(() => {}); // eslint-disable-line
 
     this.userManager.events.addAccessTokenExpiring(async () => {
       await this.renewToken();
@@ -34,7 +34,7 @@ export default class SecurityService {
         .catch((err) => console.error('Error while signing out after token expired', err));
     });
 
-    // this.userManager.events.addSilentRenewError(() => {});
+    this.userManager.events.addSilentRenewError(() => {}); // eslint-disable-line
 
     this.userManager.events.addUserSignedOut(() => {
       this.userManager.signoutRedirect()
@@ -158,7 +158,6 @@ export default class SecurityService {
   getAccessToken(): Promise<string | null> {
     return new Promise((resolve, reject) => {
       this.userManager.getUser().then((user) => {
-        console.log(user);
         if (user == null) {
           this.signIn();
           return resolve(null);

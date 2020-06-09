@@ -1,3 +1,5 @@
+const Account = require('./account');
+
 module.exports = {
   clients: [{
     client_id: 'test_implicit_app',
@@ -17,6 +19,7 @@ module.exports = {
       return `/interaction/${ctx.oidc.uid}`;
     },
   },
+  findAccount: Account.findAccount,
   cookies: {
     long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
     short: { signed: true },
@@ -24,13 +27,15 @@ module.exports = {
   },
   claims: {
     openid: ['sub'],
-    email: ['email', 'email_verified'],
+    profile: [ 'email', 'email_verified' ]
   },
   features: {
     devInteractions: { enabled: false }, // defaults to true
-    // deviceFlow: { enabled: true }, // defaults to false
     introspection: { enabled: true }, // defaults to false
     revocation: { enabled: true }, // defaults to false
+  },
+  formats: {
+    AccessToken: 'jwt',
   },
   jwks: {
     keys: [

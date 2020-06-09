@@ -7,8 +7,8 @@
  * migrations @see https://github.com/Rogger794/node-oidc-provider/tree/examples/example/migrations/sequelize
 */
 
-const Sequelize = require('./models').Sequelize;
-const sequelize = require('./models').sequelize;
+const Sequelize = require('../models').Sequelize;
+const sequelize = require('../models').sequelize;
 
 const grantable = new Set([
   'AccessToken',
