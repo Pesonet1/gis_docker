@@ -1,4 +1,3 @@
-
 import axios, { AxiosInstance } from 'axios';
 
 import { secService } from '../main'; // eslint-disable-line
@@ -35,7 +34,6 @@ export const getRepository = async () => {
   await setAuthorizationHeader();
   return repository;
 };
-
 
 export const getRequest = (path: string) => {
   if (!repository) createRepository();

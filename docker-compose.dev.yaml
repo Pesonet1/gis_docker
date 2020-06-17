@@ -38,8 +38,8 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./geoserver:/geoserver
       - ./geoserver/data_dir:/var/local/geoserver
+      - ./geoserver/exts_dir:/var/local/geoserver-exts/
 
   dev-mapproxy:
     container_name: dev-mapproxy

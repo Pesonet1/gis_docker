@@ -4,6 +4,7 @@
       ref="map"
       class="ol-map"
     />
+    <div class="mouse-position"></div>
   </div>
 </template>
 
@@ -19,11 +20,21 @@
   height: 100%;
   width: 100%;
 }
+
+.custom-mouse-position {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: red;
+  z-index: 1000;
+  font-weight: bold;
+}
 </style>
 
 <script>
 import createMap from '../util/map';
-import { wmts, wfs } from '../util/layer';
+import { wmts } from '../util/layer'; // vectorTile
+import { mousePositionControl } from '../util/control';
 
 import { getRequest } from '../util/axios'; // eslint-disable-line
 
@@ -35,14 +46,18 @@ export default {
   }),
   async mounted() {
     const backgroundLayer = wmts();
-    const wfsLayer = wfs();
+    // const wfsLayer = wfs();
     // const wmsLayer = wms();
 
     const users = await getRequest('users').catch((err) => console.error(err));
-
     console.log(users);
 
-    this.map = createMap(this.$refs.map, [backgroundLayer, wfsLayer]);
+    // vectorTile()
+    this.map = createMap(this.$refs.map, [backgroundLayer]);
+
+    this.map.addControl(
+      mousePositionControl(document.getElementById('mouse-position'), 0),
+    );
   },
 };
 </script>

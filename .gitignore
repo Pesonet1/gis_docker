@@ -1,1 +1,7 @@
 .vscode
+
+*.pbf
+*.mbtiles
+*.sqlite
+*.shp
+*.geojson

@@ -22,6 +22,7 @@ if (!secService) {
   await createRepository();
 
   const user: User | null = await secService.getUser();
+
   if (user) {
     store.commit('SET_LOGGED_IN', true);
 
