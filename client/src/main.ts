@@ -31,6 +31,9 @@ if (!secService) {
     }
   }
 
+  const userLoggedIn = await secService.getSignedIn();
+  if (!userLoggedIn) return;
+
   new Vue({
     router,
     store,

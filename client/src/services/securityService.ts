@@ -1,5 +1,7 @@
 import Oidc, { UserManager, User } from 'oidc-client';
 
+import store from '../store';
+
 export default class SecurityService {
   userManager: UserManager;
 
@@ -34,7 +36,9 @@ export default class SecurityService {
         .catch((err) => console.error('Error while signing out after token expired', err));
     });
 
-    this.userManager.events.addSilentRenewError(() => {}); // eslint-disable-line
+    this.userManager.events.addSilentRenewError(() => {
+      store.commit('SET_LOGGED_IN', false);
+    }); // eslint-disable-line
 
     this.userManager.events.addUserSignedOut(() => {
       this.userManager.signoutRedirect()

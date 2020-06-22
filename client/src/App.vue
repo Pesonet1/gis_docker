@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="loggedIn">
     <Header class="header" />
     <router-view class="router"></router-view>
   </div>
@@ -20,11 +20,16 @@ body {
 </style>
 
 <script>
+import { mapState } from 'vuex';
+
 import Header from './components/Header.vue';
 
 export default {
   components: {
     Header,
+  },
+  computed: {
+    ...mapState(['loggedIn']),
   },
 };
 </script>
