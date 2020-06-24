@@ -1,8 +1,11 @@
 <template>
-  <div v-if="loggedIn">
+  <v-app v-if="loggedIn">
     <Header class="header" />
-    <router-view class="router"></router-view>
-  </div>
+
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+  </v-app>
 </template>
 
 <style lang="scss">
@@ -12,10 +15,6 @@ body {
 
 .header {
   height: 90px;
-}
-
-.router {
-  height: calc(100% - 90px) !important;
 }
 </style>
 

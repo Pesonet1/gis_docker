@@ -35,14 +35,14 @@
 <script>
 import LayerSwitcher from '../components/LayerSwitcher.vue';
 
-import createMap from '../util/map';
+import createMap from '../util/map/map';
 import {
   backgroundLayer,
   kunnatWMS,
   kunnatWFS,
   kunnatVectorTile,
-} from '../util/layer'; // vectorTile
-import { mousePositionControl } from '../util/control';
+} from '../util/map/layer';
+import { mousePositionControl } from '../util/map/control';
 
 import { getRequest } from '../util/axios'; // eslint-disable-line
 

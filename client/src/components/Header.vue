@@ -1,12 +1,17 @@
 <template>
   <header class="header">
     <h1 class="header_title">
-      Testikartta
+      {{ $vuetify.lang.t('$vuetify.header.title') }}
     </h1>
     <div class="header_logout-button">
-      <button @click="logoutUser">
-        Kirjaudu ulos
-      </button>
+      <v-btn
+        small
+        dark
+        color="primary"
+        @click="logoutUser"
+      >
+        {{ $vuetify.lang.t('$vuetify.header.logout') }}
+      </v-btn>
     </div>
   </header>
 </template>
@@ -24,15 +29,6 @@
     font-weight: bold;
     font-size: 16px;
     color: white;
-  }
-
-  &_logout-button {
-    // border-radius: 4px;
-    // background-color: white;
-    // border: 0;
-    // font-size: 14px;
-    // color: white;
-    // text-decoration: none;
   }
 }
 </style>

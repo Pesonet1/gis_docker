@@ -5,6 +5,7 @@ import App from './App.vue';
 
 import router from './router';
 import store from './store';
+import vuetify from './plugins/vuetify';
 
 import SecurityService from './services/securityService';
 import { createRepository } from './util/axios'; // eslint-disable-line
@@ -37,6 +38,7 @@ if (!secService) {
   new Vue({
     router,
     store,
+    vuetify,
     render: (h) => h(App),
   }).$mount('#app');
 })();
