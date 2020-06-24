@@ -2,9 +2,9 @@
   <v-app v-if="loggedIn">
     <Header class="header" />
 
-    <v-content>
+    <v-main>
       <router-view></router-view>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

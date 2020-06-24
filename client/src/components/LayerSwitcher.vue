@@ -4,15 +4,10 @@
       v-for="layer in mapLayers"
       :key="layer.values_.name"
     >
-      <label :for="layer.values_.name">
-        {{ layer.values_.name }}
-      </label>
-      <input
-        :id="layer.values_.name"
-        :name="layer.values_.name"
-        type="checkbox"
-        :checked="layer.values_.visible"
-        @click="toggleLayer(layer.values_.name, !layer.values_.visible)"
+      <InputCheckbox
+        v-model="layer.values_.visible"
+        :label="layer.values_.name"
+        :change-action="toggleLayer.bind(this, layer.values_.name, !layer.values_.visible)"
       />
     </div>
   </div>
@@ -21,10 +16,11 @@
 <style lang="scss" scoped>
 .layerswitcher {
   position: absolute;
-  right: 5px;
-  top: 5px;
-  height: 250px;
-  width: 300px;
+  right: .5em;
+  top: .5em;
+  height: 200px;
+  width: 250px;
+  padding: 0 15px;
   border: 1px solid black;
   border-radius: 4px;
   background-color: white;
@@ -32,7 +28,12 @@
 </style>
 
 <script>
+import InputCheckbox from './common/InputCheckbox.vue';
+
 export default {
+  components: {
+    InputCheckbox,
+  },
   props: {
     layers: {
       type: Array,
@@ -52,6 +53,8 @@ export default {
       const layer = this.getLayerByName(name);
       if (!layer) return;
       layer.setVisible(visibility);
+      // for some reason layer visibility is not refreshing automatically...
+      layer.getSource().refresh();
     },
     getLayerByName(name) {
       return this.layers.find((layer) => layer.values_.name === name); // eslint-disable-line

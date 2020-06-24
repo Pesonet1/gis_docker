@@ -24,8 +24,8 @@
 
 .custom-mouse-position {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: .5rem;
+  right: .5rem;
   color: red;
   z-index: 1000;
   font-weight: bold;
@@ -73,7 +73,6 @@ export default {
     );
 
     this.mapLayers = this.map.getLayers().array_; // eslint-disable-line
-    console.log(this.mapLayers);
   },
 };
 </script>

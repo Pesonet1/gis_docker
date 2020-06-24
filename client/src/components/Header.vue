@@ -4,6 +4,12 @@
       {{ $vuetify.lang.t('$vuetify.header.title') }}
     </h1>
     <div class="header_logout-button">
+      <!-- <v-switch
+        v-model="$vuetify.theme.dark"
+        hide-details
+        inset
+        label="Theme Dark"
+      ></v-switch> -->
       <v-btn
         small
         dark
