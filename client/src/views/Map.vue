@@ -33,6 +33,8 @@
 </style>
 
 <script>
+import { mapState } from 'vuex';
+
 import LayerSwitcher from '../components/LayerSwitcher.vue';
 
 import createMap from '../util/map/map';
@@ -43,6 +45,7 @@ import {
   kunnatVectorTile,
 } from '../util/map/layer';
 import { mousePositionControl } from '../util/map/control';
+import addSelectInteraction from '../util/map/layerInteraction';
 
 import { getRequest } from '../util/axios'; // eslint-disable-line
 
@@ -56,6 +59,9 @@ export default {
     map: null,
     mapLayers: [],
   }),
+  computed: {
+    ...mapState(['selectedFeature']),
+  },
   async mounted() {
     const users = await getRequest('users').catch((err) => console.error(err));
     console.log(users);
@@ -73,6 +79,8 @@ export default {
     );
 
     this.mapLayers = this.map.getLayers().array_; // eslint-disable-line
+
+    addSelectInteraction(this.map);
   },
 };
 </script>

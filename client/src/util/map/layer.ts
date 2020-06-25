@@ -14,10 +14,15 @@ import * as Extent from 'ol/extent';
 import GeoJSON from 'ol/format/GeoJSON';
 import MVT from 'ol/format/MVT';
 
+import Feature from 'ol/Feature';
+
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 import projection from './projection';
 import getLabel from './layerLabel';
+import { defaultStyle, selectionStyle } from './layerStyle';
+
+import store from '../../store';
 
 const projectionExtent: [number, number, number, number] = projection.getExtent();
 const matrixIds: string[] = new Array(16).fill(0).map((value, index) => index.toString());
@@ -90,7 +95,15 @@ export const kunnatWFS = () => {
       ),
       strategy: bboxStrategy,
     }),
-    style: getLabel,
+    style: (feature) => { // eslint-disable-line
+      if (!store.state.selectedFeature) return getLabel(feature); // eslint-disable-line
+      if (!store.state.selectedFeature.hasOwnProperty('id_')) return getLabel(feature); // eslint-disable-line
+      if (feature.id_ === store.state.selectedFeature.id_) { // eslint-disable-line
+        return selectionStyle(feature);
+      }
+
+      return getLabel(feature);
+    },
   });
 
   layer.set('name', 'Kunnat WFS');
@@ -101,6 +114,8 @@ export const kunnatWFS = () => {
 
 export const kunnatVectorTile = () => {
   const layer = new VectorTileLayer({
+    declutter: true,
+    renderMode: 'vector',
     source: new VectorTileSource({
       tileGrid: new TileGrid({
         origin: Extent.getTopLeft(projectionExtent),
@@ -110,13 +125,24 @@ export const kunnatVectorTile = () => {
       }),
       minZoom: 0,
       maxZoom: 15,
-      format: new MVT(),
+      format: new MVT({
+        featureClass: Feature, // eslint-disable-line
+      }),
       url: 'http://localhost:8080/geoserver/geo/gwc/service/tms/1.0.0/'
         + 'geo:kunnat_2019'
         + '@JHS180'
         + '@pbf/{z}/{x}/{-y}.pbf',
       projection,
     }),
+    style: (feature) => { // eslint-disable-line
+      if (!store.state.selectedFeature) return defaultStyle(); // eslint-disable-line
+      if (!store.state.selectedFeature.hasOwnProperty('id_')) return defaultStyle(); // eslint-disable-line
+      if (feature.id_ === store.state.selectedFeature.id_) { // eslint-disable-line
+        return selectionStyle(feature);
+      }
+
+      return defaultStyle();
+    },
   });
 
   layer.set('name', 'Kunnat VectorTile');
