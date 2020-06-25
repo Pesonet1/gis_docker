@@ -25,22 +25,28 @@ export default class SecurityService {
       loadUserInfo: true,
     });
 
-    this.userManager.events.addUserLoaded(() => {}); // eslint-disable-line
+    this.userManager.events.addUserLoaded(() => {
+      console.log('USER LOADED');
+    });
 
     this.userManager.events.addAccessTokenExpiring(async () => {
+      console.log('ACCESS TOKEN EXPIRING');
       await this.renewToken();
     });
 
     this.userManager.events.addAccessTokenExpired(() => {
+      console.log('ACCESS TOKEN EXPIRED');
       this.userManager.signoutRedirect()
         .catch((err) => console.error('Error while signing out after token expired', err));
     });
 
     this.userManager.events.addSilentRenewError(() => {
+      console.log('SILENT RENEW ERROR');
       store.commit('SET_LOGGED_IN', false);
-    }); // eslint-disable-line
+    });
 
     this.userManager.events.addUserSignedOut(() => {
+      console.log('USER SIGNING OUT');
       this.userManager.signoutRedirect()
         .catch((err) => console.error('Error while signing out', err));
     });

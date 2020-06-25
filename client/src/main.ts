@@ -19,17 +19,19 @@ if (!secService) {
 }
 
 (async () => {
-  secService.initialize();
-  await createRepository();
+  try {
+    secService.initialize();
 
-  const user: User | null = await secService.getUser();
+    const user: User | null = await secService.getUser();
 
-  if (user) {
-    store.commit('SET_LOGGED_IN', true);
-
-    if (user.expired) {
-      await secService.renewToken();
+    if (user) {
+      store.commit('SET_LOGGED_IN', true);
     }
+
+    await createRepository();
+  } catch (err) {
+    store.commit('SET_LOGGED_IN', false);
+    throw new Error(err);
   }
 
   const userLoggedIn = await secService.getSignedIn();

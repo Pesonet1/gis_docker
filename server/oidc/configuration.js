@@ -21,7 +21,7 @@ module.exports = {
   },
   findAccount: Account.findAccount,
   cookies: {
-    long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
+    long: { signed: true, maxAge: (1 * 1 * 60 * 60) * 1000 }, // 1 hour in ms
     short: { signed: true },
     keys: ['S0_S3CR3T_K3Y'],
   },

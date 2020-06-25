@@ -8,7 +8,10 @@ const setAuthorizationHeader = async () => {
   await secService.getAccessToken().then((accessToken: string | null) => {
     if (accessToken) {
       repository.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      return;
     }
+
+    throw new Error('No accessToken was provided from oidc provider');
   }).catch((err: string) => {
     throw new Error(`Error while trying to get accessToken ${err.toString()}`);
   });
