@@ -96,10 +96,10 @@ export const kunnatWFS = () => {
       strategy: bboxStrategy,
     }),
     style: (feature) => { // eslint-disable-line
-      if (!store.state.selectedFeature) return getLabel(feature); // eslint-disable-line
-      if (!store.state.selectedFeature.hasOwnProperty('id_')) return getLabel(feature); // eslint-disable-line
-      if (feature.id_ === store.state.selectedFeature.id_) { // eslint-disable-line
-        return selectionStyle(feature);
+      const { selectedFeature }: { selectedFeature: Feature | null } = store.state;
+      if (!selectedFeature) return getLabel(feature);
+      if (feature.getId() === selectedFeature.getId()) { // eslint-disable-line
+        return selectionStyle();
       }
 
       return getLabel(feature);
@@ -126,7 +126,8 @@ export const kunnatVectorTile = () => {
       minZoom: 0,
       maxZoom: 15,
       format: new MVT({
-        featureClass: Feature, // eslint-disable-line
+        // @ts-ignore
+        featureClass: Feature,
       }),
       url: 'http://localhost:8080/geoserver/geo/gwc/service/tms/1.0.0/'
         + 'geo:kunnat_2019'
@@ -135,10 +136,10 @@ export const kunnatVectorTile = () => {
       projection,
     }),
     style: (feature) => { // eslint-disable-line
-      if (!store.state.selectedFeature) return defaultStyle(); // eslint-disable-line
-      if (!store.state.selectedFeature.hasOwnProperty('id_')) return defaultStyle(); // eslint-disable-line
-      if (feature.id_ === store.state.selectedFeature.id_) { // eslint-disable-line
-        return selectionStyle(feature);
+      const { selectedFeature }: { selectedFeature: Feature | null } = store.state;
+      if (!selectedFeature) return defaultStyle();
+      if (feature.getId() === selectedFeature.getId()) { // eslint-disable-line
+        return selectionStyle();
       }
 
       return defaultStyle();

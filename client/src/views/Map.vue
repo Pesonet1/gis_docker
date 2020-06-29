@@ -35,6 +35,8 @@
 <script>
 import { mapState } from 'vuex';
 
+import VectorLayer from 'ol/layer/Vector';
+
 import LayerSwitcher from '../components/LayerSwitcher.vue';
 
 import createMap from '../util/map/map';
@@ -45,7 +47,11 @@ import {
   kunnatVectorTile,
 } from '../util/map/layer';
 import { mousePositionControl } from '../util/map/control';
-import addSelectInteraction from '../util/map/layerInteraction';
+import {
+  addSelectInteraction,
+  // addDrawInteraction,
+  addModifyInteraction,
+} from '../util/map/layerInteraction';
 
 import { getRequest } from '../util/axios'; // eslint-disable-line
 
@@ -80,7 +86,11 @@ export default {
 
     this.mapLayers = this.map.getLayers().array_; // eslint-disable-line
 
+    const layer2 = this.mapLayers.find((layer) => layer instanceof VectorLayer);
+
     addSelectInteraction(this.map);
+    // addDrawInteraction(this.map, layer2);
+    addModifyInteraction(this.map, layer2);
   },
 };
 </script>
