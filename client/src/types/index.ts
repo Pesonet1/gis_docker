@@ -6,3 +6,5 @@ export interface InteractionLayers {
   layer: VectorTileLayer | VectorLayer | ImageLayer;
   changed: () => {};
 }
+
+export type WFSTransactionType = 'insert' | 'update' | 'delete';

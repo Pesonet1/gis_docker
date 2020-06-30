@@ -9,7 +9,9 @@
 </template>
 
 <style scoped>
-
+.v-input {
+  margin-top: 0;
+}
 </style>
 
 <script>

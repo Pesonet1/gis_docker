@@ -84,7 +84,7 @@ export const kunnatWFS = () => {
   const layer = new VectorLayer({
     extent: projectionExtent,
     zIndex: 2,
-    minZoom: 0,
+    minZoom: 6,
     maxZoom: 15,
     source: new SourceVector({
       format: new GeoJSON(),
@@ -95,15 +95,7 @@ export const kunnatWFS = () => {
       ),
       strategy: bboxStrategy,
     }),
-    style: (feature) => { // eslint-disable-line
-      const { selectedFeature }: { selectedFeature: Feature | null } = store.state;
-      if (!selectedFeature) return getLabel(feature);
-      if (feature.getId() === selectedFeature.getId()) { // eslint-disable-line
-        return selectionStyle();
-      }
-
-      return getLabel(feature);
-    },
+    style: (feature) => getLabel(feature),
   });
 
   layer.set('name', 'Kunnat WFS');
@@ -123,7 +115,7 @@ export const kunnatVectorTile = () => {
         resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
         tileSize: [256, 256],
       }),
-      minZoom: 0,
+      minZoom: 6,
       maxZoom: 15,
       format: new MVT({
         // @ts-ignore
@@ -135,15 +127,7 @@ export const kunnatVectorTile = () => {
         + '@pbf/{z}/{x}/{-y}.pbf',
       projection,
     }),
-    style: (feature) => { // eslint-disable-line
-      const { selectedFeature }: { selectedFeature: Feature | null } = store.state;
-      if (!selectedFeature) return defaultStyle();
-      if (feature.getId() === selectedFeature.getId()) { // eslint-disable-line
-        return selectionStyle();
-      }
-
-      return defaultStyle();
-    },
+    style: defaultStyle(),
   });
 
   layer.set('name', 'Kunnat VectorTile');

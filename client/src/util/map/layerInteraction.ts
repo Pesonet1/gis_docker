@@ -1,41 +1,63 @@
 import axios from 'axios';
 
 import Map from 'ol/Map';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
-import Feature, { FeatureLike } from 'ol/Feature';
-import { Draw, Modify, Snap } from 'ol/interaction';
+import Feature from 'ol/Feature';
+import {
+  Draw,
+  Modify,
+  Snap,
+  Select,
+} from 'ol/interaction';
+import { DrawEvent } from 'ol/interaction/Draw';
+import { ModifyEvent } from 'ol/interaction/Modify';
+import { SelectEvent } from 'ol/interaction/Select';
 import GeometryType from 'ol/geom/GeometryType';
 import VectorLayer from 'ol/layer/Vector';
+import VectorTileLayer from 'ol/layer/VectorTile';
 
 import WFS from 'ol/format/WFS';
 import GML from 'ol/format/GML';
 
+import { defaultStyle, selectionStyle } from './layerStyle';
+
 import store from '../../store';
 
-import { InteractionLayers } from '../../types';
+import { WFSTransactionType } from '../../types';
 
-export const addSelectInteraction = (mapInstance: Map) => {
-  mapInstance.on('click', (event: MapBrowserEvent) => {
-    // @ts-ignore
-    mapInstance.getLayers().array_.forEach((layer: InteractionLayers) => {
-      if ('changed' in layer) {
-        layer.changed();
-      }
+export const addSelectInteraction = (mapInstance: Map, layer: VectorLayer | VectorTileLayer) => {
+  const selectInteraction = new Select();
+  mapInstance.addInteraction(selectInteraction);
+
+  selectInteraction.on('select', (event: SelectEvent) => {
+    event.selected.forEach((each) => {
+      each.setStyle(selectionStyle());
     });
 
-    store.commit('SET_SELECTED_FEATURE', null);
-
-    mapInstance.forEachFeatureAtPixel(event.pixel, (feature: FeatureLike, layer) => {
-      store.commit('SET_SELECTED_FEATURE', feature);
-
-      if ('changed' in layer) {
-        layer.changed();
-      }
+    event.deselected.forEach((each) => {
+      each.setStyle(defaultStyle());
     });
+
+    // Different logic for handling selection for vectorTileLayer
+    // TODO Refactor this into own function
+    if (layer instanceof VectorTileLayer) {
+      if (event.selected.length > 0) {
+        store.commit('SET_SELECTED_FEATURE', event.selected[0]);
+
+        if ('changed' in layer) {
+          layer.changed();
+        }
+      }
+    }
   });
+
+  return selectInteraction;
 };
 
-const createTransaction = (transactionType: string, layer: VectorLayer, features: Feature[]) => {
+export const createTransaction = (
+  transactionType: WFSTransactionType,
+  layer: VectorLayer,
+  features: Feature[],
+) => {
   const formatWFS = new WFS();
   // @ts-ignore
   const formatGML = new GML({
@@ -53,6 +75,9 @@ const createTransaction = (transactionType: string, layer: VectorLayer, features
     case 'update':
       node = formatWFS.writeTransaction([], features, [], formatGML);
       break;
+    case 'delete':
+      node = formatWFS.writeTransaction([], [], features, formatGML);
+      break;
     default:
       break;
   }
@@ -66,37 +91,45 @@ const createTransaction = (transactionType: string, layer: VectorLayer, features
     headers: { 'content-type': 'text/xml' },
   }).then((data) => {
     const result = formatWFS.readTransactionResponse(data);
-    layer.getSource().clear();
     console.log(result);
+    layer.getSource().refresh();
   }).catch((error) => console.error(error));
 };
 
-export const addDrawInteraction = (mapInstance: Map, layer: any) => { // eslint-disable-line
-  const draw = new Draw({
+export const addDrawInteraction = (mapInstance: Map, layer: VectorLayer) => {
+  // @ts-ignore
+  const drawInteraction = new Draw({
     features: layer.getSource().getFeatures(),
     type: GeometryType.MULTI_POLYGON,
   });
-  mapInstance.addInteraction(draw);
+  mapInstance.addInteraction(drawInteraction);
 
-  draw.on('drawend', (evt: any) => {
-    const feature: Feature = evt.feature; // eslint-disable-line
+  drawInteraction.on('drawend', (event: DrawEvent) => {
+    const { feature }: { feature: Feature } = event;
+
+    // Set geometryName according to features in Geoserver
     feature.set('geom', feature.getGeometry());
 
     createTransaction('insert', layer, [feature]);
+
+    // Reset geometryName after sending WFS-T request
+    feature.setGeometryName('geometry');
   });
+
+  return drawInteraction;
 };
 
-export const addModifyInteraction = (mapInstance: Map, layer: any) => {
-  const modify = new Modify({ source: layer.getSource() });
-  mapInstance.addInteraction(modify);
+export const addModifyInteraction = (mapInstance: Map, layer: VectorLayer): Modify => {
+  const modifyInteraction = new Modify({ source: layer.getSource() });
+  mapInstance.addInteraction(modifyInteraction);
 
-  const snap = new Snap({ source: layer.getSource() });
-  mapInstance.addInteraction(snap);
+  const snapInteraction = new Snap({ source: layer.getSource() });
+  mapInstance.addInteraction(snapInteraction);
 
-  let modifiedFeatures: any[] = []; // eslint-disable-line
+  let modifiedFeatures: Feature[] = [];
   let geometryChangeListener: any; // eslint-disable-line
 
-  modify.on('modifystart', (event) => {
+  modifyInteraction.on('modifystart', (event: ModifyEvent) => {
     modifiedFeatures = [];
 
     event.features.forEach((feature: Feature) => {
@@ -108,17 +141,21 @@ export const addModifyInteraction = (mapInstance: Map, layer: any) => {
     });
   });
 
-  modify.on('modifyend', () => {
+  modifyInteraction.on('modifyend', () => {
     if (geometryChangeListener) {
       geometryChangeListener = null;
     }
 
-    const features: any = modifiedFeatures; // eslint-disable-line
+    const features: Feature[] = modifiedFeatures;
 
-    features.forEach((feat: Feature) => {
-      feat.setGeometryName('geom');
-    });
+    // Set geometryName according to features in Geoserver
+    features.forEach((feat: Feature) => feat.setGeometryName('geom'));
 
     createTransaction('update', layer, features);
+
+    // Reset geometryName after sending WFS-T request
+    features.forEach((feat: Feature) => feat.setGeometryName('geometry'));
   });
+
+  return modifyInteraction;
 };

@@ -5,7 +5,10 @@
       class="ol-map"
     />
     <div class="mouse-position"></div>
-    <LayerSwitcher :layers="mapLayers" />
+    <LayerSwitcher
+      :map="map"
+      :layers="mapLayers"
+    />
   </div>
 </template>
 
@@ -47,11 +50,6 @@ import {
   kunnatVectorTile,
 } from '../util/map/layer';
 import { mousePositionControl } from '../util/map/control';
-import {
-  addSelectInteraction,
-  // addDrawInteraction,
-  addModifyInteraction,
-} from '../util/map/layerInteraction';
 
 import { getRequest } from '../util/axios'; // eslint-disable-line
 
@@ -85,12 +83,6 @@ export default {
     );
 
     this.mapLayers = this.map.getLayers().array_; // eslint-disable-line
-
-    const layer2 = this.mapLayers.find((layer) => layer instanceof VectorLayer);
-
-    addSelectInteraction(this.map);
-    // addDrawInteraction(this.map, layer2);
-    addModifyInteraction(this.map, layer2);
   },
 };
 </script>
