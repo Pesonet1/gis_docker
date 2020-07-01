@@ -1,12 +1,10 @@
 import ImageLayer from 'ol/layer/Image';
 import SourceWMS from 'ol/source/ImageWMS';
-import projection from '../projection';
-
-const projectionExtent: [number, number, number, number] = projection.getExtent();
+import mapProjection from '../mapProjection';
 
 export default () => {
   const layer = new ImageLayer({
-    extent: projectionExtent,
+    extent: mapProjection.getExtent(),
     zIndex: 1,
     opacity: 0.65,
     minZoom: 0,
@@ -20,7 +18,7 @@ export default () => {
         RATIO: 1,
       },
       serverType: 'geoserver',
-      projection,
+      projection: mapProjection,
     }),
   });
 

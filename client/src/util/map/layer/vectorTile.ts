@@ -5,10 +5,8 @@ import * as Extent from 'ol/extent';
 import MVT from 'ol/format/MVT';
 import Feature from 'ol/Feature';
 
-import projection from '../projection';
+import mapProjection from '../mapProjection';
 import { defaultStyle } from '../layerStyle';
-
-const projectionExtent: [number, number, number, number] = projection.getExtent();
 
 export default () => {
   const layer = new VectorTileLayer({
@@ -16,8 +14,8 @@ export default () => {
     renderMode: 'vector',
     source: new VectorTileSource({
       tileGrid: new TileGrid({
-        origin: Extent.getTopLeft(projectionExtent),
-        extent: projection.getExtent(),
+        origin: Extent.getTopLeft(mapProjection.getExtent()),
+        extent: mapProjection.getExtent(),
         resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
         tileSize: [256, 256],
       }),
@@ -31,7 +29,7 @@ export default () => {
         + 'geo:kunnat_2019'
         + '@JHS180'
         + '@pbf/{z}/{x}/{-y}.pbf',
-      projection,
+      projection: mapProjection,
     }),
     style: defaultStyle(),
   });

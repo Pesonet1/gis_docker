@@ -3,9 +3,8 @@ import SourceWMTS from 'ol/source/WMTS';
 import TileGridWMTS from 'ol/tilegrid/WMTS';
 import * as Extent from 'ol/extent';
 
-import projection from '../projection';
+import mapProjection from '../mapProjection';
 
-const projectionExtent: [number, number, number, number] = projection.getExtent();
 const matrixIds: string[] = new Array(16).fill(0).map((value, index) => index.toString());
 
 export default () => {
@@ -19,12 +18,12 @@ export default () => {
       matrixSet: 'JHS180',
       style: 'default',
       tileGrid: new TileGridWMTS({
-        origin: Extent.getTopLeft(projectionExtent),
+        origin: Extent.getTopLeft(mapProjection.getExtent()),
         resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
         matrixIds,
-        extent: projectionExtent,
+        extent: mapProjection.getExtent(),
       }),
-      projection,
+      projection: mapProjection,
       transition: 0,
     }),
   });

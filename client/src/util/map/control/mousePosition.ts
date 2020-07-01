@@ -1,14 +1,14 @@
 import MousePosition from 'ol/control/MousePosition';
 import { createStringXY } from 'ol/coordinate';
 
-import projection from './projection';
+import mapProjection from '../mapProjection';
 
-export const mousePositionControl = ( // eslint-disable-line
+export default (
   mousePositionElement: HTMLElement,
   coordinateDecimals: number,
 ): MousePosition => (new MousePosition({
   coordinateFormat: createStringXY(coordinateDecimals),
-  projection,
+  projection: mapProjection,
   className: 'custom-mouse-position',
   target: mousePositionElement,
   undefinedHTML: '&nbsp;',

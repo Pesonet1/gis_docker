@@ -45,7 +45,7 @@ import taustakarttaWMTS from '../util/map/layer/wmts';
 import kunnatWMS from '../util/map/layer/wms';
 import kunnatWFS from '../util/map/layer/wfs';
 import kunnatVectorTile from '../util/map/layer/vectorTile';
-import { mousePositionControl } from '../util/map/control';
+import mousePositionControl from '../util/map/control/mousePosition';
 
 import 'ol/ol.css';
 

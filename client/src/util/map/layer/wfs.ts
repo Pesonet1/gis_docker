@@ -4,14 +4,12 @@ import GeoJSON from 'ol/format/GeoJSON';
 
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
-import projection from '../projection';
+import mapProjection from '../mapProjection';
 import getLabel from '../layerLabel';
-
-const projectionExtent: [number, number, number, number] = projection.getExtent();
 
 export default () => {
   const layer = new VectorLayer({
-    extent: projectionExtent,
+    extent: mapProjection.getExtent(),
     zIndex: 2,
     minZoom: 6,
     maxZoom: 15,

@@ -9,7 +9,7 @@ import VectorTileSource from 'ol/source/VectorTile';
 import TileGrid from 'ol/tilegrid/TileGrid';
 // import * as Extent from 'ol/extent';
 
-import projection from './map/projection';
+import mapProjection from './map/mapProjection';
 
 const map = null; // ol map
 
@@ -30,7 +30,7 @@ olms(map, 'http://localhost:8100/styles/basic-preview/style.json').then((map: an
   // }
 
   const tileGrid = new TileGrid({
-    extent: projection.getExtent(),
+    extent: mapProjection.getExtent(),
     resolutions,
     tileSize: [256, 256],
   });
@@ -49,7 +49,7 @@ olms(map, 'http://localhost:8100/styles/basic-preview/style.json').then((map: an
         maxZoom: 14,
         urls: source.getUrls(),
         tileGrid,
-        projection,
+        projection: mapProjection,
       }));
     }
   });
