@@ -2,9 +2,11 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorLayer from 'ol/layer/Vector';
 import ImageLayer from 'ol/layer/Image';
 
+export type WFSTransactionType = 'insert' | 'update' | 'delete';
+
+export type LayersType = VectorTileLayer | VectorLayer | ImageLayer;
+
 export interface InteractionLayers {
-  layer: VectorTileLayer | VectorLayer | ImageLayer;
+  layer: LayersType;
   changed: () => {};
 }
-
-export type WFSTransactionType = 'insert' | 'update' | 'delete';

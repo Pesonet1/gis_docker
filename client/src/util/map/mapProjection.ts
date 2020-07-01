@@ -9,6 +9,8 @@ proj4.defs('EPSG:3067', '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 
 register(proj4);
 
 const projection = getProjection('EPSG:3067');
+
+// Set projection extent according to JSH180 specification for EPSG:3067 crs!
 projection.setExtent([-548576, 6291456, 1548576, 8388608]);
 
 export default projection;

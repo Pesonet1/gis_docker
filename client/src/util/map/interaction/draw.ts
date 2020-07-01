@@ -3,14 +3,12 @@ import Feature from 'ol/Feature';
 import { Draw } from 'ol/interaction';
 import { DrawEvent } from 'ol/interaction/Draw';
 import GeometryType from 'ol/geom/GeometryType';
-import VectorLayer from 'ol/layer/Vector';
 
 import wfsTransaction from '../../../services/wfsTransaction';
 
-export default (mapInstance: Map, layer: VectorLayer): Draw => {
-  // @ts-ignore
+export default (mapInstance: Map, layer: any): Draw => {
   const drawInteraction = new Draw({
-    features: layer.getSource().getFeatures(), // eslint-disable-line
+    features: layer.getSource().getFeatures(),
     type: GeometryType.MULTI_POLYGON,
   });
   mapInstance.addInteraction(drawInteraction);

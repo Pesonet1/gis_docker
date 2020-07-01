@@ -6,7 +6,7 @@ import VectorLayer from 'ol/layer/Vector';
 import WFS from 'ol/format/WFS';
 import GML from 'ol/format/GML';
 
-import { WFSTransactionType } from '../types';
+import { WFSTransactionType } from '@/types';
 
 export default (type: WFSTransactionType, layer: VectorLayer, features: Feature[]): void => {
   const formatWFS = new WFS();

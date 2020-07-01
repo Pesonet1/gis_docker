@@ -25,6 +25,7 @@
         <v-btn
           icon
           x-small
+          :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.modifyFeatures')"
           @click="modifyLayer === layer.values_.name
             ? cancelVectorLayerModification()
             : startVectorLayerModification(layer)"
@@ -43,6 +44,8 @@
         <v-btn
           icon
           x-small
+          :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.deleteFeature')"
+          :disabled="!featureSelected()"
           @click="removeSelectedFeature(layer)"
         >
           <v-icon>
@@ -71,8 +74,6 @@
 <script>
 import Map from 'ol/Map';
 import { mdiPencil, mdiCancel, mdiDelete } from '@mdi/js';
-import VectorLayer from 'ol/layer/Vector';
-import VectorTileLayer from 'ol/layer/VectorTile';
 
 import InputCheckbox from './common/InputCheckbox.vue';
 
@@ -80,10 +81,13 @@ import addSelectInteraction from '../util/map/interaction/select';
 import addModifyInteraction from '../util/map/interaction/modify';
 import wfsTransaction from '../services/wfsTransaction';
 
+import LayerUtilMixins from '../mixins/LayerUtilMixins';
+
 export default {
   components: {
     InputCheckbox,
   },
+  mixins: [LayerUtilMixins],
   props: {
     map: {
       type: Map,
@@ -116,26 +120,27 @@ export default {
       // for some reason layer visibility is not refreshing automatically...
       layer.getSource().refresh();
 
-      if (visibility && (layer instanceof VectorLayer || layer instanceof VectorTileLayer)) {
+      this.toggleLayerInteractions(visibility, layer);
+    },
+    toggleLayerInteractions(visibility, layer) {
+      if (visibility && this.layerIsSelectable(layer)) {
         this.selectInteraction = addSelectInteraction(this.map, layer);
       }
 
-      if (!visibility && (layer instanceof VectorLayer || layer instanceof VectorTileLayer)) {
+      if (!visibility && this.layerIsSelectable(layer)) {
         this.map.removeInteraction(this.selectInteraction);
       }
 
-      if (this.layerIsVector(layer) && this.modifyLayer) {
+      if (!visibility && this.layerIsVector(layer)) {
         this.cancelVectorLayerModification();
       }
     },
     getLayerByName(name) {
       return this.layers.find((layer) => layer.values_.name === name); // eslint-disable-line
     },
-    layerIsVector(layer) {
-      return layer instanceof VectorLayer;
-    },
-    layerIsVisible(layer) {
-      return layer.getVisible();
+    featureSelected() {
+      if (!this.selectInteraction) return false;
+      return this.selectInteraction.getFeatures().array_.length > 0;
     },
     startVectorLayerModification(layer) {
       this.modifyLayer = layer.values_.name;
