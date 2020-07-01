@@ -3876,11 +3876,6 @@ elliptic@^6.0.0, elliptic@^6.5.2:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-elm-pep@^1.0.4:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/elm-pep/-/elm-pep-1.0.6.tgz#768b6b0cc59ce6b608d9d14c87ef8c2c0936f6ec"
-  integrity sha512-1DJ6ReFk8+GtgoqRiEhBo28K69Rxe9Bfc7h16+1VMQT2KlCuPBYj5W33OYa2AZpqkuqCBLhcNzO10zxJVakapA==
-
 emoji-regex@^7.0.1:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
@@ -7234,7 +7229,7 @@ oidc-client@^1.10.1:
     crypto-js "^3.1.9-1"
     uuid "^3.3.2"
 
-ol-mapbox-style@^6.1.2:
+ol-mapbox-style@^6.1.1, ol-mapbox-style@^6.1.2:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/ol-mapbox-style/-/ol-mapbox-style-6.1.2.tgz#611f918c2b713fb66de0ee85bc688aebbbb290af"
   integrity sha512-0n+6K1dhMH7/AMA1eAEb1Pt4ZRFWr1fiJWSgwHfDFQpK4yuhJgtLcn9dtxprB1NOpTHeJ5XbTKOrgTY/DR0oxQ==
@@ -7243,14 +7238,13 @@ ol-mapbox-style@^6.1.2:
     mapbox-to-css-font "^2.4.0"
     webfont-matcher "^1.1.0"
 
-ol@^6.3.1:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/ol/-/ol-6.3.1.tgz#11fcb987e632efb9f75f87fe8d85f50764543843"
-  integrity sha512-cSSYizzUJQ7AhFSrLPAKopjDXPCHtJsXSmjf3xutPG+iyBeD9IOepQGSgpOSZavPI1gsYh9wowiH+NZwVJ/NYQ==
+ol@^6.3.2-dev:
+  version "6.3.2-dev.1593440685159"
+  resolved "https://registry.yarnpkg.com/ol/-/ol-6.3.2-dev.1593440685159.tgz#8b6d17b5f558945db2a6de86cdb3548dadf00bed"
+  integrity sha512-dsZezVzjtmMv25BxuAt3gYiDWuM4iAJuJSej9To/Wilj8ELmMMKYAOvmIopUMmboeTiP/FX+HC0mkmHKSVllHw==
   dependencies:
-    elm-pep "^1.0.4"
+    ol-mapbox-style "^6.1.1"
     pbf "3.2.1"
-    pixelworks "1.1.0"
     rbush "^3.0.1"
 
 on-finished@~2.3.0:
@@ -7675,11 +7669,6 @@ pirates@^4.0.1:
   integrity sha512-WuNqLTbMI3tmfef2TKxlQmAiLHKtFhlsCZnPIpuv2Ow0RDVO8lfy1Opf4NUzlMXLjPl+Men7AuVdX6TA+s+uGA==
   dependencies:
     node-modules-regexp "^1.0.0"
-
-pixelworks@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/pixelworks/-/pixelworks-1.1.0.tgz#1f095ad48dca8bf8a1c8258e0092031a44f22ca5"
-  integrity sha1-Hwla1I3Ki/ihyCWOAJIDGkTyLKU=
 
 pkg-dir@^1.0.0:
   version "1.0.0"

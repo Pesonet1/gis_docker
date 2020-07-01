@@ -24,6 +24,7 @@ export default () => {
       format: new MVT({
         // @ts-ignore
         featureClass: Feature,
+        geometryName: 'geom',
       }),
       url: 'http://localhost:8080/geoserver/geo/gwc/service/tms/1.0.0/'
         + 'geo:kunnat_2019'

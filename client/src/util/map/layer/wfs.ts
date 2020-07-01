@@ -9,6 +9,7 @@ import getLabel from '../layerLabel';
 
 export default () => {
   const layer = new VectorLayer({
+    declutter: true,
     extent: mapProjection.getExtent(),
     zIndex: 2,
     minZoom: 6,

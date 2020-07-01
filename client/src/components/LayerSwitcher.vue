@@ -26,12 +26,12 @@
           icon
           x-small
           :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.modifyFeatures')"
-          @click="modifyLayer === layer.values_.name
+          @click="editableLayer === layer.values_.name
             ? cancelVectorLayerModification()
             : startVectorLayerModification(layer)"
         >
           <v-icon>
-            {{ modifyLayer === layer.values_.name ? mdiCancel : mdiPencil }}
+            {{ editableLayer === layer.values_.name ? mdiCancel : mdiPencil }}
           </v-icon>
         </v-btn>
       </v-col>
@@ -101,7 +101,7 @@ export default {
   data: () => ({
     selectInteraction: null,
     modifyInteraction: null,
-    modifyLayer: null,
+    editableLayer: null,
     mapLayers: [],
     mdiPencil,
     mdiCancel,
@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     toggleLayer(name, visibility) {
-      const layer = this.getLayerByName(name);
+      const layer = this.getLayerByName(this.layers, name);
       if (!layer) return;
       layer.setVisible(visibility);
       // for some reason layer visibility is not refreshing automatically...
@@ -135,21 +135,18 @@ export default {
         this.cancelVectorLayerModification();
       }
     },
-    getLayerByName(name) {
-      return this.layers.find((layer) => layer.values_.name === name); // eslint-disable-line
-    },
     featureSelected() {
       if (!this.selectInteraction) return false;
       return this.selectInteraction.getFeatures().array_.length > 0;
     },
     startVectorLayerModification(layer) {
-      this.modifyLayer = layer.values_.name;
+      this.editableLayer = layer.values_.name;
       this.modifyInteraction = addModifyInteraction(this.map, layer);
     },
     cancelVectorLayerModification() {
       this.map.removeInteraction(this.modifyInteraction);
       this.modifyInteraction = null;
-      this.modifyLayer = null;
+      this.editableLayer = null;
     },
     removeSelectedFeature(layer) {
       layer.getSource().removeFeature(this.selectInteraction.getFeatures().array_[0]);

@@ -5,6 +5,9 @@ import { LayersType } from '@/types';
 
 export default {
   methods: {
+    getLayerByName(layers: any[], name: string) { // eslint-disable-line
+      return layers.find((layer) => layer.values_.name === name);
+    },
     layerIsVector(layer: LayersType) {
       return layer instanceof VectorLayer;
     },
