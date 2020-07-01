@@ -38,20 +38,14 @@
 <script>
 import { mapState } from 'vuex';
 
-import VectorLayer from 'ol/layer/Vector';
-
 import LayerSwitcher from '../components/LayerSwitcher.vue';
 
 import createMap from '../util/map/map';
-import {
-  backgroundLayer,
-  kunnatWMS,
-  kunnatWFS,
-  kunnatVectorTile,
-} from '../util/map/layer';
+import taustakarttaWMTS from '../util/map/layer/wmts';
+import kunnatWMS from '../util/map/layer/wms';
+import kunnatWFS from '../util/map/layer/wfs';
+import kunnatVectorTile from '../util/map/layer/vectorTile';
 import { mousePositionControl } from '../util/map/control';
-
-import { getRequest } from '../util/axios'; // eslint-disable-line
 
 import 'ol/ol.css';
 
@@ -67,12 +61,8 @@ export default {
     ...mapState(['selectedFeature']),
   },
   async mounted() {
-    const users = await getRequest('users').catch((err) => console.error(err));
-    console.log(users);
-
-    // vectorTile()
     this.map = createMap(this.$refs.map, [
-      backgroundLayer(),
+      taustakarttaWMTS(),
       kunnatWMS(),
       kunnatWFS(),
       kunnatVectorTile(),
@@ -82,7 +72,7 @@ export default {
       mousePositionControl(document.getElementById('mouse-position'), 0),
     );
 
-    this.mapLayers = this.map.getLayers().array_; // eslint-disable-line
+    this.mapLayers = this.map.getLayers().array_;
   },
 };
 </script>

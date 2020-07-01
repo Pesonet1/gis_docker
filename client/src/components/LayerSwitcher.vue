@@ -76,11 +76,9 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 
 import InputCheckbox from './common/InputCheckbox.vue';
 
-import {
-  addSelectInteraction,
-  addModifyInteraction,
-  createTransaction,
-} from '../util/map/layerInteraction';
+import addSelectInteraction from '../util/map/interaction/select';
+import addModifyInteraction from '../util/map/interaction/modify';
+import wfsTransaction from '../services/wfsTransaction';
 
 export default {
   components: {
@@ -150,7 +148,7 @@ export default {
     },
     removeSelectedFeature(layer) {
       layer.getSource().removeFeature(this.selectInteraction.getFeatures().array_[0]);
-      createTransaction('delete', layer, this.selectInteraction.getFeatures().array_);
+      wfsTransaction('delete', layer, this.selectInteraction.getFeatures().array_);
     },
   },
 };
