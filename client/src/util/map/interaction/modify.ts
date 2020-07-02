@@ -4,7 +4,7 @@ import { Modify, Snap } from 'ol/interaction';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import VectorLayer from 'ol/layer/Vector';
 
-import wfsTransaction from '../../../services/wfsTransaction';
+import wfsTransaction from '@/services/wfsTransaction';
 
 export default (mapInstance: Map, layer: VectorLayer): Modify => {
   const modifyInteraction: Modify = new Modify({ source: layer.getSource() });

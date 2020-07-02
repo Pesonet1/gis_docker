@@ -77,13 +77,13 @@
 import Map from 'ol/Map';
 import { mdiPencil, mdiCancel, mdiDelete } from '@mdi/js';
 
-import InputCheckbox from './common/InputCheckbox.vue';
+import InputCheckbox from '@/components/common/InputCheckbox.vue';
 
-import addSelectInteraction from '../util/map/interaction/select';
-import addModifyInteraction from '../util/map/interaction/modify';
-import wfsTransaction from '../services/wfsTransaction';
+import addSelectInteraction from '@/util/map/interaction/select';
+import addModifyInteraction from '@/util/map/interaction/modify';
+import wfsTransaction from '@/services/wfsTransaction';
 
-import LayerUtilMixins from '../mixins/LayerUtilMixins';
+import LayerUtilMixins from '@/mixins/LayerUtilMixins';
 
 export default {
   components: {

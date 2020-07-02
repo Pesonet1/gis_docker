@@ -5,9 +5,9 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import Feature from 'ol/Feature';
 
-import { defaultStyle, selectionStyle } from '../layerStyle';
+import store from '@/store';
 
-import store from '../../../store';
+import { defaultStyle, selectionStyle } from '../layerStyle';
 
 export default (mapInstance: Map, layer: VectorLayer | VectorTileLayer): Select => {
   const selectInteraction: Select = new Select();

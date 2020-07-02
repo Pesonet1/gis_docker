@@ -1,5 +1,6 @@
 import ImageLayer from 'ol/layer/Image';
 import SourceWMS from 'ol/source/ImageWMS';
+
 import mapProjection from '../mapProjection';
 
 export default (): ImageLayer => {

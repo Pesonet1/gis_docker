@@ -4,7 +4,7 @@ import { Draw } from 'ol/interaction';
 import { DrawEvent } from 'ol/interaction/Draw';
 import GeometryType from 'ol/geom/GeometryType';
 
-import wfsTransaction from '../../../services/wfsTransaction';
+import wfsTransaction from '@/services/wfsTransaction';
 
 export default (mapInstance: Map, layer: any): Draw => {
   const drawInteraction: Draw = new Draw({
