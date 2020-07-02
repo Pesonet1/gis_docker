@@ -88,7 +88,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import axios from 'axios';
 
 import LayerSwitcher from '@/components/LayerSwitcher.vue';
 
@@ -98,7 +97,7 @@ import kunnatWMS from '@/util/map/layer/wms';
 import kunnatTiledWMS from '@/util/map/layer/tiledWms';
 import kunnatWFS from '@/util/map/layer/wfs';
 import kunnatVectorTile from '@/util/map/layer/vectorTile';
-import popupOverlay from '@/util/map/layer/overlay';
+import popupOverlay from '@/util/map/layer/popupOverlay';
 
 import { getRequest } from '@/util/axios'; // eslint-disable-line
 
@@ -133,53 +132,10 @@ export default {
     this.mapLayers = this.map.getLayers().array_;
 
     const container = document.getElementById('popup');
-    const content = document.getElementById('popup-content');
     const closer = document.getElementById('popup-closer');
 
     const overlay = popupOverlay(container, closer);
-
     this.map.addOverlay(overlay);
-
-    this.map.on('singleclick', async (event) => {
-      const pixel = this.map.getEventPixel(event.originalEvent);
-
-      const layer = this.map.forEachLayerAtPixel(pixel, (layer2) => layer2);
-      const feature = this.map.forEachFeatureAtPixel(pixel, (feature2) => feature2);
-
-      if (feature) {
-        console.log('clicked wfs / vectorTile');
-      } else {
-        if (!('getFeatureInfoUrl' in layer.getSource())) return;
-
-        console.log('clicked wms / tiledWMS');
-        const data = await this.getWMSFeatureInfo(event, layer);
-
-        if (data && data.numberReturned) {
-          content.innerHTML = `
-            <b>Kuntanumero: </b>${data.features[0].properties.kunta}<br/>
-            <b>Kuntanimi: </b>${data.features[0].properties.nimi}<br/>
-          `;
-          overlay.setPosition(event.coordinate);
-        } else {
-          overlay.setPosition(undefined);
-        }
-      }
-    });
-  },
-  methods: {
-    async getWMSFeatureInfo(event, layer) {
-      const viewResolution = this.map.getView().getResolution();
-      const url = layer.getSource().getFeatureInfoUrl(
-        event.coordinate,
-        viewResolution,
-        'EPSG:3067',
-        { INFO_FORMAT: 'application/json' },
-      );
-
-      if (!url) return null;
-
-      return axios.get(url).then((response) => response.data);
-    },
   },
 };
 </script>

@@ -7,6 +7,7 @@ interface PopupCloserHTMLElement {
 
 export default (container: HTMLElement, closer: PopupCloserHTMLElement): Overlay => {
   const overlay = new Overlay({
+    id: 'popup',
     element: container,
     autoPan: true,
     autoPanAnimation: {

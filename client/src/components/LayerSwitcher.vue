@@ -45,7 +45,7 @@
           icon
           x-small
           :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.deleteFeature')"
-          :disabled="!featureSelected()"
+          :disabled="!isFeatureSelected()"
           @click="removeSelectedFeature(layer)"
         >
           <v-icon>
@@ -81,6 +81,7 @@ import InputCheckbox from '@/components/common/InputCheckbox.vue';
 
 import addSelectInteraction from '@/util/map/interaction/select';
 import addModifyInteraction from '@/util/map/interaction/modify';
+import addPopupInteraction from '@/util/map/interaction/popup';
 import wfsTransaction from '@/services/wfsTransaction';
 
 import LayerUtilMixins from '@/mixins/LayerUtilMixins';
@@ -103,6 +104,7 @@ export default {
   data: () => ({
     selectInteraction: null,
     modifyInteraction: null,
+    popupInteraction: null,
     editableLayer: null,
     mapLayers: [],
     mdiPencil,
@@ -125,6 +127,7 @@ export default {
       this.toggleLayerInteractions(visibility, layer);
     },
     toggleLayerInteractions(visibility, layer) {
+      // HANDLE VECTOR LAYERS SELECT INTERACTION
       if (visibility && this.layerIsSelectable(layer)) {
         this.selectInteraction = addSelectInteraction(this.map, layer);
       }
@@ -133,11 +136,24 @@ export default {
         this.map.removeInteraction(this.selectInteraction);
       }
 
+      // HANDLE POPUP INTERACTION FOR ALL LAYERS
+      if (visibility && !this.popupInteraction) {
+        this.popupInteraction = addPopupInteraction(this.map);
+      }
+
+      if (!visibility && this.popupInteraction) {
+        const overlay = this.map.getOverlayById('popup');
+        overlay.setPosition(undefined);
+        this.map.un(this.popupInteraction.type, this.popupInteraction.listener);
+        this.popupInteraction = null;
+      }
+
+      // HANDLE VECTOR LAYER MODIFICATION INTERACTION
       if (!visibility && this.layerIsVector(layer)) {
         this.cancelVectorLayerModification();
       }
     },
-    featureSelected() {
+    isFeatureSelected() {
       if (!this.selectInteraction) return false;
       return this.selectInteraction.getFeatures().array_.length > 0;
     },
