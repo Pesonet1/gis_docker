@@ -43,6 +43,7 @@ import LayerSwitcher from '../components/LayerSwitcher.vue';
 import createMap from '../util/map/map';
 import taustakarttaWMTS from '../util/map/layer/wmts';
 import kunnatWMS from '../util/map/layer/wms';
+import kunnatTiledWMS from '../util/map/layer/tiledWms';
 import kunnatWFS from '../util/map/layer/wfs';
 import kunnatVectorTile from '../util/map/layer/vectorTile';
 import mousePositionControl from '../util/map/control/mousePosition';
@@ -64,6 +65,7 @@ export default {
     this.map = createMap(this.$refs.map, [
       taustakarttaWMTS(),
       kunnatWMS(),
+      kunnatTiledWMS(),
       kunnatWFS(),
       kunnatVectorTile(),
     ]);

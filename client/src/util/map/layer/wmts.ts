@@ -11,6 +11,7 @@ export default () => {
   const layer = new TileLayer({
     minZoom: 0,
     maxZoom: 15,
+    extent: mapProjection.getExtent(),
     source: new SourceWMTS({
       url: 'http://localhost/mapproxy/service?',
       layer: 'Taustakartta',
@@ -28,7 +29,7 @@ export default () => {
     }),
   });
 
-  layer.set('name', 'Taustakartta');
+  layer.set('name', 'Taustakartta WMTS');
 
   return layer;
 };

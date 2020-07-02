@@ -11,6 +11,7 @@
 <style scoped>
 .v-input {
   margin-top: 0;
+  padding: 0;
 }
 </style>
 

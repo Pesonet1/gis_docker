@@ -59,12 +59,14 @@
 
 <style lang="scss" scoped>
 .layerswitcher {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
   position: absolute;
   right: .5em;
   top: .5em;
-  height: 160px;
   width: 250px;
-  padding: 0 15px;
+  padding: 5px 15px;
   border: 1px solid black;
   border-radius: 4px;
   background-color: white;
