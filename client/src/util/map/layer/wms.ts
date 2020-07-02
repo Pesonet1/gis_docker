@@ -2,7 +2,7 @@ import ImageLayer from 'ol/layer/Image';
 import SourceWMS from 'ol/source/ImageWMS';
 import mapProjection from '../mapProjection';
 
-export default () => {
+export default (): ImageLayer => {
   const layer = new ImageLayer({
     extent: mapProjection.getExtent(),
     zIndex: 1,

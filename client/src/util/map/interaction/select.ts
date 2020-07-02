@@ -3,22 +3,23 @@ import { Select } from 'ol/interaction';
 import { SelectEvent } from 'ol/interaction/Select';
 import VectorLayer from 'ol/layer/Vector';
 import VectorTileLayer from 'ol/layer/VectorTile';
+import Feature from 'ol/Feature';
 
 import { defaultStyle, selectionStyle } from '../layerStyle';
 
 import store from '../../../store';
 
 export default (mapInstance: Map, layer: VectorLayer | VectorTileLayer): Select => {
-  const selectInteraction = new Select();
+  const selectInteraction: Select = new Select();
   mapInstance.addInteraction(selectInteraction);
 
   selectInteraction.on('select', (event: SelectEvent) => {
-    event.selected.forEach((each) => {
-      each.setStyle(selectionStyle());
+    event.selected.forEach((feature: Feature) => {
+      feature.setStyle(selectionStyle());
     });
 
-    event.deselected.forEach((each) => {
-      each.setStyle(defaultStyle());
+    event.deselected.forEach((feature: Feature) => {
+      feature.setStyle(defaultStyle());
     });
 
     // Different logic for handling selection for vectorTileLayer

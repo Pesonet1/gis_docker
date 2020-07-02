@@ -7,10 +7,10 @@ import VectorLayer from 'ol/layer/Vector';
 import wfsTransaction from '../../../services/wfsTransaction';
 
 export default (mapInstance: Map, layer: VectorLayer): Modify => {
-  const modifyInteraction = new Modify({ source: layer.getSource() });
+  const modifyInteraction: Modify = new Modify({ source: layer.getSource() });
   mapInstance.addInteraction(modifyInteraction);
 
-  const snapInteraction = new Snap({ source: layer.getSource() });
+  const snapInteraction: Snap = new Snap({ source: layer.getSource() });
   mapInstance.addInteraction(snapInteraction);
 
   let modifiedFeatures: Feature[] = [];

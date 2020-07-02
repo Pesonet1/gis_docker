@@ -7,7 +7,7 @@ import GeometryType from 'ol/geom/GeometryType';
 import wfsTransaction from '../../../services/wfsTransaction';
 
 export default (mapInstance: Map, layer: any): Draw => {
-  const drawInteraction = new Draw({
+  const drawInteraction: Draw = new Draw({
     features: layer.getSource().getFeatures(),
     type: GeometryType.MULTI_POLYGON,
   });

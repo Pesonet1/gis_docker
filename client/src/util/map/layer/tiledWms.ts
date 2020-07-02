@@ -3,7 +3,7 @@ import TileWMS from 'ol/source/TileWMS';
 
 import mapProjection from '../mapProjection';
 
-export default () => {
+export default (): TileLayer => {
   const layer = new TileLayer({
     minZoom: 0,
     maxZoom: 15,

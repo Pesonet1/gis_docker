@@ -8,7 +8,7 @@ import Feature from 'ol/Feature';
 import mapProjection from '../mapProjection';
 import { defaultStyle } from '../layerStyle';
 
-export default () => {
+export default (): VectorTileLayer => {
   const layer = new VectorTileLayer({
     declutter: true,
     renderMode: 'vector',

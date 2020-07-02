@@ -7,7 +7,7 @@ import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import mapProjection from '../mapProjection';
 import getLabel from '../layerLabel';
 
-export default () => {
+export default (): VectorLayer => {
   const layer = new VectorLayer({
     declutter: true,
     extent: mapProjection.getExtent(),

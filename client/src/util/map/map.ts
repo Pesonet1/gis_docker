@@ -7,7 +7,10 @@ import ImageLayer from 'ol/layer/Image';
 
 import mapProjection from './mapProjection';
 
-export default (ref: HTMLElement, layers: (TileLayer | VectorLayer | ImageLayer)[]) => (new Map({
+export default (
+  ref: HTMLElement,
+  layers: (TileLayer | VectorLayer | ImageLayer)[],
+): Map => (new Map({
   target: ref,
   layers,
   view: new View({

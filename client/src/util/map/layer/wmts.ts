@@ -7,7 +7,7 @@ import mapProjection from '../mapProjection';
 
 const matrixIds: string[] = new Array(16).fill(0).map((value, index) => index.toString());
 
-export default () => {
+export default (): TileLayer => {
   const layer = new TileLayer({
     minZoom: 0,
     maxZoom: 15,

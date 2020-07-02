@@ -15,7 +15,7 @@ const getTextStyle = (
   offY: number,
   place: string,
   labelText: string,
-) => (new Text({
+): Text => (new Text({
   font: textFont,
   fill: new Fill({
     color: fillColor,
