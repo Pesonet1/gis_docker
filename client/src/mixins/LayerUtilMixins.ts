@@ -1,10 +1,13 @@
 import Vue from 'vue';
+import Component from 'vue-class-component';
 
 import VectorLayer from 'ol/layer/Vector';
 import VectorTileLayer from 'ol/layer/VectorTile';
 
 import { MapLayersType } from '@/types';
 
+@Component
+// @ts-ignore
 class LayerUtilMixins extends Vue {
   getLayerByName(layers: MapLayersType[], name: string): MapLayersType | null { // eslint-disable-line
     if (layers === undefined) return null;
