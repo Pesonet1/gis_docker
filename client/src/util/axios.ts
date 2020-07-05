@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-import { secService } from '../main'; // eslint-disable-line
+import { secService } from '../main';
 
 let repository: AxiosInstance;
 

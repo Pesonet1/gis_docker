@@ -8,7 +8,7 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 
 import SecurityService from './services/securityService';
-import { createRepository } from './util/axios'; // eslint-disable-line
+import { createRepository } from './util/axios';
 
 Vue.config.productionTip = false;
 

@@ -6,10 +6,14 @@ import mapProjection from '../mapProjection';
 export default (
   mousePositionElement: HTMLElement,
   coordinateDecimals: number,
-): MousePosition => (new MousePosition({
-  coordinateFormat: createStringXY(coordinateDecimals),
-  projection: mapProjection,
-  className: 'custom-mouse-position',
-  target: mousePositionElement,
-  undefinedHTML: '&nbsp;',
-}));
+): MousePosition | null => {
+  if (!mousePositionElement) return null;
+
+  return new MousePosition({
+    coordinateFormat: createStringXY(coordinateDecimals),
+    projection: mapProjection,
+    className: 'custom-mouse-position',
+    target: mousePositionElement,
+    undefinedHTML: '&nbsp;',
+  });
+};

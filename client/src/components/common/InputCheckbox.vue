@@ -15,8 +15,10 @@
 }
 </style>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
   props: {
     value: {
       type: Boolean,
@@ -33,9 +35,13 @@ export default {
   },
   computed: {
     checkboxValue: {
-      get() { return this.value; },
-      set(val) { this.$emit('input', val); },
+      get(): boolean {
+        return this.value;
+      },
+      set(val: string) {
+        this.$emit('input', val);
+      },
     },
   },
-};
+});
 </script>

@@ -86,32 +86,37 @@
 }
 </style>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { mapState } from 'vuex';
+
+import Map from 'ol/Map';
+import Overlay from 'ol/Overlay';
+import MousePosition from 'ol/control/MousePosition';
 
 import LayerSwitcher from '@/components/LayerSwitcher.vue';
 
-import createMap from '@/util/map/map';
-import taustakarttaWMTS from '@/util/map/layer/wmts';
-import kunnatWMS from '@/util/map/layer/wms';
-import kunnatTiledWMS from '@/util/map/layer/tiledWms';
-import kunnatWFS from '@/util/map/layer/wfs';
-import kunnatVectorTile from '@/util/map/layer/vectorTile';
-import popupOverlay from '@/util/map/layer/popupOverlay';
+import { MapLayersType } from '../types';
 
-import { getRequest } from '@/util/axios'; // eslint-disable-line
+import createMap from '../util/map/map';
+import taustakarttaWMTS from '../util/map/layer/wmts';
+import kunnatWMS from '../util/map/layer/wms';
+import kunnatTiledWMS from '../util/map/layer/tiledWms';
+import kunnatWFS from '../util/map/layer/wfs';
+import kunnatVectorTile from '../util/map/layer/vectorTile';
+import popupOverlay from '../util/map/layer/popupOverlay';
 
-import mousePositionControl from '@/util/map/control/mousePosition';
+import mousePositionControl from '../util/map/control/mousePosition';
 
 import 'ol/ol.css';
 
-export default {
+export default Vue.extend({
   components: {
     LayerSwitcher,
   },
   data: () => ({
-    map: null,
-    mapLayers: [],
+    map: null as Map | null,
+    mapLayers: [] as MapLayersType[],
   }),
   computed: {
     ...mapState(['selectedFeature']),
@@ -125,17 +130,22 @@ export default {
       kunnatVectorTile(),
     ]);
 
-    this.map.addControl(
-      mousePositionControl(document.getElementById('mouse-position'), 0),
-    );
+    const mousePositionElement: HTMLElement | null = document.getElementById('mouse-position');
+    const containerElement: HTMLElement | null = document.getElementById('popup');
+    const closerElement: HTMLElement | null = document.getElementById('popup-closer');
 
+    if (containerElement && closerElement) {
+      const overlay: Overlay | null = popupOverlay(containerElement, closerElement);
+      if (overlay) this.map.addOverlay(overlay);
+    }
+
+    if (mousePositionElement) {
+      const mousePosition: MousePosition | null = mousePositionControl(mousePositionElement, 0);
+      if (mousePosition) this.map.addControl(mousePosition);
+    }
+
+    // @ts-ignore
     this.mapLayers = this.map.getLayers().array_;
-
-    const container = document.getElementById('popup');
-    const closer = document.getElementById('popup-closer');
-
-    const overlay = popupOverlay(container, closer);
-    this.map.addOverlay(overlay);
   },
-};
+});
 </script>

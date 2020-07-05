@@ -18,17 +18,18 @@ body {
 }
 </style>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { mapState } from 'vuex';
 
 import Header from '@/components/Header.vue';
 
-export default {
+export default Vue.extend({
   components: {
     Header,
   },
   computed: {
     ...mapState(['loggedIn']),
   },
-};
+});
 </script>

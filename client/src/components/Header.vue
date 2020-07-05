@@ -39,14 +39,16 @@
 }
 </style>
 
-<script>
-import { secService } from '../main'; // eslint-disable-line
+<script lang="ts">
+import Vue from 'vue';
 
-export default {
+import { secService } from '../main';
+
+export default Vue.extend({
   methods: {
     logoutUser() {
       secService.signOut();
     },
   },
-};
+});
 </script>

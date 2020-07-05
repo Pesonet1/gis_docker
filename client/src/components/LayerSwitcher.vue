@@ -73,28 +73,34 @@
 }
 </style>
 
-<script>
-import Map from 'ol/Map';
+<script lang="ts">
+import { mixins } from 'vue-class-component';
 import { mdiPencil, mdiCancel, mdiDelete } from '@mdi/js';
+
+import Map from 'ol/Map';
+import { Select, Modify } from 'ol/interaction';
+import { EventsKey } from 'ol/events';
+import VectorLayer from 'ol/layer/Vector';
+import VectorTileLayer from 'ol/layer/VectorTile';
 
 import InputCheckbox from '@/components/common/InputCheckbox.vue';
 
-import addSelectInteraction from '@/util/map/interaction/select';
-import addModifyInteraction from '@/util/map/interaction/modify';
-import addPopupInteraction from '@/util/map/interaction/popup';
-import wfsTransaction from '@/services/wfsTransaction';
+import addSelectInteraction from '../util/map/interaction/select';
+import addModifyInteraction from '../util/map/interaction/modify';
+import addPopupInteraction from '../util/map/interaction/popup';
+import wfsTransaction from '../services/wfsTransaction';
 
-import LayerUtilMixins from '@/mixins/LayerUtilMixins';
+import LayerUtilMixins from '../mixins/LayerUtilMixins';
 
-export default {
+import { MapLayersType } from '../types';
+
+export default mixins(LayerUtilMixins).extend({
   components: {
     InputCheckbox,
   },
-  mixins: [LayerUtilMixins],
   props: {
     map: {
       type: Map,
-      default: null,
     },
     layers: {
       type: Array,
@@ -102,11 +108,11 @@ export default {
     },
   },
   data: () => ({
-    selectInteraction: null,
-    modifyInteraction: null,
-    popupInteraction: null,
+    selectInteraction: null as Select | null,
+    modifyInteraction: null as Modify | null,
+    popupInteraction: null as EventsKey | null,
     editableLayer: null,
-    mapLayers: [],
+    mapLayers: [] as MapLayersType[],
     mdiPencil,
     mdiCancel,
     mdiDelete,
@@ -117,22 +123,25 @@ export default {
     },
   },
   methods: {
-    toggleLayer(name, visibility) {
-      const layer = this.getLayerByName(this.layers, name);
+    toggleLayer(name: string, visibility: boolean) {
+      const layer: MapLayersType | null = (this as any).getLayerByName(this.layers, name); // eslint-disable-line
       if (!layer) return;
       layer.setVisible(visibility);
       // for some reason layer visibility is not refreshing automatically...
       layer.getSource().refresh();
 
-      this.toggleLayerInteractions(visibility, layer);
+      if (layer instanceof VectorLayer || layer instanceof VectorTileLayer) {
+        this.toggleLayerInteractions(visibility, layer);
+      }
     },
-    toggleLayerInteractions(visibility, layer) {
+    toggleLayerInteractions(visibility: boolean, layer: VectorLayer | VectorTileLayer) {
       // HANDLE VECTOR LAYERS SELECT INTERACTION
-      if (visibility && this.layerIsSelectable(layer)) {
+      if (visibility && (this as any).layerIsSelectable(layer)) { // eslint-disable-line
         this.selectInteraction = addSelectInteraction(this.map, layer);
       }
 
-      if (!visibility && this.layerIsSelectable(layer)) {
+      if (!visibility && (this as any).layerIsSelectable(layer)) { // eslint-disable-line
+        if (!this.selectInteraction) return;
         this.map.removeInteraction(this.selectInteraction);
       }
 
@@ -149,27 +158,33 @@ export default {
       }
 
       // HANDLE VECTOR LAYER MODIFICATION INTERACTION
-      if (!visibility && this.layerIsVector(layer)) {
+      if (!visibility && (this as any).layerIsVector(layer)) { // eslint-disable-line
         this.cancelVectorLayerModification();
       }
     },
-    isFeatureSelected() {
+    isFeatureSelected(): boolean {
       if (!this.selectInteraction) return false;
+      // @ts-ignore
       return this.selectInteraction.getFeatures().array_.length > 0;
     },
-    startVectorLayerModification(layer) {
+    startVectorLayerModification(layer: VectorLayer) {
+      // @ts-ignore
       this.editableLayer = layer.values_.name;
       this.modifyInteraction = addModifyInteraction(this.map, layer);
     },
     cancelVectorLayerModification() {
+      if (!this.modifyInteraction) return;
       this.map.removeInteraction(this.modifyInteraction);
       this.modifyInteraction = null;
       this.editableLayer = null;
     },
-    removeSelectedFeature(layer) {
+    removeSelectedFeature(layer: VectorLayer) {
+      if (!this.selectInteraction) return;
+      // @ts-ignore
       layer.getSource().removeFeature(this.selectInteraction.getFeatures().array_[0]);
+      // @ts-ignore
       wfsTransaction('delete', layer, this.selectInteraction.getFeatures().array_);
     },
   },
-};
+});
 </script>

@@ -1,11 +1,8 @@
 import Overlay from 'ol/Overlay';
 
-interface PopupCloserHTMLElement {
-  onclick: () => boolean;
-  blur: () => void;
-}
+export default (container: HTMLElement, closer: HTMLElement): Overlay | null => {
+  if (!container || !closer) return null;
 
-export default (container: HTMLElement, closer: PopupCloserHTMLElement): Overlay => {
   const overlay = new Overlay({
     id: 'popup',
     element: container,

@@ -1,16 +1,11 @@
 import Map from 'ol/Map';
 import View from 'ol/View';
 
-import TileLayer from 'ol/layer/Tile';
-import VectorLayer from 'ol/layer/Vector';
-import ImageLayer from 'ol/layer/Image';
+import { MapLayersType } from '@/types';
 
 import mapProjection from './mapProjection';
 
-export default (
-  ref: HTMLElement,
-  layers: (TileLayer | VectorLayer | ImageLayer)[],
-): Map => (new Map({
+export default (ref: any, layers: MapLayersType[]): Map => (new Map({ // eslint-disable-line
   target: ref,
   layers,
   view: new View({
