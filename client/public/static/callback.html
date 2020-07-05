@@ -8,11 +8,16 @@
   <body>
     <script src="oidc-client.min.js"></script>
     <script>
-      var mgr = new Oidc.UserManager({userStore: new Oidc.WebStorageStateStore(), loadUserInfo: true, filterProtocolClaims: true});
+      const mgr = new Oidc.UserManager({
+        userStore: new Oidc.WebStorageStateStore(),
+        loadUserInfo: true,
+        filterProtocolClaims: true,
+        response_mode: 'query'
+      });
       
-      mgr.signinRedirectCallback().then(function (user) {
+      mgr.signinRedirectCallback().then((user) => {
         window.location.href = '../';
-      }).catch(function (err) {
+      }).catch((err) => {
         console.error(err);
       });
     </script>

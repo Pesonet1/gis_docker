@@ -3,9 +3,8 @@ const Account = require('./account');
 module.exports = {
   clients: [{
     client_id: 'test_implicit_app',
-    token_endpoint_auth_method: 'none',
-    response_types: ['id_token'],
-    grant_types: ['implicit'],
+    grant_types: ['authorization_code', 'implicit'],
+    response_types: ['code'],
     redirect_uris: [
       'http://localhost:8082/static/callback.html',
       'http://localhost:8082/static/silent-renew.html',
@@ -13,6 +12,7 @@ module.exports = {
     post_logout_redirect_uris: [
       'http://localhost:8082',
     ],
+    token_endpoint_auth_method: 'none'
   }],
   interactions: {
     url(ctx) {

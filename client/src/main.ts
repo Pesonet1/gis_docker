@@ -14,23 +14,25 @@ Vue.config.productionTip = false;
 
 export const secService = new SecurityService(); // eslint-disable-line
 
-if (!secService) {
-  throw new Error('SecurityService was not initialized');
-}
+const initializeOidc = async () => {
+  secService.initialize();
+
+  const user: User | null = await secService.getUser();
+
+  if (user) {
+    store.commit('SET_LOGGED_IN', true);
+
+    if (user.expired) {
+      await secService.renewToken();
+    }
+  }
+};
 
 (async () => {
   try {
-    secService.initialize();
-
-    const user: User | null = await secService.getUser();
-
-    if (user) {
-      store.commit('SET_LOGGED_IN', true);
-    }
-
+    await initializeOidc();
     await createRepository();
   } catch (err) {
-    store.commit('SET_LOGGED_IN', false);
     throw new Error(err);
   }
 

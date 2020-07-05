@@ -36,9 +36,6 @@ const run = async () => {
 
   const provider = new Provider(`http://localhost:${port}${authPrefix}`, { adapter, ...configuration });
 
-  // provider.proxy = true;
-  // provider.keys = process.env.SECURE_KEY.split(',');
-
   /**
    * REMOVE THIS ON PRODUCTION ENVIRONMENT. THIS ONLY DISABLES FORCE USE OF HTTPS ON LOCALHOST
    * https://github.com/panva/node-oidc-provider/blob/master/recipes/implicit_http_localhost.md
