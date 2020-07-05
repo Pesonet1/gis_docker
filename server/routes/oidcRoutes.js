@@ -1,6 +1,8 @@
+const { urlencoded } = require('express');
 const { cryptCompare } = require('../utils/bcrypt');
-
 const SequelizeModels = require('../models').sequelize.models;
+
+const body = urlencoded({ extended: false });
 
 module.exports = (authPrefix, app, provider) => {
   const { constructor: { errors: { SessionNotFound } } } = provider;
@@ -26,7 +28,7 @@ module.exports = (authPrefix, app, provider) => {
           flash: undefined,
         });
       }
-  
+
       return res.render('interaction', {
         client,
         uid,
@@ -39,7 +41,7 @@ module.exports = (authPrefix, app, provider) => {
     }
   });
 
-  app.post('/interaction/:uid/login', setNoCache, async (req, res, next) => {
+  app.post('/interaction/:uid/login', setNoCache, body, async (req, res, next) => {
     try {
       const { uid, prompt, params } = await provider.interactionDetails(req, res);
 
@@ -83,12 +85,13 @@ module.exports = (authPrefix, app, provider) => {
     }
   });
 
-  app.post('/interaction/:uid/confirm', setNoCache, async (req, res, next) => {
+  app.post('/interaction/:uid/confirm', setNoCache, body, async (req, res, next) => {
     try {
       const result = {
         consent: {
-          // rejectedScopes: [], // < uncomment and add rejections here
-          // rejectedClaims: [], // < uncomment and add rejections here
+          rejectedScopes: [],
+          rejectedClaims: [],
+          replace: false,
         },
       };
 

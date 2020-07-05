@@ -67,4 +67,15 @@ module.exports = {
     DeviceCode: 10 * 60, // 10 minutes in seconds
     RefreshToken: 1 * 24 * 60 * 60, // 1 day in seconds
   },
+  logoutSource: async (ctx, form) => {
+    ctx.body = `<!DOCTYPE html>
+        <body>
+          <div style="display:none;">
+            ${form}
+            <button id="logout-btn" type="submit" form="op.logoutForm" value="yes" name="logout"></button>
+          </div>
+          <script>document.getElementById('logout-btn').click()</script>
+        </body>
+        </html>`;
+  },
 };

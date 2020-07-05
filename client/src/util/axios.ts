@@ -5,13 +5,13 @@ import { secService } from '../main'; // eslint-disable-line
 let repository: AxiosInstance;
 
 const setAuthorizationHeader = async () => {
-  await secService.getAccessToken().then((accessToken: string | null) => {
+  await secService.getAccessToken().then(async (accessToken: string | null) => {
     if (accessToken) {
       repository.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
       return;
     }
 
-    throw new Error('No accessToken was provided from oidc provider');
+    await secService.renewToken();
   }).catch((err: string) => {
     throw new Error(`Error while trying to get accessToken ${err.toString()}`);
   });

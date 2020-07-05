@@ -9,13 +9,13 @@ export default class SecurityService {
     this.userManager = new Oidc.UserManager({
       userStore: new Oidc.WebStorageStateStore({}),
       authority: 'http://localhost:8085/oidc/',
-      client_id: 'test_implicit_app', // eslint-disable-line
-      redirect_uri: 'http://localhost:8082/static/callback.html', // eslint-disable-line
-      response_type: 'code', // eslint-disable-line
+      client_id: 'test_implicit_app',
+      redirect_uri: 'http://localhost:8082/static/callback.html',
+      response_type: 'code',
       scope: 'openid profile',
-      post_logout_redirect_uri: 'http://localhost:8082', // eslint-disable-line
-      silent_redirect_uri: 'http://localhost:8082/static/silent-renew.html', // eslint-disable-line
-      accessTokenExpiringNotificationTime: 10,
+      post_logout_redirect_uri: 'http://localhost:8082',
+      silent_redirect_uri: 'http://localhost:8082/static/silent-renew.html',
+      accessTokenExpiringNotificationTime: 15,
       automaticSilentRenew: true,
       filterProtocolClaims: true,
       loadUserInfo: true,
@@ -48,6 +48,10 @@ export default class SecurityService {
       this.userManager.signoutRedirect()
         .catch((err) => console.error('Error while signing out', err));
     });
+
+    // Stop this userManager for silent-renew in order to use silent-renew call
+    // from silent-renew.html callback
+    this.userManager.stopSilentRenew();
   }
 
   // Renew the token manually
@@ -100,7 +104,6 @@ export default class SecurityService {
 
   // Redirect of the current window to the authorization endpoint.
   signIn() {
-    console.log('aa');
     this.userManager.signinRedirect()
       .catch((err) => console.error('Error while redirecting to authorization endpoint', err));
   }
