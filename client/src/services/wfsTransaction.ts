@@ -2,16 +2,15 @@ import axios from 'axios';
 
 import Feature from 'ol/Feature';
 import VectorLayer from 'ol/layer/Vector';
-
-import WFS from 'ol/format/WFS';
+import WFS, { TransactionResponse } from 'ol/format/WFS';
 import GML from 'ol/format/GML';
 
 import { WFSTransactionType } from '@/types';
 
 export default (type: WFSTransactionType, layer: VectorLayer, features: Feature[]): void => {
-  const formatWFS = new WFS();
+  const formatWFS: WFS = new WFS();
   // @ts-ignore
-  const formatGML = new GML({
+  const formatGML: GML = new GML({
     featureNS: 'geo',
     featureType: 'kunnat_2019',
     srsName: 'EPSG:3067',
@@ -41,7 +40,7 @@ export default (type: WFSTransactionType, layer: VectorLayer, features: Feature[
     data: new XMLSerializer().serializeToString(node),
     headers: { 'content-type': 'text/xml' },
   }).then((data) => {
-    const result = formatWFS.readTransactionResponse(data);
+    const result: TransactionResponse = formatWFS.readTransactionResponse(data);
     console.log(result);
     layer.getSource().refresh();
   }).catch((error) => console.error(error));

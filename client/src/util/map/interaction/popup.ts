@@ -6,11 +6,13 @@ import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { EventsKey } from 'ol/events';
 import Overlay from 'ol/Overlay';
 
+import { WMSFeatureInfo } from '@/types';
+
 const getWMSFeatureInfo = async (
   mapInstance: Map,
   event: MapBrowserEvent,
   layer: any, // eslint-disable-line
-): Promise<any> => { // eslint-disable-line
+): Promise<WMSFeatureInfo | null> => {
   const viewResolution: number = mapInstance.getView().getResolution();
   const url: string = layer.getSource().getFeatureInfoUrl(
     event.coordinate,
@@ -53,7 +55,7 @@ export default (mapInstance: Map): EventsKey => {
       if (!('getFeatureInfoUrl' in layer.getSource())) return;
 
       console.log('clicked wms / tiledWMS');
-      const data = await getWMSFeatureInfo(mapInstance, event, layer);
+      const data: WMSFeatureInfo | null = await getWMSFeatureInfo(mapInstance, event, layer);
 
       if (data && data.numberReturned && content) {
         content.innerHTML = `

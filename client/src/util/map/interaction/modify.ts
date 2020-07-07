@@ -5,6 +5,7 @@ import { ModifyEvent } from 'ol/interaction/Modify';
 import VectorLayer from 'ol/layer/Vector';
 
 import wfsTransaction from '@/services/wfsTransaction';
+import { EventsKey } from 'ol/events';
 
 export default (mapInstance: Map, layer: VectorLayer): Modify => {
   const modifyInteraction: Modify = new Modify({ source: layer.getSource() });
@@ -14,7 +15,7 @@ export default (mapInstance: Map, layer: VectorLayer): Modify => {
   mapInstance.addInteraction(snapInteraction);
 
   let modifiedFeatures: Feature[] = [];
-  let geometryChangeListener: any; // eslint-disable-line
+  let geometryChangeListener: EventsKey | null = null;
 
   modifyInteraction.on('modifystart', (event: ModifyEvent) => {
     modifiedFeatures = [];
