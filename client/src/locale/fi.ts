@@ -5,6 +5,7 @@ export default {
   },
   layerswitcher: {
     titles: {
+      drawFeatures: 'Piirrä tasolle kohde',
       modifyFeatures: 'Muokkaa tason kohteita',
       deleteFeature: 'Poista valittu kohde',
     },

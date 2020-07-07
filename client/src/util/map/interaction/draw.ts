@@ -2,12 +2,14 @@ import Map from 'ol/Map';
 import Feature from 'ol/Feature';
 import { Draw } from 'ol/interaction';
 import { DrawEvent } from 'ol/interaction/Draw';
+import VectorLayer from 'ol/layer/Vector';
 import GeometryType from 'ol/geom/GeometryType';
 
 import wfsTransaction from '@/services/wfsTransaction';
 
-export default (mapInstance: Map, layer: any): Draw => {
+export default (mapInstance: Map, layer: VectorLayer): Draw => {
   const drawInteraction: Draw = new Draw({
+    // @ts-ignore
     features: layer.getSource().getFeatures(),
     type: GeometryType.MULTI_POLYGON,
   });

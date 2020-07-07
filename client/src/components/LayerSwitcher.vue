@@ -8,13 +8,32 @@
       no-gutters
     >
       <v-col
-        :cols="layerIsVector(layer) && layerIsVisible(layer) ? 10 : 12"
+        :cols="layerIsVector(layer) && layerIsVisible(layer) ? 9 : 12"
       >
         <InputCheckbox
           v-model="layer.values_.visible"
           :label="layer.values_.name"
           :change-action="toggleLayer.bind(this, layer.values_.name, !layer.values_.visible)"
         />
+      </v-col>
+
+      <v-col
+        v-if="layerIsVector(layer) && layerIsVisible(layer)"
+        cols="1"
+        align="end"
+      >
+        <v-btn
+          icon
+          x-small
+          :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.drawFeatures')"
+          @click="drawableLayer === layer.values_.name
+            ? cancelVectorLayerDrawing()
+            : startVectorLayerDrawing(layer)"
+        >
+          <v-icon>
+            {{ drawableLayer === layer.values_.name ? mdiCancel : mdiShapePolygonPlus }}
+          </v-icon>
+        </v-btn>
       </v-col>
 
       <v-col
@@ -75,10 +94,15 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mdiPencil, mdiCancel, mdiDelete } from '@mdi/js';
+import {
+  mdiPencil,
+  mdiCancel,
+  mdiDelete,
+  mdiShapePolygonPlus,
+} from '@mdi/js';
 
 import Map from 'ol/Map';
-import { Select, Modify } from 'ol/interaction';
+import { Select, Modify, Draw } from 'ol/interaction';
 import { EventsKey } from 'ol/events';
 import VectorLayer from 'ol/layer/Vector';
 import VectorTileLayer from 'ol/layer/VectorTile';
@@ -86,6 +110,7 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 import InputCheckbox from '@/components/common/InputCheckbox.vue';
 
 import addSelectInteraction from '../util/map/interaction/select';
+import addDrawInteraction from '../util/map/interaction/draw';
 import addModifyInteraction from '../util/map/interaction/modify';
 import addPopupInteraction from '../util/map/interaction/popup';
 import { getLayerByName, layerIsSelectable } from '../util/map/helpers';
@@ -108,13 +133,16 @@ export default Vue.extend({
   },
   data: () => ({
     selectInteraction: null as Select | null,
+    drawInteraction: null as Draw | null,
     modifyInteraction: null as Modify | null,
     popupInteraction: null as EventsKey | null,
+    drawableLayer: null as VectorLayer | null,
     editableLayer: null as VectorLayer | null,
     mapLayers: [] as MapLayersType[],
     mdiPencil,
     mdiCancel,
     mdiDelete,
+    mdiShapePolygonPlus,
   }),
   watch: {
     layers(newVal: MapLayersType[]) {
@@ -165,6 +193,17 @@ export default Vue.extend({
       if (!this.selectInteraction) return false;
       // @ts-ignore
       return this.selectInteraction.getFeatures().array_.length > 0;
+    },
+    startVectorLayerDrawing(layer: VectorLayer) {
+      // @ts-ignore
+      this.drawableLayer = layer.values_.name;
+      this.drawInteraction = addDrawInteraction(this.map, layer);
+    },
+    cancelVectorLayerDrawing() {
+      if (!this.drawInteraction) return;
+      this.map.removeInteraction(this.drawInteraction);
+      this.drawInteraction = null;
+      this.drawableLayer = null;
     },
     startVectorLayerModification(layer: VectorLayer) {
       // @ts-ignore
