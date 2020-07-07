@@ -45,7 +45,7 @@ export const getRequest = (path: string) => {
     .then((response) => response.data);
 };
 
-export const postRequest = (path: string, data: any) => { // eslint-disable-line
+export const postRequest = (path: string, data: object) => {
   if (!repository) createRepository();
   return repository.post(path, data);
 };

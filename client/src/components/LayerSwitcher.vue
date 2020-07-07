@@ -74,7 +74,7 @@
 </style>
 
 <script lang="ts">
-import { mixins } from 'vue-class-component';
+import Vue from 'vue';
 import { mdiPencil, mdiCancel, mdiDelete } from '@mdi/js';
 
 import Map from 'ol/Map';
@@ -88,13 +88,12 @@ import InputCheckbox from '@/components/common/InputCheckbox.vue';
 import addSelectInteraction from '../util/map/interaction/select';
 import addModifyInteraction from '../util/map/interaction/modify';
 import addPopupInteraction from '../util/map/interaction/popup';
+import { getLayerByName, layerIsSelectable } from '../util/map/helpers';
 import wfsTransaction from '../services/wfsTransaction';
-
-import LayerUtilMixins from '../mixins/LayerUtilMixins';
 
 import { MapLayersType } from '../types';
 
-export default mixins(LayerUtilMixins).extend({
+export default Vue.extend({
   components: {
     InputCheckbox,
   },
@@ -111,36 +110,36 @@ export default mixins(LayerUtilMixins).extend({
     selectInteraction: null as Select | null,
     modifyInteraction: null as Modify | null,
     popupInteraction: null as EventsKey | null,
-    editableLayer: null,
+    editableLayer: null as VectorLayer | null,
     mapLayers: [] as MapLayersType[],
     mdiPencil,
     mdiCancel,
     mdiDelete,
   }),
   watch: {
-    layers(newVal) {
+    layers(newVal: MapLayersType[]) {
       this.mapLayers = newVal;
     },
   },
   methods: {
     toggleLayer(name: string, visibility: boolean) {
-      const layer: MapLayersType | null = (this as any).getLayerByName(this.layers, name); // eslint-disable-line
+      const layer: MapLayersType | null = getLayerByName(this.layers, name);
       if (!layer) return;
       layer.setVisible(visibility);
       // for some reason layer visibility is not refreshing automatically...
       layer.getSource().refresh();
 
-      if (layer instanceof VectorLayer || layer instanceof VectorTileLayer) {
-        this.toggleLayerInteractions(visibility, layer);
-      }
+      this.toggleLayerInteractions(visibility, layer);
     },
-    toggleLayerInteractions(visibility: boolean, layer: VectorLayer | VectorTileLayer) {
+    toggleLayerInteractions(visibility: boolean, layer: MapLayersType) {
       // HANDLE VECTOR LAYERS SELECT INTERACTION
-      if (visibility && (this as any).layerIsSelectable(layer)) { // eslint-disable-line
+      if (visibility
+        && layerIsSelectable(layer)
+        && (layer instanceof VectorLayer || layer instanceof VectorTileLayer)) {
         this.selectInteraction = addSelectInteraction(this.map, layer);
       }
 
-      if (!visibility && (this as any).layerIsSelectable(layer)) { // eslint-disable-line
+      if (!visibility && layerIsSelectable(layer)) {
         if (!this.selectInteraction) return;
         this.map.removeInteraction(this.selectInteraction);
       }
@@ -158,7 +157,7 @@ export default mixins(LayerUtilMixins).extend({
       }
 
       // HANDLE VECTOR LAYER MODIFICATION INTERACTION
-      if (!visibility && (this as any).layerIsVector(layer)) { // eslint-disable-line
+      if (!visibility && this.layerIsVector(layer)) {
         this.cancelVectorLayerModification();
       }
     },
@@ -184,6 +183,14 @@ export default mixins(LayerUtilMixins).extend({
       layer.getSource().removeFeature(this.selectInteraction.getFeatures().array_[0]);
       // @ts-ignore
       wfsTransaction('delete', layer, this.selectInteraction.getFeatures().array_);
+    },
+    layerIsVisible(layer: MapLayersType): boolean {
+      if (!layer) return false;
+      return layer.getVisible();
+    },
+    layerIsVector(layer: MapLayersType): boolean {
+      if (!layer) return false;
+      return layer instanceof VectorLayer;
     },
   },
 });
