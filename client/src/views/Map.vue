@@ -13,6 +13,10 @@
       :map="map"
       :layers="mapLayers"
     />
+    <LayerColorUpdater
+      :map="map"
+      :layers="mapLayers"
+    />
   </div>
 </template>
 
@@ -95,6 +99,7 @@ import Overlay from 'ol/Overlay';
 import MousePosition from 'ol/control/MousePosition';
 
 import LayerSwitcher from '@/components/LayerSwitcher.vue';
+import LayerColorUpdater from '@/components/LayerColorUpdater.vue';
 
 import { MapLayersType } from '../types';
 
@@ -113,6 +118,7 @@ import 'ol/ol.css';
 export default Vue.extend({
   components: {
     LayerSwitcher,
+    LayerColorUpdater,
   },
   data: () => ({
     map: null as Map | null,
