@@ -47,61 +47,94 @@
 <script lang="ts">
 import Vue from 'vue';
 
-import Map from 'ol/Map';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import VectorTileLayer from 'ol/layer/VectorTile';
 
+interface ColorPickerValue {
+  alpha: number;
+  hex: string;
+  hexa: string;
+  hsla: {
+    a: number;
+    h: number;
+    l: number;
+    s: number;
+  };
+  hsva: {
+    a: number;
+    h: number;
+    s: number;
+    v: number;
+  };
+  hue: number;
+  rgba: {
+    a: number;
+    b: number;
+    g: number;
+    r: number;
+  };
+}
+
 export default Vue.extend({
   props: {
-    map: {
-      type: Map,
-    },
     layers: {
       type: Array,
       default: () => [],
     },
   },
   data: () => ({
-    borderColor: null as string | null,
-    fillColor: null as string | null,
+    borderColor: {
+      rgba: {
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 1,
+      },
+    } as ColorPickerValue,
+    fillColor: {
+      rgba: {
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 1,
+      },
+    } as ColorPickerValue,
   }),
   computed: {
-    vectorTileLayerSelected() {
-      const layer = this.layers.find((layer2) => layer2 instanceof VectorTileLayer);
+    vectorTileLayerSelected(): boolean {
+      // @ts-ignore
+      const layer: VectorTileLayer | null = this.layers
+        .find((layer2) => layer2 instanceof VectorTileLayer);
+
       if (!layer) return false;
+      if (layer.getVisible()) this.setLayerColor();
+
       return layer.getVisible();
     },
   },
   methods: {
     setLayerColor() {
       // @ts-ignore
-      const layer = this.layers.find((layer2) => layer2 instanceof VectorTileLayer);
+      const layer: VectorTileLayer | null = this.layers
+        .find((layer2) => layer2 instanceof VectorTileLayer);
 
-      if (!layer || !this.fillColor || !this.borderColor) return;
+      if (!layer) return;
       if (!layer.getVisible()) return;
 
-      // @ts-ignore
       layer.setStyle(new Style({
         stroke: new Stroke({
-          color: [
-            this.borderColor.rgba.r,
-            this.borderColor.rgba.g,
-            this.borderColor.rgba.b,
-            this.borderColor.rgba.a,
-          ],
+          color: this.getRgbaColorArray(this.borderColor),
           width: 2,
         }),
         fill: new Fill({
-          color: [
-            this.fillColor.rgba.r,
-            this.fillColor.rgba.g,
-            this.fillColor.rgba.b,
-            this.fillColor.rgba.a,
-          ],
+          color: this.getRgbaColorArray(this.fillColor),
         }),
       }));
+    },
+    getRgbaColorArray(color: ColorPickerValue): [number, number, number, number] {
+      return [color.rgba.r, color.rgba.g, color.rgba.b, color.rgba.a];
     },
   },
 });

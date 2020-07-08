@@ -14,7 +14,6 @@
       :layers="mapLayers"
     />
     <LayerColorUpdater
-      :map="map"
       :layers="mapLayers"
     />
   </div>
