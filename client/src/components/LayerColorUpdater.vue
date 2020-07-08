@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="vectorTileLayerSelected"
+    v-if="vectorTileLayerVisible"
     class="layercolorupdater"
   >
     <v-color-picker
@@ -18,14 +18,6 @@
       hide-mode-switch
     >
     </v-color-picker>
-
-    <v-btn
-      @click="setLayerColor"
-      small
-      color="primary"
-    >
-      {{ 'Aseta tason värit' }}
-    </v-btn>
   </div>
 </template>
 
@@ -46,6 +38,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapState } from 'vuex';
 
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
@@ -88,31 +81,37 @@ export default Vue.extend({
     borderColor: {
       rgba: {
         r: 255,
-        g: 255,
-        b: 255,
+        g: 0,
+        b: 0,
         a: 1,
       },
     } as ColorPickerValue,
     fillColor: {
       rgba: {
-        r: 255,
+        r: 0,
         g: 255,
-        b: 255,
+        b: 0,
         a: 1,
       },
     } as ColorPickerValue,
   }),
-  computed: {
-    vectorTileLayerSelected(): boolean {
-      // @ts-ignore
-      const layer: VectorTileLayer | null = this.layers
-        .find((layer2) => layer2 instanceof VectorTileLayer);
-
-      if (!layer) return false;
-      if (layer.getVisible()) this.setLayerColor();
-
-      return layer.getVisible();
+  watch: {
+    vectorTileLayerVisible: {
+      handler(visible: boolean) {
+        if (visible) this.setLayerColor();
+      },
     },
+    borderColor: {
+      deep: true,
+      handler() { this.setLayerColor(); },
+    },
+    fillColor: {
+      deep: true,
+      handler() { this.setLayerColor(); },
+    },
+  },
+  computed: {
+    ...mapState(['vectorTileLayerVisible']),
   },
   methods: {
     setLayerColor() {

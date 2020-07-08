@@ -160,6 +160,10 @@ export default Vue.extend({
       this.toggleLayerInteractions(visibility, layer);
     },
     toggleLayerInteractions(visibility: boolean, layer: MapLayersType) {
+      if (layer instanceof VectorTileLayer) {
+        this.$store.commit('SET_VECTOR_TILE_LAYER_VISIBILITY', layer.getVisible());
+      }
+
       // HANDLE VECTOR LAYERS SELECT INTERACTION
       if (visibility
         && layerIsSelectable(layer)

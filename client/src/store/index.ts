@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     loggedIn: false,
     selectedFeature: null,
+    vectorTileLayerVisible: false,
   },
   mutations: {
     SET_LOGGED_IN(state, bool) {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     SET_SELECTED_FEATURE(state, feature) {
       state.selectedFeature = feature;
+    },
+    SET_VECTOR_TILE_LAYER_VISIBILITY(state, bool) {
+      state.vectorTileLayerVisible = bool;
     },
   },
   actions: {
