@@ -13,7 +13,7 @@ export default (): ImageLayer => {
     source: new SourceWMS({
       url: 'http://localhost/geoserver/geo/wms',
       params: {
-        LAYERS: 'geo:kunnat_2019',
+        LAYERS: 'geo:kunnat',
         TRANSPARENT: true,
         FORMAT: 'image/png8',
         RATIO: 1,

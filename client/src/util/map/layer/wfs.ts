@@ -17,7 +17,7 @@ export default (): VectorLayer => {
     source: new SourceVector({
       format: new GeoJSON(),
       url: (extent) => ('http://localhost/geoserver/geo/wfs'
-        + '?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:kunnat_2019'
+        + '?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:kunnat'
         + '&outputFormat=application/json'
         + `&bbox=${extent.join(',')}`
       ),

@@ -11,7 +11,7 @@ export default (): TileLayer => {
     source: new TileWMS({
       url: 'http://localhost/geoserver/geo/wms',
       params: {
-        LAYERS: 'geo:kunnat_2019',
+        LAYERS: 'geo:kunnat',
         FORMAT: 'image/png8',
         TILED: true,
       },

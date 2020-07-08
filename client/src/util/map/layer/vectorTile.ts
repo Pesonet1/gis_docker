@@ -27,7 +27,7 @@ export default (): VectorTileLayer => {
         geometryName: 'geom',
       }),
       url: 'http://localhost/geoserver/geo/gwc/service/tms/1.0.0/'
-        + 'geo:kunnat_2019'
+        + 'geo:kunnat'
         + '@JHS180'
         + '@pbf/{z}/{x}/{-y}.pbf',
       projection: mapProjection,

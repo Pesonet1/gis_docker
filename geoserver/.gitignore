@@ -1,7 +1,10 @@
-/data_dir/gwc
-/data_dir/gwc-layers
-/data_dir/security
+/data_dir/gwc/geo_kunnat
+
 
 /data_dir/gwc-gs.xml
 /data_dir/logging.xml
- 
+
+*_deletes_
+*tmp
+*.bak
+*-wal

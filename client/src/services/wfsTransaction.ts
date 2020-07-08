@@ -12,7 +12,7 @@ export default (type: WFSTransactionType, layer: VectorLayer, features: Feature[
   // @ts-ignore
   const formatGML: GML = new GML({
     featureNS: 'geo',
-    featureType: 'kunnat_2019',
+    featureType: 'kunnat',
     srsName: 'EPSG:3067',
   });
 
