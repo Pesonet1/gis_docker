@@ -12,7 +12,7 @@ export default (): VectorLayer => {
     declutter: true,
     extent: mapProjection.getExtent(),
     zIndex: 2,
-    minZoom: 6,
+    minZoom: 0,
     maxZoom: 15,
     source: new SourceVector({
       format: new GeoJSON(),

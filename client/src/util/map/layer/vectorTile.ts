@@ -19,7 +19,7 @@ export default (): VectorTileLayer => {
         resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
         tileSize: [256, 256],
       }),
-      minZoom: 6,
+      minZoom: 0,
       maxZoom: 15,
       format: new MVT({
         // @ts-ignore
