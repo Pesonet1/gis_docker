@@ -3,11 +3,15 @@ export default {
     title: 'Testikartta',
     logout: 'Kirjaudu ulos',
   },
-  layerswitcher: {
+  layerSwitcher: {
     titles: {
       drawFeatures: 'Piirrä tasolle kohde',
       modifyFeatures: 'Muokkaa tason kohteita',
       deleteFeature: 'Poista valittu kohde',
     },
+  },
+  layerColorUpdater: {
+    borderColor: 'Rajaväri',
+    fillColor: 'Täyttöväri',
   },
 };

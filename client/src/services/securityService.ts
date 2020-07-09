@@ -15,7 +15,7 @@ export default class SecurityService {
       scope: 'openid profile',
       post_logout_redirect_uri: 'http://localhost:8082',
       silent_redirect_uri: 'http://localhost:8082/static/silent-renew.html',
-      accessTokenExpiringNotificationTime: 15,
+      accessTokenExpiringNotificationTime: 10,
       automaticSilentRenew: true,
       filterProtocolClaims: true,
       loadUserInfo: true,

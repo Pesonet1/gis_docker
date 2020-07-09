@@ -3,16 +3,24 @@
     v-if="vectorTileLayerVisible"
     class="layercolorupdater"
   >
+    <div>
+      {{ $vuetify.lang.t('$vuetify.layerColorUpdater.borderColor') }}
+    </div>
+
     <v-color-picker
-      v-model="borderColor"
+      v-model="borderColor.rgba"
       mode="rgba"
       hide-canvas
       hide-mode-switch
     >
     </v-color-picker>
 
+    <div>
+      {{ $vuetify.lang.t('$vuetify.layerColorUpdater.fillColor') }}
+    </div>
+
     <v-color-picker
-      v-model="fillColor"
+      v-model="fillColor.rgba"
       mode="rgba"
       hide-canvas
       hide-mode-switch
@@ -106,6 +114,7 @@ export default Vue.extend({
       handler() { this.setLayerColor(); },
     },
     fillColor: {
+      immediate: false,
       deep: true,
       handler() { this.setLayerColor(); },
     },

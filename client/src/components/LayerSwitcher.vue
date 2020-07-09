@@ -25,7 +25,7 @@
         <v-btn
           icon
           x-small
-          :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.drawFeatures')"
+          :title="$vuetify.lang.t('$vuetify.layerSwitcher.titles.drawFeatures')"
           @click="drawableLayer === layer.values_.name
             ? cancelVectorLayerDrawing()
             : startVectorLayerDrawing(layer)"
@@ -44,7 +44,7 @@
         <v-btn
           icon
           x-small
-          :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.modifyFeatures')"
+          :title="$vuetify.lang.t('$vuetify.layerSwitcher.titles.modifyFeatures')"
           @click="editableLayer === layer.values_.name
             ? cancelVectorLayerModification()
             : startVectorLayerModification(layer)"
@@ -63,7 +63,7 @@
         <v-btn
           icon
           x-small
-          :title="$vuetify.lang.t('$vuetify.layerswitcher.titles.deleteFeature')"
+          :title="$vuetify.lang.t('$vuetify.layerSwitcher.titles.deleteFeature')"
           :disabled="!isFeatureSelected()"
           @click="removeSelectedFeature(layer)"
         >
