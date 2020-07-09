@@ -4,7 +4,7 @@ services:
   dev-nginx:
     container_name: dev-nginx
     build:
-      context: ./.docker/dev/nginx
+      context: ./nginx
     ports:
       - 80:80
       - 443:443
@@ -16,8 +16,7 @@ services:
 
   dev-database:
     container_name: dev-database
-    build:
-      context: './.docker/dev/database'
+    image: kartoza/postgis:12.0
     restart: always
     environment:
       POSTGRES_DBNAME: test_db
@@ -26,15 +25,14 @@ services:
       POSTGRES_MULTIPLE_EXTENSIONS: postgis
       ALLOW_IP_RANGE: 0.0.0.0/0
     volumes:
-      # - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data/
       - ./database/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
     ports:
       - 5435:5432
 
   dev-geoserver:
     container_name: dev-geoserver
-    build:
-      context: ./.docker/dev/geoserver
+    image: oscarfonts/geoserver
     ports:
       - 8080:8080
     volumes:
@@ -44,6 +42,9 @@ services:
   dev-mapproxy:
     container_name: dev-mapproxy
     build:
-      context: ./.docker/dev/mapproxy
+      context: ./mapproxy
     volumes:
       - ./mapproxy:/mapproxy
+
+volumes:
+  postgres_data:
