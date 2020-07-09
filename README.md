@@ -1,173 +1,50 @@
 # GIS Docker
 
-Build and run Docker containers (geoserver, database, mapproxy, nginx)
+Main purpose for this repository is to act as a playground for testing different GIS related web technologies.
 
-`docker-compose -f docker-compose.dev.yaml up --build`
+This repository contains containerized (Docker) parts of a GIS application that constructs a simple GIS application.
 
-## Containers
+- Client 8082:8082
+- Server 8085:8085
+- Database 5435:5432
+- Geoserver 8080:8080
+- Mapproxy 8083:8083
+- Nginx 80:80
 
-Nginx 80:80
-Geoserver 8080:8080
-Database 5435:5432
-Mapproxy :8083
-
-### Nginx
-
-Following proxying is used for Geoserver & Mapproxy
+Nginx is used for proxying network traffic between containers. Currently it is only used for proxying Geoserver & Mapproxy requests.
 
 ```
 /geoserver -> geoserver:8080
 /mapproxy -> mapproxy:8083
 ```
 
-### Geoserver (Tomcat)
+## Setup
 
-Geoserver has kunnat_2019 geopackage automatically configured.
+First [install docker](https://docs.docker.com/compose/install/)
 
-TODO More configuration needed
-
-### MapProxy
-
-Mapproxy is used for serving base map for client app. It loads, seeds & proxies a background map from kartat.kapsi tiles.
-
-By default mapproxy seeding process is not run. It needs to be run manually with following command inside container.
+Build and run Docker containers (geoserver, database, mapproxy, nginx)
 
 ```
-$ su $USER_NAME -c "mapproxy-seed -f mapproxy.yaml -s seed.yaml --progress-file .mapproxy_seed_progress"
+$ docker-compose -f docker-compose.dev.yaml up --build
 ```
 
-This will take several hours to complete. After this background should be available on client app.
-
-### Database (PostgresSQL)
-
-TODO
-
-## Client (Vue CLI)
-
-Client app can be started with following command
+Start containers without build
 
 ```
-$ yarn run serve
+$ docker-compose -f docker-compose.dev.yaml up
 ```
 
-App is opened on localhost for port 8082
-
-
-## Server (Node + Express)
-
-Server can be start by running following command
+Shutdown containers
 
 ```
-$ npm run start
+$ docker-compose -f docker-compose.dev.yaml down
 ```
 
-Server listens to port 8085 on localhost. Server listens automatically to file changes by using nodemon.
-
-### OIDC (provider)
-
-TODO
-
-### Sequelize
-
-Install sequelize-cli
+Manually run server & client applications
 
 ```
-$ npm install --save-dev sequelize-cli
+cd client -> yarn run serve
+cd server -> npm run start
 ```
 
-This project is initialized with sequelize-cli init command
-
-```
-$ npx sequelize-cli init
-```
-
-It creates config, migrations, models, seeders folders automatically
-
-#### Creating models
-
-Generate skeleton model
-
-```
-$ npx sequelize-cli migration:generate --name migration-skeleton
-```
-
-Generate model with attributes
-
-```
-$ npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
-```
-
-#### Running migrations
-
-```
-$ npx sequelize-cli db:migrate
-```
-
-Revert to latest migration
-
-```
-$ npx sequelize-cli db:migrate:undo
-```
-
-Revert to specific migration
-
-```
-$ npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX-create-posts.js
-```
-
-Revert all migrations
-
-```
-$ npx sequelize-cli db:migrate:undo:all
-```
-
-#### Seeding
-
-Create seed file with name
-
-```
-$ npx sequelize-cli seed:generate --name demo-user
-```
-
-Set seeding content by defining created file. Always remember to fill down seeding correctly so that we can revert seedings.
-
-```
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Users', [{
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'example@example.com',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }]);
-  },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Users', null, {});
-  }
-};
-```
-
-Run all seeds
-
-```
-$ npx sequelize-cli db:seed:all
-```
-
-Reverting recent seed
-
-```
-$ npx sequelize-cli db:seed:undo
-```
-
-Undo specific seed
-
-```
-$ npx sequelize-cli db:seed:undo --seed name-of-seed-as-in-data
-```
-
-Undo all seeds
-
-```
-$ npx sequelize-cli db:seed:undo:alls
-```
+TODO: Dockerize server & client applications
