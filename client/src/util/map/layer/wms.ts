@@ -7,7 +7,7 @@ export default (): ImageLayer => {
   const layer = new ImageLayer({
     extent: mapProjection.getExtent(),
     zIndex: 1,
-    opacity: 0.65,
+    opacity: 0.8,
     minZoom: 0,
     maxZoom: 15,
     source: new SourceWMS({

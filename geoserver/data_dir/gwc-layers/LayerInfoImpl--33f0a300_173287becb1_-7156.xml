@@ -9,6 +9,14 @@
   <gridSubsets>
     <gridSubset>
       <gridSetName>JHS180</gridSetName>
+      <extent>
+        <coords>
+          <double>43547.78932226647</double>
+          <double>6523158.091198515</double>
+          <double>764796.7155847414</double>
+          <double>7795461.187543589</double>
+        </coords>
+      </extent>
     </gridSubset>
   </gridSubsets>
   <metaWidthHeight>
@@ -22,7 +30,7 @@
       <key>STYLES</key>
       <defaultValue></defaultValue>
       <availableStyles class="sorted-set"/>
-      <defaultStyle>polygon</defaultStyle>
+      <defaultStyle>geo:style_kunnat</defaultStyle>
     </styleParameterFilter>
   </parameterFilters>
   <gutter>0</gutter>

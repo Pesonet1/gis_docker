@@ -88,18 +88,18 @@ export default Vue.extend({
   data: () => ({
     borderColor: {
       rgba: {
-        r: 255,
+        r: 0,
         g: 0,
         b: 0,
-        a: 1,
+        a: 0.8,
       },
     } as ColorPickerValue,
     fillColor: {
       rgba: {
         r: 0,
-        g: 255,
-        b: 0,
-        a: 1,
+        g: 0,
+        b: 255,
+        a: 0.8,
       },
     } as ColorPickerValue,
   }),
@@ -134,7 +134,7 @@ export default Vue.extend({
       layer.setStyle(new Style({
         stroke: new Stroke({
           color: this.getRgbaColorArray(this.borderColor),
-          width: 2,
+          width: 1,
         }),
         fill: new Fill({
           color: this.getRgbaColorArray(this.fillColor),

@@ -5,6 +5,7 @@ import mapProjection from '../mapProjection';
 
 export default (): TileLayer => {
   const layer = new TileLayer({
+    opacity: 0.8,
     minZoom: 0,
     maxZoom: 15,
     extent: mapProjection.getExtent(),

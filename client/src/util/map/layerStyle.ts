@@ -5,7 +5,7 @@ import Fill from 'ol/style/Fill';
 export const defaultStyle = (): Style => (new Style({
   stroke: new Stroke({
     color: 'black',
-    width: 2,
+    width: 1,
   }),
   fill: new Fill({
     color: 'rgba(0, 0, 0, 0.5)',
@@ -15,7 +15,7 @@ export const defaultStyle = (): Style => (new Style({
 export const selectionStyle = (): Style => (new Style({
   stroke: new Stroke({
     color: 'red',
-    width: 2,
+    width: 1,
   }),
   fill: new Fill({
     color: 'rgba(255, 0, 0, 0.5)',
