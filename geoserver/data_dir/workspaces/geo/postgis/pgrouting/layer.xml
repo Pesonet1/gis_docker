@@ -1,0 +1,16 @@
+<layer>
+  <name>pgrouting</name>
+  <id>LayerInfoImpl--12f501ab:17358ef5972:25f</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--5b4f175d:172c1d4ae58:-7ffc</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--12f501ab:17358ef5972:25e</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2020-07-19 09:21:32.382 UTC</dateCreated>
+</layer>

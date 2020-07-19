@@ -2,7 +2,8 @@
 
 Main purpose for this repository is to act as a playground for testing different GIS related web technologies.
 
-This repository contains containerized (Docker) parts of a GIS application that constructs a simple GIS application.
+This repository contains containerized (Docker) parts of a GIS application that constructs a simple GIS application. 
+Additionally, pgrouting util container is included for running osm2pgrouting tool for importing osm data into database for pgrouting.
 
 - Client 8082:8082
 - Server 8085:8085
@@ -10,6 +11,7 @@ This repository contains containerized (Docker) parts of a GIS application that 
 - Geoserver 8080:8080
 - Mapproxy 8083:8083
 - Nginx 80:80
+- osm2pgrouting (run on demand)
 
 Nginx is used for proxying network traffic between containers. Currently it is only used for proxying Geoserver & Mapproxy requests.
 
