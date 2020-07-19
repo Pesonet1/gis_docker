@@ -10,7 +10,7 @@ Geoserver container supports adding external extensions. Extensions can be added
 
 ## OGC Protocols
 
-- WMS
+- WMS (Tiled WMS)
 - WMTS
 - WFS (WFS-T)
 - VectorTile
@@ -21,6 +21,8 @@ Geoserver container supports adding external extensions. Extensions can be added
 2. Services -> WFS  -> set workspace -> level: transactional
 3. Give admin user WRITE & READ permissions
 4. TODO User permissions...
+
+### Gridset for JHS180
 
 ## OSM Tiles served from Geoserver
 
@@ -35,7 +37,7 @@ https://download.geofabrik.de/europe/finland.html
 2. Use osm2pgsql for importing data into database
 
 ```
-PGPASSWORD=postgres PGPORT=5435 osm2pgsql -c -d test_db -U postgres -H localhost finland-latest.osm.pbf --slim -C 4096 --cached-strategy sparse
+PGPASSWORD=postgres PGPORT=5435 osm2pgsql -c -d gis -U postgres -H localhost finland-latest.osm.pbf --slim -C 4096 --cached-strategy sparse
 ```
 
 3. Run custom osm scripts...

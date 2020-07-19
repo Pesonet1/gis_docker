@@ -19,10 +19,10 @@ services:
     image: kartoza/postgis:12.0
     restart: always
     environment:
-      POSTGRES_DBNAME: test_db
+      POSTGRES_DBNAME: gis
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_MULTIPLE_EXTENSIONS: postgis
+      POSTGRES_MULTIPLE_EXTENSIONS: postgis,pgrouting
       ALLOW_IP_RANGE: 0.0.0.0/0
     volumes:
       - postgres_data:/var/lib/postgresql/data/
