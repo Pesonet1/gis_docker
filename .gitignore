@@ -1,5 +1,6 @@
 .vscode
 
+*.osm
 *.pbf
 *.mbtiles
 *.sqlite
