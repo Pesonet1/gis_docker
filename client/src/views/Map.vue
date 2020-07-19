@@ -109,6 +109,7 @@ import kunnatTiledWMS from '../util/map/layer/tiledWms';
 import kunnatWFS from '../util/map/layer/wfs';
 import kunnatVectorTile from '../util/map/layer/vectorTile';
 import popupOverlay from '../util/map/layer/popupOverlay';
+import pgrouting from '../util/map/layer/pgrouting';
 
 import mousePositionControl from '../util/map/control/mousePosition';
 
@@ -133,6 +134,7 @@ export default Vue.extend({
       kunnatTiledWMS(),
       kunnatWFS(),
       kunnatVectorTile(),
+      pgrouting([385823.0, 6671394.36], [387362.01, 6675332.38]),
     ]);
 
     const mousePositionElement: HTMLElement | null = document.getElementById('mouse-position');
