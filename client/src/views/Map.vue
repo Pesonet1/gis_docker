@@ -13,6 +13,9 @@
       :map="map"
       :layers="mapLayers"
     />
+    <Router
+      :map="map"
+    />
     <LayerColorUpdater
       :layers="mapLayers"
     />
@@ -99,6 +102,7 @@ import MousePosition from 'ol/control/MousePosition';
 
 import LayerSwitcher from '@/components/LayerSwitcher.vue';
 import LayerColorUpdater from '@/components/LayerColorUpdater.vue';
+import Router from '@/components/Router.vue';
 
 import { MapLayersType } from '../types';
 
@@ -109,7 +113,6 @@ import kunnatTiledWMS from '../util/map/layer/tiledWms';
 import kunnatWFS from '../util/map/layer/wfs';
 import kunnatVectorTile from '../util/map/layer/vectorTile';
 import popupOverlay from '../util/map/layer/popupOverlay';
-import pgrouting from '../util/map/layer/pgrouting';
 
 import mousePositionControl from '../util/map/control/mousePosition';
 
@@ -119,6 +122,7 @@ export default Vue.extend({
   components: {
     LayerSwitcher,
     LayerColorUpdater,
+    Router,
   },
   data: () => ({
     map: null as Map | null,
@@ -134,7 +138,6 @@ export default Vue.extend({
       kunnatTiledWMS(),
       kunnatWFS(),
       kunnatVectorTile(),
-      pgrouting([385823.0, 6671394.36], [387362.01, 6675332.38]),
     ]);
 
     const mousePositionElement: HTMLElement | null = document.getElementById('mouse-position');

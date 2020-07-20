@@ -18,8 +18,7 @@ export default (startCoord: number[], destCoord: number[]): ImageLayer => {
     }),
   });
 
-  layer.set('name', 'PGROUTING');
-  layer.setVisible(false);
+  layer.set('name', 'routing_result');
 
   return layer;
 };

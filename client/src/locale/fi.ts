@@ -14,4 +14,8 @@ export default {
     borderColor: 'Rajaväri',
     fillColor: 'Täyttöväri',
   },
+  router: {
+    clearButton: 'Tyhjennä',
+    routeButton: 'Reititä',
+  },
 };

@@ -145,8 +145,10 @@ export default Vue.extend({
     mdiShapePolygonPlus,
   }),
   watch: {
-    layers(newVal: MapLayersType[]) {
-      this.mapLayers = newVal;
+    layers(layers: MapLayersType[]) {
+      // @ts-ignore
+      const filteredLayers = layers.filter((layer) => layer.values_.name !== 'routing_input' && layer.values_.name !== 'routing_result');
+      this.mapLayers = filteredLayers;
     },
   },
   methods: {
