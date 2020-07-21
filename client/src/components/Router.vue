@@ -77,7 +77,11 @@ import { Draw, Modify, Snap } from 'ol/interaction';
 import { DrawEvent } from 'ol/interaction/Draw';
 import GeometryType from 'ol/geom/GeometryType';
 
-import { routingLocationLayer, routingResultLayer } from '../util/map/layer/pgrouting';
+import {
+  routingLocationLayer,
+  routingResultLayer,
+  defaultStyle,
+} from '../util/map/layer/pgrouting';
 
 export default Vue.extend({
   props: {
@@ -102,12 +106,15 @@ export default Vue.extend({
       if (!this.vectorLayer) {
         this.vectorLayer = routingLocationLayer();
 
-        const modifyInteraction: Modify = new Modify({ source: this.vectorLayer.getSource() });
-        this.map.addInteraction(modifyInteraction);
+        const modifyInteraction: Modify = new Modify({
+          source: this.vectorLayer.getSource(),
+          style: defaultStyle,
+        });
 
         const snapInteraction: Snap = new Snap({ source: this.vectorLayer.getSource() });
-        this.map.addInteraction(snapInteraction);
 
+        this.map.addInteraction(modifyInteraction);
+        this.map.addInteraction(snapInteraction);
         this.map.addLayer(this.vectorLayer);
       }
 
@@ -123,6 +130,7 @@ export default Vue.extend({
         // @ts-ignore
         features: this.vectorLayer.getSource().getFeatures(),
         type: GeometryType.POINT,
+        style: defaultStyle,
       });
 
       this.map.addInteraction(drawInteraction);
@@ -135,10 +143,12 @@ export default Vue.extend({
         if (startPoint) {
           this.startPoint = event.feature;
           this.startPointSet = true;
+          this.startPoint.set('text', 'Aloitus');
           vectorLayerSource.addFeature(this.startPoint);
         } else {
           this.destPoint = event.feature;
           this.destPointSet = true;
+          this.destPoint.set('text', 'Lopetus');
           vectorLayerSource.addFeature(this.destPoint);
         }
 
