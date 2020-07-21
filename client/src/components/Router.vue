@@ -73,12 +73,11 @@ import ImageLayer from 'ol/layer/Image';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
-import { Draw } from 'ol/interaction';
+import { Draw, Modify, Snap } from 'ol/interaction';
 import { DrawEvent } from 'ol/interaction/Draw';
 import GeometryType from 'ol/geom/GeometryType';
-// import { Modify, Snap } from 'ol/interaction';
 
-import routeLayer from '../util/map/layer/pgrouting';
+import { routingLocationLayer, routingResultLayer } from '../util/map/layer/pgrouting';
 
 export default Vue.extend({
   props: {
@@ -101,26 +100,21 @@ export default Vue.extend({
   methods: {
     setStartPoint() {
       if (!this.vectorLayer) {
-        this.createRouteVectorLayer();
+        this.vectorLayer = routingLocationLayer();
+
+        const modifyInteraction: Modify = new Modify({ source: this.vectorLayer.getSource() });
+        this.map.addInteraction(modifyInteraction);
+
+        const snapInteraction: Snap = new Snap({ source: this.vectorLayer.getSource() });
+        this.map.addInteraction(snapInteraction);
+
+        this.map.addLayer(this.vectorLayer);
       }
 
       this.addPointInteraction(true);
     },
     setEndPoint() {
       this.addPointInteraction(false);
-    },
-    createRouteVectorLayer() {
-      this.vectorLayer = new VectorLayer({
-        source: new VectorSource(),
-      });
-
-      this.vectorLayer.set('name', 'routing_input');
-      this.map.addLayer(this.vectorLayer);
-
-      // const modifyInteraction: Modify = new Modify({ source: this.vectorLayer.getSource() });
-      // this.map.addInteraction(modifyInteraction);
-      // const snapInteraction: Snap = new Snap({ source: this.vectorLayer.getSource() });
-      // this.map.addInteraction(snapInteraction);
     },
     addPointInteraction(startPoint: boolean) {
       if (!this.vectorLayer) return;
@@ -159,7 +153,7 @@ export default Vue.extend({
       // @ts-ignore
       const destCoord = this.destPoint.getGeometry().getCoordinates();
 
-      this.resultLayer = routeLayer(startCoord, destCoord);
+      this.resultLayer = routingResultLayer(startCoord, destCoord);
 
       this.routingLoading = true;
       this.resultLayer.getSource().on('imageloadend', () => {
