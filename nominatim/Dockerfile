@@ -35,6 +35,7 @@ RUN cd ./src && git checkout tags/$NOMINATIM_VERSION && git submodule update --r
 COPY local.php /app/src/build/settings/local.php
 COPY nominatim.conf /etc/apache2/sites-enabled/000-default.conf
 
+# Set apache to run different port than default 80
 RUN sed -i '/Listen 80/c\Listen 8000' /etc/apache2/ports.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
@@ -44,7 +45,4 @@ RUN chmod o=rwx /app/src/build
 
 EXPOSE 8100
 
-COPY local.php /app/local.php
-COPY startapache.sh /app/startapache.sh
-COPY init.sh /app/init.sh
-COPY Helsinki.osm.pbf /app/Helsinki.osm.pbf
+COPY . /app

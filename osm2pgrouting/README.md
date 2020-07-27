@@ -6,7 +6,7 @@ https://github.com/pgRouting/osm2pgrouting
 
 NOTE: Run this container after you have started other containers (database is needed)
 
-First get some OSM data and place it under this folder. TODO Include this inside build phase if not provided
+First get some OSM data and place it under this folder.
 
 https://download.bbbike.org/osm/bbbike/
 http://download.geofabrik.de/europe/finland.html

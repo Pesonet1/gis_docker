@@ -25,7 +25,7 @@ services:
       POSTGRES_MULTIPLE_EXTENSIONS: postgis,pgrouting
       ALLOW_IP_RANGE: 0.0.0.0/0
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql
       - ./database/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
     ports:
       - 5435:5432
@@ -45,6 +45,21 @@ services:
       context: ./mapproxy
     volumes:
       - ./mapproxy:/mapproxy
+
+  # NOTE THAT /app/init.sh needs to be run to get data into db
+  # see nominatim/README.md for more info
+
+  dev-nominatim:
+    container_name: dev-nominatim
+    build:
+      context: ./nominatim
+    ports:
+      - 7070:8100
+    volumes:
+      - ./nominatim:/nominatim
+    command: /bin/sh -c "/app/startapache.sh"
+    depends_on:
+      - dev-database
 
 volumes:
   postgres_data:
