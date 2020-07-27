@@ -6,3 +6,4 @@
 *.sqlite
 *.shp
 *.geojson
+nominatim.so
