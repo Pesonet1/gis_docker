@@ -1,7 +1,7 @@
 <template>
   <div class="router">
     <v-btn
-      class="mx-2"
+      class="mr-2"
       color="primary"
       fab
       small
@@ -59,8 +59,8 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: 3em;
-  top: .5em;
+  left: .5rem;
+  top: .5rem;
 }
 </style>
 

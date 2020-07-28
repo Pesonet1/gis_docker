@@ -32,4 +32,5 @@ export default (ref: any, mapLayers: MapLayersType[]): Map => (new Map({ // esli
     minZoom: 2,
     enableRotation: false,
   }),
+  controls: [],
 }));
