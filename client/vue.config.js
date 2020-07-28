@@ -11,6 +11,10 @@ module.exports = {
         target: 'localhost/geoserver',
         changeOrigin: true,
       },
+      '^/nominatim': {
+        target: 'localhost/nominatim',
+        changeOrigin: true,
+      },
     },
   },
   transpileDependencies: [

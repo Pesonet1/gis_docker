@@ -116,7 +116,7 @@ export default Vue.extend({
   methods: {
     searchAddress: debounce(async function (searchValue: string) { // eslint-disable-line
       try {
-        const response: AxiosResponse = await axios.get(`http://localhost:7070/search?addressdetails=1&q=${searchValue}&format=json&polygon_geojson=1&limit=5`);
+        const response: AxiosResponse = await axios.get(`http://localhost/nominatim/search?addressdetails=1&q=${searchValue}&format=json&polygon_geojson=1&limit=5`);
         const { data }: { data: NominatimSearchResponse[] } = response;
 
         // @ts-ignore
