@@ -141,6 +141,7 @@ export default Vue.extend({
       }
     }, 250),
     setMapPositionToResult(result: NominatimSearchResponse) {
+      // @ts-ignore
       this.selectedSearchValue = result.place_id;
 
       const resultCoords: Coordinate = fromLonLat([parseFloat(result.lon), parseFloat(result.lat)], 'EPSG:3067');
