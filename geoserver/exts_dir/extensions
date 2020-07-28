@@ -17,7 +17,7 @@
 ####################
 #gdal
 #grib
-pyramid
+#pyramid
 #imagemosaic-jdbc
 #jp2k
 #netcdf
@@ -40,7 +40,7 @@ vectortiles
 ############
 #csw
 #wcs2_0-eo
-#wps
+wps
 #wps-cluster-hazelcast
 #geofence
 #geofence-server
