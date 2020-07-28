@@ -45,3 +45,30 @@ export interface WMSFeatureInfo {
   totalFeatures: string;
   type: string;
 }
+
+export interface NominatimSearchResponse {
+  address: {
+    city?: string;
+    city_district?: string;
+    country?: string;
+    country_code?: string;
+    postcode?: string;
+    suburb?: string;
+  };
+  boundingBox: number[];
+  class: string;
+  display_name: string;
+  geojson: {
+    coordinates: [number, number];
+    type: string;
+  };
+  icon: string;
+  importance: number;
+  lat: string;
+  license: string;
+  lon: string;
+  osm_id: number;
+  osm_type: string;
+  place_id: string;
+  type: string;
+}

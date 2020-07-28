@@ -9,16 +9,13 @@
       <div id="popup-content"></div>
     </div>
     <div class="mouse-position"></div>
+    <AddressSearch :map="map" />
     <LayerSwitcher
       :map="map"
       :layers="mapLayers"
     />
-    <Router
-      :map="map"
-    />
-    <LayerColorUpdater
-      :layers="mapLayers"
-    />
+    <Router :map="map" />
+    <LayerColorUpdater :layers="mapLayers" />
   </div>
 </template>
 
@@ -100,6 +97,7 @@ import Map from 'ol/Map';
 import Overlay from 'ol/Overlay';
 import MousePosition from 'ol/control/MousePosition';
 
+import AddressSearch from '@/components/AddressSearch.vue';
 import LayerSwitcher from '@/components/LayerSwitcher.vue';
 import LayerColorUpdater from '@/components/LayerColorUpdater.vue';
 import Router from '@/components/Router.vue';
@@ -120,6 +118,7 @@ import 'ol/ol.css';
 
 export default Vue.extend({
   components: {
+    AddressSearch,
     LayerSwitcher,
     LayerColorUpdater,
     Router,

@@ -18,4 +18,7 @@ export default {
     clearButton: 'Tyhjennä',
     routeButton: 'Reititä',
   },
+  addressSearch: {
+    noResults: 'Ei hakutuloksia',
+  },
 };

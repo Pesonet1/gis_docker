@@ -11,6 +11,7 @@ Additionally, pgrouting util container is included for running osm2pgrouting too
 - Geoserver 8080:8080
 - Mapproxy 8083:8083
 - Nginx 80:80
+- Nominatim 7070:8100
 - osm2pgrouting (run on demand)
 
 Nginx is used for proxying network traffic between containers. Currently it is only used for proxying Geoserver & Mapproxy requests.

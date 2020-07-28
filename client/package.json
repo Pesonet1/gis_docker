@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@mdi/js": "^5.3.45",
+    "@types/lodash": "^4.14.158",
     "@types/ol": "^6.3.1",
     "@types/proj4": "^2.5.0",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "lodash": "^4.17.19",
     "oidc-client": "^1.10.1",
     "ol": "^6.3.2-dev",
     "ol-mapbox-style": "^6.1.2",
