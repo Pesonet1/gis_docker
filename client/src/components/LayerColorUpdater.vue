@@ -88,7 +88,7 @@ export default Vue.extend({
   data: () => ({
     borderColor: {
       rgba: {
-        r: 0,
+        r: 255,
         g: 0,
         b: 0,
         a: 0.8,
@@ -110,6 +110,7 @@ export default Vue.extend({
       },
     },
     borderColor: {
+      immediate: false,
       deep: true,
       handler() { this.setLayerColor(); },
     },
