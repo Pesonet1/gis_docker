@@ -106,10 +106,10 @@ import { MapLayersType } from '../types';
 
 import createMap from '../util/map/map';
 import taustakarttaWMTS from '../util/map/layer/wmts';
-import kunnatWMS from '../util/map/layer/wms';
-import kunnatTiledWMS from '../util/map/layer/tiledWms';
-import kunnatWFS from '../util/map/layer/wfs';
-import kunnatVectorTile from '../util/map/layer/vectorTile';
+import getWMSLayer from '../util/map/layer/wms';
+import getTiledWMSLayer from '../util/map/layer/tiledWms';
+import getWFSLayer from '../util/map/layer/wfs';
+import getVectorTileLayer from '../util/map/layer/vectorTile';
 import popupOverlay from '../util/map/layer/popupOverlay';
 // import wpsSimplify from '../util/map/process/wpsSimplify';
 
@@ -134,10 +134,11 @@ export default Vue.extend({
   async mounted() {
     this.map = createMap(this.$refs.map, [
       taustakarttaWMTS(),
-      kunnatWMS(),
-      kunnatTiledWMS(),
-      kunnatWFS(),
-      kunnatVectorTile(),
+      getWMSLayer('geo:kunnat', 'Kunnat WMS'),
+      getWMSLayer('geo:corine', 'CORINE Maankäyttö ja maapeite'),
+      getTiledWMSLayer('geo:kunnat', 'Kunnat TiledWMS'),
+      getWFSLayer('geo:kunnat', 'Kunnat WFS'),
+      getVectorTileLayer('geo:kunnat', 'Kunnat VectorTile'),
     ]);
 
     const mousePositionElement: HTMLElement | null = document.getElementById('mouse-position');

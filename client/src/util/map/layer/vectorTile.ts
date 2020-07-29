@@ -8,7 +8,7 @@ import Feature from 'ol/Feature';
 import mapProjection from '../mapProjection';
 import { defaultStyle } from '../layerStyle';
 
-export default (): VectorTileLayer => {
+export default (layerType: string, layerName: string): VectorTileLayer => {
   const layer = new VectorTileLayer({
     declutter: true,
     renderMode: 'vector',
@@ -27,7 +27,7 @@ export default (): VectorTileLayer => {
         geometryName: 'geom',
       }),
       url: 'http://localhost/geoserver/geo/gwc/service/tms/1.0.0/'
-        + 'geo:kunnat'
+        + `${layerType}`
         + '@JHS180'
         + '@pbf/{z}/{x}/{-y}.pbf',
       projection: mapProjection,
@@ -35,7 +35,7 @@ export default (): VectorTileLayer => {
     style: defaultStyle(),
   });
 
-  layer.set('name', 'Kunnat VectorTile');
+  layer.set('name', layerName);
   layer.setVisible(false);
 
   return layer;

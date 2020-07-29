@@ -7,7 +7,7 @@ import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import mapProjection from '../mapProjection';
 import getLabel from '../layerLabel';
 
-export default (): VectorLayer => {
+export default (typeName: string, layerName: string): VectorLayer => {
   const layer = new VectorLayer({
     declutter: true,
     extent: mapProjection.getExtent(),
@@ -17,7 +17,7 @@ export default (): VectorLayer => {
     source: new SourceVector({
       format: new GeoJSON(),
       url: (extent) => ('http://localhost/geoserver/geo/wfs'
-        + '?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:kunnat'
+        + `?service=wfs&version=2.0.0&request=GetFeature&typeNames=${typeName}`
         + '&outputFormat=application/json'
         + `&bbox=${extent.join(',')}`
       ),
@@ -26,7 +26,7 @@ export default (): VectorLayer => {
     style: (feature) => getLabel(feature),
   });
 
-  layer.set('name', 'Kunnat WFS');
+  layer.set('name', layerName);
   layer.setVisible(false);
 
   return layer;

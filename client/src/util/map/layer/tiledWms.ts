@@ -3,7 +3,7 @@ import TileWMS from 'ol/source/TileWMS';
 
 import mapProjection from '../mapProjection';
 
-export default (): TileLayer => {
+export default (layerType: string, layerName: string): TileLayer => {
   const layer = new TileLayer({
     opacity: 0.8,
     minZoom: 0,
@@ -12,7 +12,7 @@ export default (): TileLayer => {
     source: new TileWMS({
       url: 'http://localhost/geoserver/geo/wms',
       params: {
-        LAYERS: 'geo:kunnat',
+        LAYERS: layerType,
         FORMAT: 'image/png8',
         TILED: true,
       },
@@ -22,7 +22,7 @@ export default (): TileLayer => {
     }),
   });
 
-  layer.set('name', 'Kunnat TiledWMS');
+  layer.set('name', layerName);
   layer.setVisible(false);
 
   return layer;

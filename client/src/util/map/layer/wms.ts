@@ -3,17 +3,17 @@ import SourceWMS from 'ol/source/ImageWMS';
 
 import mapProjection from '../mapProjection';
 
-export default (): ImageLayer => {
+export default (layerType: string, layerName: string): ImageLayer => {
   const layer = new ImageLayer({
     extent: mapProjection.getExtent(),
     zIndex: 1,
-    opacity: 0.8,
+    opacity: 0.7,
     minZoom: 0,
     maxZoom: 15,
     source: new SourceWMS({
       url: 'http://localhost/geoserver/geo/wms',
       params: {
-        LAYERS: 'geo:kunnat',
+        LAYERS: layerType,
         TRANSPARENT: true,
         FORMAT: 'image/png8',
         RATIO: 1,
@@ -23,7 +23,7 @@ export default (): ImageLayer => {
     }),
   });
 
-  layer.set('name', 'Kunnat WMS');
+  layer.set('name', layerName);
   layer.setVisible(false);
 
   return layer;
