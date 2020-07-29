@@ -1,0 +1,17 @@
+<layer>
+  <name>corine</name>
+  <id>LayerInfoImpl--548ae14d:17396a4b400:-7fe5</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--5b4f175d:172c1d4ae58:-7ffd</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--548ae14d:17396a4b400:-7fe6</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2020-07-29 09:34:16.274 UTC</dateCreated>
+  <dateModified>2020-07-29 09:36:39.769 UTC</dateModified>
+</layer>
