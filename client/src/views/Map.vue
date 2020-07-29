@@ -111,6 +111,7 @@ import kunnatTiledWMS from '../util/map/layer/tiledWms';
 import kunnatWFS from '../util/map/layer/wfs';
 import kunnatVectorTile from '../util/map/layer/vectorTile';
 import popupOverlay from '../util/map/layer/popupOverlay';
+// import wpsSimplify from '../util/map/process/wpsSimplify';
 
 import mousePositionControl from '../util/map/control/mousePosition';
 
@@ -155,6 +156,8 @@ export default Vue.extend({
 
     // @ts-ignore
     this.mapLayers = this.map.getLayers().array_;
+
+    // wpsSimplify(this.map);
   },
 });
 </script>

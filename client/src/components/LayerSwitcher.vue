@@ -147,7 +147,7 @@ export default Vue.extend({
   watch: {
     layers(layers: MapLayersType[]) {
       // @ts-ignore
-      const filteredLayers = layers.filter((layer) => ['routing_input', 'routing_result', 'marker_layer'].indexOf(layer.values_.name) < 0);
+      const filteredLayers = layers.filter((layer) => ['routing_input', 'routing_result', 'marker_layer', 'wps_layer'].indexOf(layer.values_.name) < 0);
       this.mapLayers = filteredLayers;
     },
   },
