@@ -1,0 +1,17 @@
+<layer>
+  <name>pgrouting_osm</name>
+  <id>LayerInfoImpl--12f501ab:17358ef5972:25f</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--12f501ab:17358ef5972:2c6</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--12f501ab:17358ef5972:25e</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2020-07-19 09:21:32.382 UTC</dateCreated>
+  <dateModified>2020-08-01 08:37:25.924 UTC</dateModified>
+</layer>

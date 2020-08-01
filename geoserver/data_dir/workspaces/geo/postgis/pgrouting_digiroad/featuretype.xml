@@ -1,14 +1,14 @@
 <featureType>
-  <id>FeatureTypeInfoImpl--12f501ab:17358ef5972:25e</id>
-  <name>pgrouting</name>
-  <nativeName>pgrouting</nativeName>
+  <id>FeatureTypeInfoImpl--548ae14d:17396a4b400:-7f9f</id>
+  <name>pgrouting_digiroad</name>
+  <nativeName>pgrouting_digiroad</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--5b4f175d:172c1d4ae58:-7fe3</id>
   </namespace>
-  <title>pgrouting</title>
+  <title>pgrouting_digiroad</title>
   <keywords>
     <string>features</string>
-    <string>pgrouting</string>
+    <string>a</string>
   </keywords>
   <nativeCRS class="projected">PROJCS[&quot;ETRS89 / TM35FIN(E,N)&quot;, 
   GEOGCS[&quot;ETRS89&quot;, 
@@ -51,9 +51,9 @@
   <metadata>
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
-        <name>pgrouting</name>
-        <sql>SELECT ST_MakeLine(route.geom) FROM (&#xd;
-    SELECT geom FROM wrk_fromAtoB(&apos;vehicle_net&apos;, %x1%, %y1%, %x2%, %y2%&#xd;
+        <name>pgrouting_digiroad</name>
+        <sql>SELECT ST_MakeLine(ST_LineMerge(route.geom)) FROM (&#xd;
+    SELECT geom FROM wrk_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%&#xd;
   ) ORDER BY seq) AS route
 </sql>
         <escapeSql>false</escapeSql>
