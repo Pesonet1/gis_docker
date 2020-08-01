@@ -74,7 +74,7 @@ export const routingResultLayer = (startCoord: number[], destCoord: number[]): I
     source: new SourceWMS({
       url: 'http://localhost/geoserver/geo/wms',
       params: {
-        LAYERS: 'geo:pgrouting',
+        LAYERS: 'geo:pgrouting_digiroad',
         FORMAT: 'image/png',
         VIEWPARAMS: viewparams.join(';'),
       },
