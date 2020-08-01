@@ -1,24 +1,22 @@
--- wrk_dijsktra
 
-CREATE OR REPLACE FUNCTION wrk_dijkstra(
-        IN edges_subset regclass,
-        IN source BIGINT,
-        IN target BIGINT,
-        OUT seq INTEGER,
-        OUT gid BIGINT,
-        OUT name TEXT,
-        OUT cost FLOAT,
-        OUT azimuth FLOAT,
-        OUT route_readable TEXT,
-        OUT route_geom geometry
-    )
-    RETURNS SETOF record AS
+CREATE OR REPLACE FUNCTION wrk_dijkstra_osm(
+    IN edges_subset regclass,
+    IN source BIGINT,
+    IN target BIGINT,
+    OUT seq INTEGER,
+    OUT gid BIGINT,
+    OUT name TEXT,
+    OUT cost FLOAT,
+    OUT azimuth FLOAT,
+    OUT route_readable TEXT,
+    OUT route_geom geometry
+)
+RETURNS SETOF record AS
 $BODY$
     WITH
     dijkstra AS (
         SELECT * FROM pgr_dijkstra(
-            -- using parameters instead of specific values
-            'SELECT gid AS id, * FROM ' || $1,
+            'SELECT gid AS id, target, source, cost, reverse_cost FROM ' || $1,
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
             (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
     ),
@@ -43,9 +41,7 @@ $BODY$
 $BODY$
 LANGUAGE 'sql';
 
--- wrk_fromAtoB
-
-CREATE OR REPLACE FUNCTION wrk_fromAtoB(
+CREATE OR REPLACE FUNCTION wrk_fromAtoB_osm(
     IN edges_subset regclass,
     IN x1 numeric, IN y1 numeric,
     IN x2 numeric, IN y2 numeric,
@@ -62,9 +58,8 @@ $BODY$
 DECLARE
     final_query TEXT;
 BEGIN
-
     final_query :=
-        FORMAT( $$
+        FORMAT($$
             WITH
             vertices AS (
                 SELECT * FROM ways_vertices_pgr
@@ -75,7 +70,7 @@ BEGIN
             ),
             dijkstra AS (
                 SELECT *
-                FROM wrk_dijkstra(
+                FROM wrk_dijkstra_osm(
                     '%1$I',
                     -- source
                     (SELECT osm_id FROM vertices
@@ -92,8 +87,9 @@ BEGIN
                 dijkstra.cost AS the_time,
                 azimuth,
                 route_geom AS geom
-            FROM dijkstra JOIN ways USING (gid);$$,
-        edges_subset, x1,y1,x2,y2); -- %1 to %5 of the FORMAT function
+            FROM dijkstra JOIN ways USING (gid);
+        $$,
+        edges_subset, x1, y1, x2, y2);
     RAISE notice '%', final_query;
     RETURN QUERY EXECUTE final_query;
 END;
