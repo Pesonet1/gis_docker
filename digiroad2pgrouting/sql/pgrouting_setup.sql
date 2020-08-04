@@ -1,16 +1,44 @@
 ALTER TABLE reititys.digiroad ALTER COLUMN geom TYPE geometry(LineString, 3067) USING ST_Force2D(geom);
 
-ALTER TABLE reititys.digiroad ADD COLUMN source integer;
-ALTER TABLE reititys.digiroad ADD COLUMN target integer;
+ALTER TABLE reititys.digiroad ADD COLUMN source INTEGER;
+ALTER TABLE reititys.digiroad ADD COLUMN target INTEGER;
+ALTER TABLE reititys.digiroad ADD COLUMN oneway TEXT;
+ALTER TABLE reititys.digiroad ADD COLUMN cost DOUBLE PRECISION;
+ALTER TABLE reititys.digiroad ADD COLUMN reverse_cost DOUBLE PRECISION;
+ALTER TABLE reititys.digiroad ADD COLUMN length_m INTEGER; 
+ALTER TABLE reititys.digiroad ADD COLUMN speed_limit INTEGER;
+
+UPDATE reititys.digiroad SET oneway = CASE
+	WHEN ajosuunta = 2 THEN 'NO'
+    WHEN ajosuunta = 3 THEN 'YES'
+	WHEN ajosuunta = 4 THEN 'YES'
+	ELSE 'UNKOWN'
+END;
+
+UPDATE reititys.digiroad SET speed_limit = arvo
+    FROM reititys.digiroad_nopeusrajoitus
+    WHERE reititys.digiroad.link_id = reititys.digiroad_nopeusrajoitus.link_id;
 
 SELECT pgr_createTopology('reititys.digiroad', 0.0001, 'geom', 'id');
+-- SELECT pgr_analyzeGraph('reititys.digiroad', 0.00001, 'geom', 'id');
+-- SELECT pgr_analyzeOneway('reititys.digiroad', ARRAY[''], ARRAY[''], ARRAY[''], ARRAY[''], false);
 
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("source");
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("target");
 
-ALTER TABLE reititys.digiroad ADD COLUMN pituus integer; 
+UPDATE reititys.digiroad SET length_m = ST_Length(geom);
 
-UPDATE reititys.digiroad SET pituus = ST_Length(geom);
+UPDATE reititys.digiroad SET cost = CASE
+    WHEN speed_limit IS NOT NULL THEN length_m / (speed_limit / 3.6) -- length_m;
+    ELSE length_m
+END;
+
+UPDATE reititys.digiroad SET reverse_cost = CASE
+	WHEN oneway = 'YES' THEN 999999
+	WHEN oneway = 'NO' THEN -cost
+    WHEN oneway = 'UNKOWN' THEN 999999
+	ELSE length_m
+END;
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra_digiroad(
     IN source BIGINT,
@@ -25,28 +53,29 @@ CREATE OR REPLACE FUNCTION wrk_dijkstra_digiroad(
 )
 RETURNS SETOF record AS
 $BODY$
-    WITH
+	WITH
 	dijkstra AS (
-		SELECT * FROM pgr_dijkstra('SELECT id, pituus AS cost, pituus AS reverse_cost, * FROM reititys.digiroad', $1, $2)
+		SELECT * FROM pgr_dijkstra('SELECT id, source, target, cost, reverse_cost, tienimi_su FROM reititys.digiroad WHERE toiminn_lk NOT IN (6,7,8)', $1, $2)
 	),
 	get_geom AS (
-		SELECT dijkstra.*, reititys.digiroad.tienimi_su, reititys.digiroad.pituus,
+		SELECT dijkstra.*, reititys.digiroad.tienimi_su,
 			CASE
 				WHEN dijkstra.node = reititys.digiroad.source THEN geom
 				ELSE ST_Reverse(geom)
 			END AS route_geom
 		FROM dijkstra JOIN reititys.digiroad ON (edge = id)
-		ORDER BY seq)
-    SELECT
-        seq,
-        edge,  -- will get the name "gid"
-        tienimi_su,
-       	cost,
-        degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
-        ST_AsText(route_geom),
-        route_geom
-    FROM get_geom
-    ORDER BY seq;
+		ORDER BY seq
+	)
+	SELECT
+		seq,
+		edge as gid,
+		tienimi_su AS name,
+		cost,
+		degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
+		ST_AsText(route_geom),
+		route_geom
+	FROM get_geom
+	ORDER BY seq;
 $BODY$
 LANGUAGE 'sql';
 
@@ -63,9 +92,9 @@ CREATE OR REPLACE FUNCTION wrk_fromAtoB_digiroad(
 )
 RETURNS SETOF record AS
 $BODY$
-  	DECLARE final_query TEXT;
+	DECLARE final_query TEXT;
 	BEGIN
-      	final_query :=
+		final_query :=
 			FORMAT($$
 				WITH
 				vertices AS (
@@ -89,15 +118,14 @@ $BODY$
 					seq,
 					dijkstra.gid,
 					dijkstra.name,
-					reititys.digiroad.pituus AS length,
+					reititys.digiroad.length_m AS length,
 					dijkstra.cost AS the_time,
 					azimuth,
 					route_geom AS geom
 				FROM dijkstra INNER JOIN reititys.digiroad ON dijkstra.gid = reititys.digiroad.id;
-			$$,
-          	x1, y1, x2, y2);
-      RAISE notice '%', final_query;
-      RETURN QUERY EXECUTE final_query;
+			$$, x1, y1, x2, y2);
+		RAISE notice '%', final_query;
+		RETURN QUERY EXECUTE final_query;
   END;
 $BODY$
 LANGUAGE 'plpgsql';

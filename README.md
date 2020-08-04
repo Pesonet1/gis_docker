@@ -31,10 +31,16 @@ Nginx is used for proxying network traffic between containers. Currently it is o
 
 First [install docker](https://docs.docker.com/compose/install/)
 
-Build and run Docker containers (geoserver, database, mapproxy, nginx)
+Build and run Docker containers
 
 ```
 $ docker-compose -f docker-compose.dev.yaml up --build
+```
+
+Build individual containers
+
+```
+$ docker-compose build <container-name>
 ```
 
 Start containers without build

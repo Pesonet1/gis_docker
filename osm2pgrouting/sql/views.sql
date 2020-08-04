@@ -6,6 +6,5 @@ CREATE VIEW vehicle_net AS
         cost_s / 60 AS cost,
         reverse_cost_s / 60 AS reverse_cost,
         the_geom
-    FROM ways JOIN configuration AS c
-    USING (tag_id)
-    WHERE c.tag_value NOT IN ('steps','footway','path');
+    FROM ways JOIN configuration AS c USING (tag_id)
+    WHERE c.tag_value NOT IN ('steps', 'footway', 'path');
