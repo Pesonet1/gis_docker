@@ -1,11 +1,32 @@
 <template>
   <div class="px-3 pb-3 address-search">
-    <v-text-field
-      v-model="searchValue"
-      class="pb-3"
-      hide-details
+    <v-row
+      no-gutters
+      align="center"
     >
-    </v-text-field>
+      <v-col cols="11">
+        <v-text-field
+          v-model="searchValue"
+          class="pb-3"
+          hide-details
+        >
+        </v-text-field>
+      </v-col>
+      <v-col
+        cols="1"
+        align="end"
+      >
+        <v-btn
+          icon
+          x-small
+          @click="clearAddressSearch"
+        >
+          <v-icon>
+            {{ mdiClose }}
+          </v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
 
     <v-row
       v-if="searching"
@@ -74,6 +95,7 @@
 import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
 import debounce from 'lodash/debounce';
+import { mdiClose } from '@mdi/js';
 
 import Map from 'ol/Map';
 import { fromLonLat } from 'ol/proj';
@@ -98,9 +120,12 @@ export default Vue.extend({
     selectedSearchValue: null as number | null,
     searchResult: [] as NominatimSearchResponse[] | [],
     markerLayer: null as VectorLayer | null,
+    mdiClose,
   }),
   watch: {
     searchValue(newValue: string) {
+      if (!newValue) return;
+
       if (newValue.length <= 3) {
         this.searching = false;
         return;
@@ -114,8 +139,27 @@ export default Vue.extend({
     this.markerLayer = getMarkerLayer();
   },
   methods: {
+    clearAddressSearch() {
+      this.searching = false;
+      this.noResults = true;
+      this.searchError = false;
+      this.searchValue = null;
+      this.selectedSearchValue = null;
+      this.seachResult = [];
+
+      if (this.markerLayer) {
+        this.markerLayer.getSource().clear();
+        this.map.removeLayer(this.markerLayer);
+        this.markerLayerAdded = false;
+        this.markerLayer = null;
+      }
+    },
     searchAddress: debounce(async function (searchValue: string) { // eslint-disable-line
       try {
+        if (!this.markerLayer) {
+          this.markerLayer = getMarkerLayer();
+        }
+
         const response: AxiosResponse = await axios.get(`http://localhost/nominatim/search?addressdetails=1&q=${searchValue}&format=json&polygon_geojson=1&limit=5`);
         const { data }: { data: NominatimSearchResponse[] } = response;
 
