@@ -8,38 +8,8 @@ ALTER TABLE reititys.digiroad ADD COLUMN reverse_cost DOUBLE PRECISION;
 ALTER TABLE reititys.digiroad ADD COLUMN length_m INTEGER; 
 ALTER TABLE reititys.digiroad ADD COLUMN speed_limit INTEGER;
 
--- ajosuunta
--- Liikenne on sallittua molempiin suuntiin 2
--- Liikenne on sallittu digitointisuuntaa vastaan 3
--- Liikenne on sallittu digitointisuuntaan 4
-
--- geom_flip
--- Digitointisuunta säilynyt samana 0
--- Digitointisuunta vaihtunut 1
-
--- ‘FT’ - oneway from the source to the target node.
--- ‘TF’ - oneway from the target to the source node.
--- ‘B’ - two way street.
--- ‘’ - empty field, assume twoway.
--- <NULL> - NULL field, use two_way_if_null flag.
-
-UPDATE reititys.digiroad SET oneway = CASE
-	WHEN ajosuunta = 2 THEN 'B'
-    WHEN ajosuunta = 3 AND geom_flip = 1 THEN 'FT'
-	WHEN ajosuunta = 3 AND geom_flip = 0 THEN 'TF'
-    WHEN ajosuunta = 4 AND geom_flip = 1 THEN 'TF'
-    WHEN ajosuunta = 4 AND geom_flip = 0 THEN 'FT'
-	ELSE NULL
-END;
-
-UPDATE reititys.digiroad SET speed_limit = arvo
-    FROM reititys.digiroad_nopeusrajoitus
-    WHERE reititys.digiroad.link_id = reititys.digiroad_nopeusrajoitus.link_id;
-
 SELECT pgr_createTopology('reititys.digiroad', 0.0001, 'geom', 'id');
--- SELECT pgr_analyzeGraph('reititys.digiroad', 0.00001, 'geom', 'id');
--- SELECT pgr_analyzeOneway('reititys.digiroad', ARRAY[''], ARRAY[''], ARRAY[''], ARRAY[''], false);
-
+SELECT pgr_analyzeGraph('reititys.digiroad', 0.00001, 'geom', 'id');
 SELECT pgr_analyzeOneway('reititys.digiroad',
 	ARRAY['', 'B', 'TF'],
 	ARRAY['', 'B', 'FT'],
@@ -52,7 +22,34 @@ SELECT pgr_analyzeOneway('reititys.digiroad',
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("source");
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("target");
 
+UPDATE reititys.digiroad SET speed_limit = arvo
+    FROM reititys.digiroad_nopeusrajoitus
+    WHERE reititys.digiroad.link_id = reititys.digiroad_nopeusrajoitus.link_id;
+
 UPDATE reititys.digiroad SET length_m = ST_Length(geom);
+
+-- ajosuunta
+-- Liikenne on sallittua molempiin suuntiin 2
+-- Liikenne on sallittu digitointisuuntaa vastaan 3
+-- Liikenne on sallittu digitointisuuntaan 4
+
+-- geom_flip
+-- Digitointisuunta säilynyt samana 0
+-- Digitointisuunta vaihtunut 1
+
+-- FT - oneway from the source to the target node.
+-- TF - oneway from the target to the source node.
+-- B - two way street.
+-- NULL - empty field, assume twoway.
+
+UPDATE reititys.digiroad SET oneway = CASE
+	WHEN ajosuunta = 2 THEN 'B'
+    WHEN ajosuunta = 3 AND geom_flip = 1 THEN 'FT'
+	WHEN ajosuunta = 3 AND geom_flip = 0 THEN 'TF'
+    WHEN ajosuunta = 4 AND geom_flip = 1 THEN 'TF'
+    WHEN ajosuunta = 4 AND geom_flip = 0 THEN 'FT'
+	ELSE NULL
+END;
 
 UPDATE reititys.digiroad SET cost = CASE
     WHEN oneway = 'TF' THEN 10000
