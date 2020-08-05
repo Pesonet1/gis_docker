@@ -3,12 +3,12 @@
 Main purpose for this repository is to act as a playground for testing different GIS related web technologies.
 
 This repository contains containerized (Docker) parts of a GIS application that constructs a simple GIS application. 
-Additionally, pgrouting util container is included for running osm2pgrouting tool for importing osm data into database for pgrouting.
+Additionally, pgrouting containers (osm2pgrouting & digiroad2pgrouting) are included for running osm2pgrouting tool for importing network data (osm & digiroad) into database for pgrouting.
 
 Running main containers (client & server currently disabled and need to be run manually)
 
-- Client 8082:8082
-- Server 8085:8085
+- Client 8082 (not dockerized)
+- Server 8085 (not dockerized)
 - Database 5435:5432
 - Geoserver 8080:8080
 - Mapproxy 8083:8083
@@ -61,5 +61,3 @@ Manually run server & client applications
 cd client -> yarn run serve
 cd server -> npm run start
 ```
-
-TODO: Dockerize server & client applications
