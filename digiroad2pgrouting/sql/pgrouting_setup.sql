@@ -8,11 +8,28 @@ ALTER TABLE reititys.digiroad ADD COLUMN reverse_cost DOUBLE PRECISION;
 ALTER TABLE reititys.digiroad ADD COLUMN length_m INTEGER; 
 ALTER TABLE reititys.digiroad ADD COLUMN speed_limit INTEGER;
 
+-- ajosuunta
+-- Liikenne on sallittua molempiin suuntiin 2
+-- Liikenne on sallittu digitointisuuntaa vastaan 3
+-- Liikenne on sallittu digitointisuuntaan 4
+
+-- geom_flip
+-- Digitointisuunta säilynyt samana 0
+-- Digitointisuunta vaihtunut 1
+
+-- ‘FT’ - oneway from the source to the target node.
+-- ‘TF’ - oneway from the target to the source node.
+-- ‘B’ - two way street.
+-- ‘’ - empty field, assume twoway.
+-- <NULL> - NULL field, use two_way_if_null flag.
+
 UPDATE reititys.digiroad SET oneway = CASE
-	WHEN ajosuunta = 2 THEN 'NO'
-    WHEN ajosuunta = 3 THEN 'YES'
-	WHEN ajosuunta = 4 THEN 'YES'
-	ELSE 'UNKOWN'
+	WHEN ajosuunta = 2 THEN 'B'
+    WHEN ajosuunta = 3 AND geom_flip = 1 THEN 'FT'
+	WHEN ajosuunta = 3 AND geom_flip = 0 THEN 'TF'
+    WHEN ajosuunta = 4 AND geom_flip = 1 THEN 'TF'
+    WHEN ajosuunta = 4 AND geom_flip = 0 THEN 'FT'
+	ELSE NULL
 END;
 
 UPDATE reititys.digiroad SET speed_limit = arvo
@@ -23,20 +40,27 @@ SELECT pgr_createTopology('reititys.digiroad', 0.0001, 'geom', 'id');
 -- SELECT pgr_analyzeGraph('reititys.digiroad', 0.00001, 'geom', 'id');
 -- SELECT pgr_analyzeOneway('reititys.digiroad', ARRAY[''], ARRAY[''], ARRAY[''], ARRAY[''], false);
 
+SELECT pgr_analyzeOneway('reititys.digiroad',
+	ARRAY['', 'B', 'TF'],
+	ARRAY['', 'B', 'FT'],
+	ARRAY['', 'B', 'FT'],
+	ARRAY['', 'B', 'TF'],
+	oneway := 'oneway',
+	two_way_if_null := true
+);
+
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("source");
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("target");
 
 UPDATE reititys.digiroad SET length_m = ST_Length(geom);
 
 UPDATE reititys.digiroad SET cost = CASE
-    WHEN speed_limit IS NOT NULL THEN length_m / (speed_limit / 3.6) -- length_m;
-    ELSE length_m
+    WHEN oneway = 'TF' THEN 10000
+    ELSE length_m -- speed_limit IS NOT NULL THEN length_m / (speed_limit / 3.6) -- length_m;
 END;
 
 UPDATE reititys.digiroad SET reverse_cost = CASE
-	WHEN oneway = 'YES' THEN 999999
-	WHEN oneway = 'NO' THEN -cost
-    WHEN oneway = 'UNKOWN' THEN 999999
+	WHEN oneway = 'FT' THEN 10000
 	ELSE length_m
 END;
 
@@ -55,7 +79,7 @@ RETURNS SETOF record AS
 $BODY$
 	WITH
 	dijkstra AS (
-		SELECT * FROM pgr_dijkstra('SELECT id, source, target, cost, reverse_cost, tienimi_su FROM reititys.digiroad WHERE toiminn_lk NOT IN (6,7,8)', $1, $2)
+		SELECT * FROM pgr_dijkstra('SELECT id, source, target, cost, reverse_cost, tienimi_su FROM reititys.digiroad WHERE toiminn_lk NOT IN (6,7,8)', $1, $2, directed := 'true')
 	),
 	get_geom AS (
 		SELECT dijkstra.*, reititys.digiroad.tienimi_su,
