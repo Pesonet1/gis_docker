@@ -1,9 +1,8 @@
 # Osm2pgrouting
 
-Docker container can be used for importing osm dataset into postgresql to be used by pgrouting. This is done by using (osm2pgrouting)[https://github.com/pgRouting/osm2pgrouting
-] tool.
+Docker container can be used for importing osm dataset into postgresql to be used by pgrouting. This is done by using [osm2pgrouting](https://github.com/pgRouting/osm2pgrouting) tool.
 
-This docker container is heavely based on (pgrouting workshop)[https://workshop.pgrouting.org/2.6/en/index.html]
+This docker container is heavely based on [pgrouting workshop](https://workshop.pgrouting.org/2.6/en/index.html)
 
 ## Running this container
 

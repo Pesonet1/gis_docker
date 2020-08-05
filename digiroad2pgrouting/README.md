@@ -1,13 +1,12 @@
 # digiroad2pgrouting
 
-Docker container can be used for importing digiroad topology into postgresql to be used by pgrouting. This is done by using (osm2pgrouting)[https://github.com/pgRouting/osm2pgrouting
-] tool.
+Docker container can be used for importing digiroad topology into postgresql to be used by pgrouting. This is done by using [osm2pgrouting](https://github.com/pgRouting/osm2pgrouting) tool.
 
-This docker container is heavily based on this (blog post)[https://www.paikkatietomies.fi/pgrouting_miehen_tiella_pitaa/].
+This docker container is heavily based on this [blog post](https://www.paikkatietomies.fi/pgrouting_miehen_tiella_pitaa/).
 
 ## Installation
 
-1. Download digiroad dataset (K) (from here)[https://aineistot.vayla.fi/digiroad/latest/].
+1. Download digiroad dataset (K) [from here](https://aineistot.vayla.fi/digiroad/latest/).
 
 2. Create `digiroad_data` folder inside digiroad2pgrouting folder and copy sub folders inside it e.g. ITA-UUSIMAA, UUSIMAA_1.
 

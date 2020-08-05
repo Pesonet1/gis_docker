@@ -1,6 +1,6 @@
 # Geoserver
 
-This container is based on (container)[https://hub.docker.com/r/oscarfonts/geoserver]
+This container is based on [container](https://hub.docker.com/r/oscarfonts/geoserver)
 
 Geoserver has `kunnat` geopackage automatically configured that provides simple data for examples of different layer protocols (WMS, WMTS, WFS, VectorTile).
 
