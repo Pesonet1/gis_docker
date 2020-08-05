@@ -20,11 +20,12 @@ Utility containers
 - osm2pgrouting (run on demand)
 - digiroad2pgrouting (run on demand)
 
-Nginx is used for proxying network traffic between containers. Currently it is only used for proxying Geoserver & Mapproxy requests.
+Nginx is used for proxying network traffic between containers. Currently it is only used for proxying Geoserver, Mapproxy & nominatim requests.
 
 ```
 /geoserver -> geoserver:8080
 /mapproxy -> mapproxy:8083
+/nominatim/ -> nominatim:8100
 ```
 
 ## Setup
