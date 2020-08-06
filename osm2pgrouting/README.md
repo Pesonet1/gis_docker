@@ -8,7 +8,7 @@ This docker container is heavely based on [pgrouting workshop](https://workshop.
 
 NOTE: Run this container after you have started other containers (database is needed)
 
-First get some OSM data and place it under this folder.
+First get some OSM data and place it under this folder (NOTE: currently Helsinki.osm.pbf is the hardcoded filename).
 
 https://download.bbbike.org/osm/bbbike/
 http://download.geofabrik.de/europe/finland.html

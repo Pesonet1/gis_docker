@@ -2,6 +2,11 @@
 
 ## Installation
 
+First get some OSM data and place it under this folder (NOTE: currently Helsinki.osm.pbf is the hardcoded filename).
+
+https://download.bbbike.org/osm/bbbike/
+http://download.geofabrik.de/europe/finland.html
+
 NOTE: Run these commands inside nominatim folder (otherwise change relative paths)
 
 1. Start dev-database container
