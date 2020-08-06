@@ -145,7 +145,7 @@ export default Vue.extend({
       this.searchError = false;
       this.searchValue = null;
       this.selectedSearchValue = null;
-      this.seachResult = [];
+      this.searchResult = [];
 
       if (this.markerLayer) {
         this.markerLayer.getSource().clear();
@@ -156,7 +156,9 @@ export default Vue.extend({
     },
     searchAddress: debounce(async function (searchValue: string) { // eslint-disable-line
       try {
+        // @ts-ignore
         if (!this.markerLayer) {
+          // @ts-ignore
           this.markerLayer = getMarkerLayer();
         }
 
