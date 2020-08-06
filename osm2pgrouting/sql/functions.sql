@@ -7,8 +7,6 @@ CREATE OR REPLACE FUNCTION wrk_dijkstra_osm(
     OUT gid BIGINT,
     OUT name TEXT,
     OUT cost FLOAT,
-    OUT azimuth FLOAT,
-    OUT route_readable TEXT,
     OUT route_geom geometry
 )
 RETURNS SETOF record AS
@@ -33,8 +31,6 @@ $BODY$
         edge,  -- will get the name "gid"
         name,
         cost,
-        degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
-        ST_AsText(route_geom),
         route_geom
     FROM get_geom
     ORDER BY seq;
@@ -49,8 +45,7 @@ CREATE OR REPLACE FUNCTION wrk_fromAtoB_osm(
     OUT gid BIGINT,
     OUT name TEXT,
     OUT length FLOAT,
-    OUT the_time FLOAT,
-    OUT azimuth FLOAT,
+    OUT cost FLOAT,
     OUT geom geometry
 )
 RETURNS SETOF record AS
@@ -84,8 +79,7 @@ BEGIN
                 dijkstra.gid,
                 dijkstra.name,
                 ways.length_m/1000.0 AS length,
-                dijkstra.cost AS the_time,
-                azimuth,
+                dijkstra.cost,
                 route_geom AS geom
             FROM dijkstra JOIN ways USING (gid);
         $$,
