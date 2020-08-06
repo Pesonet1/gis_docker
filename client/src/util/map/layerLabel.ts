@@ -32,8 +32,8 @@ const getTextStyle = (
   padding: [5, 5, 5, 5],
 }));
 
-const getLabelText = (feature: RenderFeature | FeatureLike): Text => {
-  const text = feature.get('nimi');
+export const getLabelText = (feature: RenderFeature | FeatureLike, property: string): Text => {
+  const text = feature.get(property).toString();
 
   if (text) {
     return getTextStyle('11px Verdana', 'white', 'black', 3, 0, 0, 'point', text);
@@ -42,7 +42,7 @@ const getLabelText = (feature: RenderFeature | FeatureLike): Text => {
   return new Text();
 };
 
-export default (feature: RenderFeature | FeatureLike): Style => (new Style({
+export const getFeatureLabelStyle = (feature: RenderFeature | FeatureLike): Style => (new Style({
   stroke: new Stroke({
     color: 'black',
     width: 2,
@@ -50,5 +50,5 @@ export default (feature: RenderFeature | FeatureLike): Style => (new Style({
   fill: new Fill({
     color: 'rgba(0, 0, 0, 0.5)',
   }),
-  text: getLabelText(feature),
+  text: getLabelText(feature, 'nimi'),
 }));

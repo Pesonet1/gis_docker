@@ -79,7 +79,8 @@ import GeometryType from 'ol/geom/GeometryType';
 
 import {
   routingLocationLayer,
-  routingResultLayer,
+  // routingResultLayerWMS,
+  routingResultLayerWFS,
   defaultStyle,
 } from '../util/map/layer/pgrouting';
 
@@ -93,7 +94,7 @@ export default Vue.extend({
     startPoint: null as Feature | null,
     destPoint: null as Feature | null,
     vectorLayer: null as VectorLayer | null,
-    resultLayer: null as ImageLayer | null,
+    resultLayer: null as ImageLayer | VectorLayer | null,
     startPointSet: false as boolean,
     destPointSet: false as boolean,
     routeCalculated: false as boolean,
@@ -163,10 +164,20 @@ export default Vue.extend({
       // @ts-ignore
       const destCoord = this.destPoint.getGeometry().getCoordinates();
 
-      this.resultLayer = routingResultLayer(startCoord, destCoord);
+      // LOADER INDICATION FOR WMS
+      // this.resultLayer = routingResultLayerWMS(startCoord, destCoord);
+
+      // this.routingLoading = true;
+      // this.resultLayer.getSource().on('imageloadend', () => {
+      //   this.routingLoading = false;
+      //   this.routeCalculated = true;
+      // });
+
+      // LOADER INDICATION FOR WFS
+      this.resultLayer = routingResultLayerWFS(startCoord, destCoord);
 
       this.routingLoading = true;
-      this.resultLayer.getSource().on('imageloadend', () => {
+      this.resultLayer.getSource().on('change', () => {
         this.routingLoading = false;
         this.routeCalculated = true;
       });

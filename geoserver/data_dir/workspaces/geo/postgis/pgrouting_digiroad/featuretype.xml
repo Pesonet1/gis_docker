@@ -52,8 +52,8 @@
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>pgrouting_digiroad</name>
-        <sql>SELECT ST_MakeLine(ST_LineMerge(route.geom)) FROM (&#xd;
-    SELECT geom FROM wrk_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%&#xd;
+        <sql>SELECT ROUND(SUM(route.cost) / 60) as total_cost_in_min, ST_MakeLine(route.geom) FROM (&#xd;
+    SELECT gid, name, cost, geom FROM wrk_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%&#xd;
   ) ORDER BY seq) AS route
 </sql>
         <escapeSql>false</escapeSql>

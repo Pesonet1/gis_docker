@@ -5,7 +5,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 import mapProjection from '../mapProjection';
-import getLabel from '../layerLabel';
+import { getFeatureLabelStyle } from '../layerLabel';
 
 export default (typeName: string, layerName: string): VectorLayer => {
   const layer = new VectorLayer({
@@ -23,7 +23,7 @@ export default (typeName: string, layerName: string): VectorLayer => {
       ),
       strategy: bboxStrategy,
     }),
-    style: (feature) => getLabel(feature),
+    style: (feature) => getFeatureLabelStyle(feature),
   });
 
   layer.set('name', layerName);

@@ -2,6 +2,7 @@ import ImageLayer from 'ol/layer/Image';
 import SourceWMS from 'ol/source/ImageWMS';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
 
 import RenderFeature from 'ol/render/Feature';
 import FeatureLike from 'ol/Feature';
@@ -11,6 +12,9 @@ import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import Text from 'ol/style/Text';
 import CircleStyle from 'ol/style/Circle';
+
+import mapProjection from '../mapProjection';
+import { getLabelText } from '../layerLabel';
 
 export const defaultStyle = () => (new Style({
   image: new CircleStyle({
@@ -64,7 +68,7 @@ export const routingLocationLayer = (): VectorLayer => {
   return layer;
 };
 
-export const routingResultLayer = (startCoord: number[], destCoord: number[]): ImageLayer => {
+export const routingResultLayerWMS = (startCoord: number[], destCoord: number[]): ImageLayer => {
   const viewparams = [
     `x1:${startCoord[0]}`, `y1:${startCoord[1]}`,
     `x2:${destCoord[0]}`, `y2:${destCoord[1]}`,
@@ -78,6 +82,38 @@ export const routingResultLayer = (startCoord: number[], destCoord: number[]): I
         FORMAT: 'image/png',
         VIEWPARAMS: viewparams.join(';'),
       },
+    }),
+  });
+
+  layer.set('name', 'routing_result');
+
+  return layer;
+};
+
+export const routingResultLayerWFS = (startCoord: number[], destCoord: number[]): VectorLayer => {
+  const viewparams = [
+    `x1:${startCoord[0]}`, `y1:${startCoord[1]}`,
+    `x2:${destCoord[0]}`, `y2:${destCoord[1]}`,
+  ];
+
+  const layer = new VectorLayer({
+    declutter: true,
+    extent: mapProjection.getExtent(),
+    zIndex: 2,
+    minZoom: 0,
+    maxZoom: 15,
+    source: new VectorSource({
+      url: 'http://localhost/geoserver/geo/wfs'
+        + '?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:pgrouting_digiroad'
+        + `&outputFormat=application/json&viewparams=${viewparams.join(';')}`,
+      format: new GeoJSON(),
+    }),
+    style: (feature) => new Style({
+      stroke: new Stroke({
+        color: 'darkmagenta',
+        width: 3,
+      }),
+      text: getLabelText(feature, 'total_cost_in_min'),
     }),
   });
 

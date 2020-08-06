@@ -21,9 +21,9 @@ This will import digiroad data into database specified in `digiroad.sh` file int
 Pgrouting can be used with Geoserver by using created pgrouting functions by creating following sql view layer.
 
 ```
-SELECT ST_MakeLine(ST_LineMerge(route.geom))
+SELECT ROUND(SUM(route.cost) / 60) as total_cost_in_min, ST_MakeLine(route.geom)
 FROM (
-  SELECT geom FROM wrk_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%
+  SELECT gid, name, cost, geom FROM wrk_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%);
 ) ORDER BY seq) AS route
 ```
 
