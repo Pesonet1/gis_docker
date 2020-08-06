@@ -71,7 +71,7 @@ UPDATE reititys.digiroad SET reverse_cost = CASE
 	END
 END;
 
--- ROuting functions for Geoserver
+-- Routing functions for Geoserver
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra_digiroad(
     IN source BIGINT,
@@ -80,8 +80,6 @@ CREATE OR REPLACE FUNCTION wrk_dijkstra_digiroad(
     OUT gid BIGINT,
     OUT name TEXT,
     OUT cost FLOAT,
-    OUT azimuth FLOAT,
-    OUT route_readable TEXT,
     OUT route_geom geometry
 )
 RETURNS SETOF record AS
@@ -104,8 +102,6 @@ $BODY$
 		edge as gid,
 		tienimi_su AS name,
 		cost,
-		degrees(ST_azimuth(ST_StartPoint(route_geom), ST_EndPoint(route_geom))) AS azimuth,
-		ST_AsText(route_geom),
 		route_geom
 	FROM get_geom
 	ORDER BY seq;
@@ -119,8 +115,7 @@ CREATE OR REPLACE FUNCTION wrk_fromAtoB_digiroad(
     OUT gid BIGINT,
     OUT name TEXT,
     OUT length INTEGER,
-    OUT the_time DOUBLE PRECISION,
-    OUT azimuth DOUBLE PRECISION,
+    OUT cost DOUBLE PRECISION,
     OUT geom geometry
 )
 RETURNS SETOF record AS
@@ -152,8 +147,7 @@ $BODY$
 					dijkstra.gid,
 					dijkstra.name,
 					reititys.digiroad.length_m AS length,
-					dijkstra.cost AS the_time,
-					azimuth,
+					dijkstra.cost,
 					route_geom AS geom
 				FROM dijkstra INNER JOIN reititys.digiroad ON dijkstra.gid = reititys.digiroad.id;
 			$$, x1, y1, x2, y2);
