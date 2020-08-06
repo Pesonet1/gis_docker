@@ -44,10 +44,8 @@ UPDATE reititys.digiroad SET length_m = ST_Length(geom);
 
 UPDATE reititys.digiroad SET oneway = CASE
 	WHEN ajosuunta = 2 THEN 'B'
-    WHEN ajosuunta = 3 AND geom_flip = 1 THEN 'FT'
-	WHEN ajosuunta = 3 AND geom_flip = 0 THEN 'TF'
-    WHEN ajosuunta = 4 AND geom_flip = 1 THEN 'TF'
-    WHEN ajosuunta = 4 AND geom_flip = 0 THEN 'FT'
+    WHEN ajosuunta = 3 THEN 'TF'
+    WHEN ajosuunta = 4 THEN 'FT'
 	ELSE NULL
 END;
 
