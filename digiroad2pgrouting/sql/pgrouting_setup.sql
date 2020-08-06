@@ -9,33 +9,26 @@ ALTER TABLE reititys.digiroad ADD COLUMN length_m INTEGER;
 ALTER TABLE reititys.digiroad ADD COLUMN speed_limit INTEGER;
 
 SELECT pgr_createTopology('reititys.digiroad', 0.0001, 'geom', 'id');
-SELECT pgr_analyzeGraph('reititys.digiroad', 0.00001, 'geom', 'id');
-SELECT pgr_analyzeOneway('reititys.digiroad',
-	ARRAY['', 'B', 'TF'],
-	ARRAY['', 'B', 'FT'],
-	ARRAY['', 'B', 'FT'],
-	ARRAY['', 'B', 'TF'],
-	oneway := 'oneway',
-	two_way_if_null := true
-);
+SELECT pgr_analyzeGraph('reititys.digiroad', 0.0001, 'geom', 'id');
 
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("source");
 CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("target");
+
+-- Get speed_limit value from nopeusrajoitus table
 
 UPDATE reititys.digiroad SET speed_limit = arvo
     FROM reititys.digiroad_nopeusrajoitus
     WHERE reititys.digiroad.link_id = reititys.digiroad_nopeusrajoitus.link_id;
 
+-- Set length_m column value based on linestring length
+
 UPDATE reititys.digiroad SET length_m = ST_Length(geom);
 
--- ajosuunta
+-- Set oneway column based on ajosuunta column in digiroad data
+
 -- Liikenne on sallittua molempiin suuntiin 2
 -- Liikenne on sallittu digitointisuuntaa vastaan 3
 -- Liikenne on sallittu digitointisuuntaan 4
-
--- geom_flip
--- Digitointisuunta säilynyt samana 0
--- Digitointisuunta vaihtunut 1
 
 -- FT - oneway from the source to the target node.
 -- TF - oneway from the target to the source node.
@@ -49,15 +42,36 @@ UPDATE reititys.digiroad SET oneway = CASE
 	ELSE NULL
 END;
 
+-- Set pgr table in and out edge values based on oneway column values
+
+SELECT pgr_analyzeOneway('reititys.digiroad',
+	ARRAY['', 'B', 'TF'],
+	ARRAY['', 'B', 'FT'],
+	ARRAY['', 'B', 'FT'],
+	ARRAY['', 'B', 'TF'],
+	oneway := 'oneway',
+	two_way_if_null := true
+);
+
+-- Set cost in seconds
+
 UPDATE reititys.digiroad SET cost = CASE
     WHEN oneway = 'TF' THEN 10000
-    ELSE length_m -- speed_limit IS NOT NULL THEN length_m / (speed_limit / 3.6) -- length_m;
+    ELSE CASE
+		WHEN speed_limit IS NOT NULL THEN length_m / (speed_limit / 3.6)
+		ELSE length_m
+	END
 END;
 
 UPDATE reititys.digiroad SET reverse_cost = CASE
 	WHEN oneway = 'FT' THEN 10000
-	ELSE length_m
+	ELSE CASE
+		WHEN speed_limit IS NOT NULL THEN length_m / (speed_limit / 3.6)
+		ELSE length_m
+	END
 END;
+
+-- ROuting functions for Geoserver
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra_digiroad(
     IN source BIGINT,
