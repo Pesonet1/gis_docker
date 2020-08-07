@@ -11,8 +11,12 @@ ALTER TABLE reititys.digiroad ADD COLUMN speed_limit INTEGER;
 SELECT pgr_createTopology('reititys.digiroad', 0.0001, 'geom', 'id');
 SELECT pgr_analyzeGraph('reititys.digiroad', 0.0001, 'geom', 'id');
 
-CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("source");
-CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_the_geom_idx ON reititys.digiroad("target");
+CREATE INDEX IF NOT EXISTS digiroad_id_idx ON reititys.digiroad("id");
+CREATE INDEX IF NOT EXISTS digiroad_source_idx ON reititys.digiroad("source");
+CREATE INDEX IF NOT EXISTS digiroad_target_idx ON reititys.digiroad("target");
+CREATE INDEX IF NOT EXISTS digiroad_geom_idx ON reititys.digiroad USING GIST ("geom");
+CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_id_idx ON reititys.digiroad_vertices_pgr("id");
+CREATE INDEX IF NOT EXISTS digiroad_vertices_pgr_geom_idx ON reititys.digiroad_vertices_pgr USING GIST ("the_geom");
 
 -- Get speed_limit value from nopeusrajoitus table
 
@@ -125,21 +129,14 @@ $BODY$
 		final_query :=
 			FORMAT($$
 				WITH
-				vertices AS (
-					SELECT * FROM reititys.digiroad_vertices_pgr
-					WHERE id IN (
-						SELECT source FROM reititys.digiroad
-						UNION
-						SELECT target FROM reititys.digiroad)
-				),
 				dijkstra AS (
 					SELECT *
 					FROM wrk_dijkstra_digiroad(
 						-- source
-						(SELECT id FROM vertices
+						(SELECT id FROM reititys.digiroad_vertices_pgr
 							ORDER BY the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067) LIMIT 1),
 						-- target
-						(SELECT id FROM vertices
+						(SELECT id FROM reititys.digiroad_vertices_pgr
 							ORDER BY the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067) LIMIT 1))
 				)
 				SELECT
