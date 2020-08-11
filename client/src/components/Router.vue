@@ -80,7 +80,8 @@ import GeometryType from 'ol/geom/GeometryType';
 import {
   routingLocationLayer,
   // routingResultLayerWMS,
-  routingResultLayerWFS,
+  dijkstraRoutingResultLayerWFS,
+  // kspRoutingResultLayerWFS,
   defaultStyle,
 } from '../util/map/layer/pgrouting';
 
@@ -174,7 +175,7 @@ export default Vue.extend({
       // });
 
       // LOADER INDICATION FOR WFS
-      this.resultLayer = routingResultLayerWFS(startCoord, destCoord);
+      this.resultLayer = dijkstraRoutingResultLayerWFS(startCoord, destCoord);
 
       this.routingLoading = true;
       this.resultLayer.getSource().on('change', () => {

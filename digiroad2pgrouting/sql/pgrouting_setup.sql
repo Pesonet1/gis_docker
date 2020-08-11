@@ -75,14 +75,13 @@ UPDATE reititys.digiroad SET reverse_cost = CASE
 	END
 END;
 
--- Routing functions for Geoserver
+-- Routing functions
 
 CREATE OR REPLACE FUNCTION wrk_dijkstra_digiroad(
     IN source BIGINT,
     IN target BIGINT,
     OUT seq INTEGER,
     OUT gid BIGINT,
-    OUT name TEXT,
     OUT cost FLOAT,
     OUT route_geom geometry
 )
@@ -90,10 +89,15 @@ RETURNS SETOF record AS
 $BODY$
 	WITH
 	dijkstra AS (
-		SELECT * FROM pgr_dijkstra('SELECT id, source, target, cost, reverse_cost, tienimi_su FROM reititys.digiroad WHERE toiminn_lk NOT IN (6,7,8)', $1, $2, directed := 'true')
+		SELECT *
+        FROM pgr_dijkstra(
+            'SELECT id, source, target, cost, reverse_cost FROM reititys.digiroad WHERE toiminn_lk NOT IN (6,7,8)',
+            $1,
+            $2,
+            directed := 'true')
 	),
 	get_geom AS (
-		SELECT dijkstra.*, reititys.digiroad.tienimi_su,
+		SELECT dijkstra.*,
 			CASE
 				WHEN dijkstra.node = reititys.digiroad.source THEN geom
 				ELSE ST_Reverse(geom)
@@ -104,7 +108,6 @@ $BODY$
 	SELECT
 		seq,
 		edge as gid,
-		tienimi_su AS name,
 		cost,
 		route_geom
 	FROM get_geom
@@ -112,12 +115,55 @@ $BODY$
 $BODY$
 LANGUAGE 'sql';
 
-CREATE OR REPLACE FUNCTION wrk_fromAtoB_digiroad(
+CREATE OR REPLACE FUNCTION wrk_ksp_digiroad(
+    IN source BIGINT,
+    IN target BIGINT,
+    OUT seq INTEGER,
+    OUT gid BIGINT,
+    OUT path_id INTEGER,
+    OUT cost FLOAT,
+    OUT route_geom geometry
+)
+RETURNS SETOF record AS
+$BODY$
+	WITH
+	ksp AS (
+		SELECT *
+        FROM pgr_ksp(
+            'SELECT id, source, target, cost, reverse_cost FROM reititys.digiroad WHERE toiminn_lk NOT IN (6,7,8)',
+            $1,
+            $2,
+            3,
+            directed := 'true',
+            heap_paths := 'false')
+	),
+	get_geom AS (
+		SELECT ksp.*,
+			CASE
+				WHEN ksp.node = reititys.digiroad.source THEN geom
+				ELSE ST_Reverse(geom)
+			END AS route_geom
+		FROM ksp JOIN reititys.digiroad ON (edge = id)
+		ORDER BY seq
+	)
+	SELECT
+		seq,
+		edge as gid,
+        path_id,
+		cost,
+		route_geom
+	FROM get_geom
+	ORDER BY seq;
+$BODY$
+LANGUAGE 'sql';
+
+-- Geoserver functions
+
+CREATE OR REPLACE FUNCTION wrk_dijkstra_fromAtoB_digiroad(
     IN x1 numeric, IN y1 numeric,
     IN x2 numeric, IN y2 numeric,
     OUT seq INTEGER,
     OUT gid BIGINT,
-    OUT name TEXT,
     OUT length INTEGER,
     OUT cost DOUBLE PRECISION,
     OUT geom geometry
@@ -133,20 +179,69 @@ $BODY$
 					SELECT *
 					FROM wrk_dijkstra_digiroad(
 						-- source
-						(SELECT id FROM reititys.digiroad_vertices_pgr
-							ORDER BY the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067) LIMIT 1),
+						(
+                            SELECT nodes.id
+                            FROM reititys.digiroad_vertices_pgr AS nodes
+                            INNER JOIN reititys.digiroad AS edges ON (edges.source = nodes.id)
+                            WHERE edges.toiminn_lk NOT IN (6,7,8)
+							ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067) LIMIT 1
+                        ),
 						-- target
-						(SELECT id FROM reititys.digiroad_vertices_pgr
-							ORDER BY the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067) LIMIT 1))
+						(
+                            SELECT nodes.id
+                            FROM reititys.digiroad_vertices_pgr AS nodes
+                            INNER JOIN reititys.digiroad AS edges ON (edges.target = nodes.id)
+                            WHERE edges.toiminn_lk NOT IN (6,7,8)
+							ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067) LIMIT 1)
+                        )
 				)
 				SELECT
 					seq,
 					dijkstra.gid,
-					dijkstra.name,
 					reititys.digiroad.length_m AS length,
 					dijkstra.cost,
 					route_geom AS geom
 				FROM dijkstra INNER JOIN reititys.digiroad ON dijkstra.gid = reititys.digiroad.id;
+			$$, x1, y1, x2, y2);
+		RAISE notice '%', final_query;
+		RETURN QUERY EXECUTE final_query;
+  END;
+$BODY$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION wrk_ksp_fromAtoB_digiroad(
+    IN x1 numeric, IN y1 numeric,
+    IN x2 numeric, IN y2 numeric,
+    OUT seq INTEGER,
+    OUT gid BIGINT,
+    OUT path_id INTEGER,
+    OUT cost DOUBLE PRECISION,
+    OUT geom geometry
+)
+RETURNS SETOF record AS
+$BODY$
+	DECLARE final_query TEXT;
+	BEGIN
+		final_query :=
+			FORMAT($$
+                SELECT seq, gid, path_id, cost, route_geom AS geom
+                FROM wrk_ksp_digiroad(
+                    -- source
+                    (
+                        SELECT nodes.id
+                        FROM reititys.digiroad_vertices_pgr AS nodes
+                        INNER JOIN reititys.digiroad AS edges ON (edges.source = nodes.id)
+                        WHERE edges.toiminn_lk NOT IN (6,7,8)
+                        ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067) LIMIT 1
+                    ),
+                    -- target
+                    (
+                        SELECT nodes.id
+                        FROM reititys.digiroad_vertices_pgr AS nodes
+                        INNER JOIN reititys.digiroad AS edges ON (edges.target = nodes.id)
+                        WHERE edges.toiminn_lk NOT IN (6,7,8)
+                        ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067) LIMIT 1)
+                    )
 			$$, x1, y1, x2, y2);
 		RAISE notice '%', final_query;
 		RETURN QUERY EXECUTE final_query;

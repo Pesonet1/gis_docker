@@ -1,8 +1,8 @@
 <GeoServerTileLayer>
-  <id>LayerInfoImpl--548ae14d:17396a4b400:-7f9e</id>
+  <id>LayerInfoImpl--548ae14d:17396a4b400:-7d32</id>
   <enabled>true</enabled>
   <inMemoryCached>true</inMemoryCached>
-  <name>geo:pgrouting_digiroad_dijkstra</name>
+  <name>geo:pgrouting_digiroad_ksp</name>
   <mimeFormats>
     <string>image/png</string>
     <string>image/jpeg</string>
@@ -26,7 +26,7 @@
       <key>STYLES</key>
       <defaultValue></defaultValue>
       <availableStyles class="sorted-set"/>
-      <defaultStyle>geo:style_routing</defaultStyle>
+      <defaultStyle>generic</defaultStyle>
     </styleParameterFilter>
   </parameterFilters>
   <gutter>0</gutter>

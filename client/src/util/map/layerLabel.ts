@@ -32,11 +32,13 @@ const getTextStyle = (
   padding: [5, 5, 5, 5],
 }));
 
-export const getLabelText = (feature: RenderFeature | FeatureLike, property: string): Text => {
+type LabelPlacement = 'point' | 'line';
+
+export const getLabelText = (feature: RenderFeature | FeatureLike, property: string, placement: LabelPlacement = 'point'): Text => {
   const text = feature.get(property).toString();
 
   if (text) {
-    return getTextStyle('11px Verdana', 'white', 'black', 3, 0, 0, 'point', text);
+    return getTextStyle('11px Verdana', 'white', 'black', 3, 0, 0, placement, text);
   }
 
   return new Text();
