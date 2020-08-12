@@ -1,14 +1,14 @@
 <featureType>
-  <id>FeatureTypeInfoImpl--548ae14d:17396a4b400:-7d33</id>
-  <name>pgrouting_digiroad_ksp</name>
-  <nativeName>pgrouting_digiroad_ksp</nativeName>
+  <id>FeatureTypeInfoImpl--548ae14d:17396a4b400:-7c4d</id>
+  <name>pgrouting_osm_ksp</name>
+  <nativeName>pgrouting_osm_ksp</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--5b4f175d:172c1d4ae58:-7fe3</id>
   </namespace>
-  <title>pgrouting_digiroad_ksp</title>
+  <title>pgrouting_osm_ksp</title>
   <keywords>
     <string>features</string>
-    <string>pgrouting_digiroad_ksp</string>
+    <string>pgrouting_osm_ksp</string>
   </keywords>
   <nativeCRS class="projected">PROJCS[&quot;ETRS89 / TM35FIN(E,N)&quot;, 
   GEOGCS[&quot;ETRS89&quot;, 
@@ -51,11 +51,11 @@
   <metadata>
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
-        <name>pgrouting_digiroad_ksp</name>
-        <sql>SELECT DISTINCT ON (total_cost_in_min) route.path_id, ROUND(SUM(route.cost) / 60) as total_cost_in_min, ST_MakeLine(route.geom)&#xd;
+        <name>pgrouting_osm_ksp</name>
+        <sql>SELECT DISTINCT ON (total_cost_in_min) route.path_id, ROUND(SUM(route.cost)) as total_cost_in_min, ST_MakeLine(route.geom)&#xd;
 FROM (&#xd;
 	SELECT gid, path_id, cost, geom&#xd;
-	FROM wrk_ksp_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%)&#xd;
+	FROM wrk_ksp_fromAtoB_osm(&apos;vehicle_net&apos;, %x1%, %y1%, %x2%, %y2%)&#xd;
 	ORDER BY path_id&#xd;
 ) AS route&#xd;
 GROUP BY path_id

@@ -15,6 +15,7 @@ import CircleStyle from 'ol/style/Circle';
 
 import mapProjection from '../mapProjection';
 import { getLabelText } from '../layerLabel';
+import { RouteDataTypes, RoutingTypes } from '../../../types';
 
 export const defaultStyle = () => (new Style({
   image: new CircleStyle({
@@ -78,7 +79,7 @@ export const routingResultLayerWMS = (startCoord: number[], destCoord: number[])
     source: new SourceWMS({
       url: 'http://localhost/geoserver/geo/wms',
       params: {
-        LAYERS: 'geo:pgrouting_digiroad',
+        LAYERS: 'geo:pgrouting_digiroad_digiroad',
         FORMAT: 'image/png',
         VIEWPARAMS: viewparams.join(';'),
       },
@@ -90,44 +91,54 @@ export const routingResultLayerWMS = (startCoord: number[], destCoord: number[])
   return layer;
 };
 
-export const dijkstraRoutingResultLayerWFS = (
-  startCoord: number[],
-  destCoord: number[],
-): VectorLayer => {
-  const viewparams = [
-    `x1:${startCoord[0]}`, `y1:${startCoord[1]}`,
-    `x2:${destCoord[0]}`, `y2:${destCoord[1]}`,
-  ];
+const dijkstraStyle = (feature: RenderFeature | FeatureLike) => (new Style({
+  stroke: new Stroke({
+    color: 'darkmagenta',
+    width: 3,
+  }),
+  text: getLabelText(feature, 'total_cost_in_min'),
+}));
 
-  const layer = new VectorLayer({
-    declutter: true,
-    extent: mapProjection.getExtent(),
-    zIndex: 2,
-    minZoom: 0,
-    maxZoom: 15,
-    source: new VectorSource({
-      url: 'http://localhost/geoserver/geo/wfs'
-        + '?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:pgrouting_digiroad_dijkstra'
-        + `&outputFormat=application/json&viewparams=${viewparams.join(';')}`,
-      format: new GeoJSON(),
+const kspStyle = (feature: RenderFeature | FeatureLike) => {
+  const pathId = feature.get('path_id');
+
+  let lineColor = 'black';
+  let lineDashOffset = 0;
+
+  switch (pathId) {
+    case 1:
+      lineColor = 'green';
+      lineDashOffset = 0;
+      break;
+    case 2:
+      lineColor = 'orange';
+      lineDashOffset = 5;
+      break;
+    case 3:
+      lineColor = 'yellow';
+      lineDashOffset = 10;
+      break;
+    default:
+      lineColor = 'black';
+      break;
+  }
+
+  return new Style({
+    stroke: new Stroke({
+      color: lineColor,
+      lineDash: [10, 20],
+      lineDashOffset,
+      width: 3,
     }),
-    style: (feature) => new Style({
-      stroke: new Stroke({
-        color: 'darkmagenta',
-        width: 3,
-      }),
-      text: getLabelText(feature, 'total_cost_in_min'),
-    }),
+    text: getLabelText(feature, 'total_cost_in_min'),
   });
-
-  layer.set('name', 'routing_result');
-
-  return layer;
 };
 
-export const kspRoutingResultLayerWFS = (
+export const routingResultLayerWFS = (
   startCoord: number[],
   destCoord: number[],
+  routeData: RouteDataTypes,
+  routingType: RoutingTypes,
 ): VectorLayer => {
   const viewparams = [
     `x1:${startCoord[0]}`, `y1:${startCoord[1]}`,
@@ -142,44 +153,13 @@ export const kspRoutingResultLayerWFS = (
     maxZoom: 15,
     source: new VectorSource({
       url: 'http://localhost/geoserver/geo/wfs'
-        + '?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:pgrouting_digiroad_ksp'
+        + `?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:pgrouting_${routeData}_${routingType}`
         + `&outputFormat=application/json&viewparams=${viewparams.join(';')}`,
       format: new GeoJSON(),
     }),
-    style: (feature) => {
-      const pathId = feature.get('path_id');
-
-      let lineColor = 'black';
-      let lineDashOffset = 0;
-
-      switch (pathId) {
-        case 1:
-          lineColor = 'green';
-          lineDashOffset = 0;
-          break;
-        case 2:
-          lineColor = 'orange';
-          lineDashOffset = 5;
-          break;
-        case 3:
-          lineColor = 'yellow';
-          lineDashOffset = 10;
-          break;
-        default:
-          lineColor = 'black';
-          break;
-      }
-
-      return new Style({
-        stroke: new Stroke({
-          color: lineColor,
-          lineDash: [10, 20],
-          lineDashOffset,
-          width: 3,
-        }),
-        text: getLabelText(feature, 'total_cost_in_min'),
-      });
-    },
+    style: (feature) => (routingType === 'dijkstra'
+      ? dijkstraStyle(feature)
+      : kspStyle(feature)),
   });
 
   layer.set('name', 'routing_result');

@@ -5,6 +5,8 @@ import ImageLayer from 'ol/layer/Image';
 import { GeoJSONGeometry } from 'ol/format/GeoJSON';
 
 export type WFSTransactionType = 'insert' | 'update' | 'delete';
+export type RouteDataTypes = 'osm' | 'digiroad';
+export type RoutingTypes = 'dijkstra' | 'ksp';
 
 export type MapLayersType = TileLayer | VectorLayer | VectorTileLayer | ImageLayer;
 

@@ -1,8 +1,8 @@
 <GeoServerTileLayer>
-  <id>LayerInfoImpl--548ae14d:17396a4b400:-7d32</id>
+  <id>LayerInfoImpl--548ae14d:17396a4b400:-7c4c</id>
   <enabled>true</enabled>
   <inMemoryCached>true</inMemoryCached>
-  <name>geo:pgrouting_digiroad_ksp</name>
+  <name>geo:pgrouting_osm_ksp</name>
   <mimeFormats>
     <string>image/png</string>
     <string>image/jpeg</string>

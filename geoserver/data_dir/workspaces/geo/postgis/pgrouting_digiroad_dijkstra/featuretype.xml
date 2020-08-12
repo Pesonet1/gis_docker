@@ -52,9 +52,12 @@
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>pgrouting_digiroad</name>
-        <sql>SELECT ROUND(SUM(route.cost) / 60) as total_cost_in_min, ST_MakeLine(route.geom) FROM (&#xd;
-    SELECT gid, cost, geom FROM wrk_dijkstra_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%&#xd;
-  ) ORDER BY seq) AS route
+        <sql>SELECT ROUND(SUM(route.cost) / 60) as total_cost_in_min, ST_MakeLine(route.geom)&#xd;
+FROM (&#xd;
+    SELECT gid, cost, geom&#xd;
+    FROM wrk_dijkstra_fromAtoB_digiroad(%x1%, %y1%, %x2%, %y2%)&#xd;
+    ORDER BY seq&#xd;
+) AS route
 </sql>
         <escapeSql>false</escapeSql>
         <geometry>

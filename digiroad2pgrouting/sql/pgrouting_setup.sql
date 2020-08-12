@@ -184,7 +184,8 @@ $BODY$
                             FROM reititys.digiroad_vertices_pgr AS nodes
                             INNER JOIN reititys.digiroad AS edges ON (edges.source = nodes.id)
                             WHERE edges.toiminn_lk NOT IN (6,7,8)
-							ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067) LIMIT 1
+							ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067)
+                            LIMIT 1
                         ),
 						-- target
 						(
@@ -192,8 +193,10 @@ $BODY$
                             FROM reititys.digiroad_vertices_pgr AS nodes
                             INNER JOIN reititys.digiroad AS edges ON (edges.target = nodes.id)
                             WHERE edges.toiminn_lk NOT IN (6,7,8)
-							ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067) LIMIT 1)
+							ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067)
+                            LIMIT 1
                         )
+                    )
 				)
 				SELECT
 					seq,
@@ -232,7 +235,8 @@ $BODY$
                         FROM reititys.digiroad_vertices_pgr AS nodes
                         INNER JOIN reititys.digiroad AS edges ON (edges.source = nodes.id)
                         WHERE edges.toiminn_lk NOT IN (6,7,8)
-                        ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067) LIMIT 1
+                        ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%1$s, %2$s), 3067)
+                        LIMIT 1
                     ),
                     -- target
                     (
@@ -240,8 +244,10 @@ $BODY$
                         FROM reititys.digiroad_vertices_pgr AS nodes
                         INNER JOIN reititys.digiroad AS edges ON (edges.target = nodes.id)
                         WHERE edges.toiminn_lk NOT IN (6,7,8)
-                        ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067) LIMIT 1)
+                        ORDER BY nodes.the_geom <-> ST_SetSRID(ST_Point(%3$s, %4$s), 3067)
+                        LIMIT 1
                     )
+                )
 			$$, x1, y1, x2, y2);
 		RAISE notice '%', final_query;
 		RETURN QUERY EXECUTE final_query;

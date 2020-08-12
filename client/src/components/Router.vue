@@ -1,66 +1,114 @@
 <template>
-  <div class="router">
-    <v-btn
-      class="mr-2"
-      color="primary"
-      fab
-      small
-      :dark="!startPointSet && !routeCalculated"
-      :disabled="startPointSet || routeCalculated"
-      @click="setStartPoint"
-    >
-      <v-icon dark>
-        {{ mdiRayStart }}
-      </v-icon>
-    </v-btn>
+  <div class="router-wrapper">
+    <div class="router-buttons">
+      <v-btn
+        class="mr-2"
+        color="primary"
+        fab
+        small
+        :dark="!startPointSet && !routeCalculated"
+        :disabled="startPointSet || routeCalculated"
+        @click="setStartPoint"
+      >
+        <v-icon dark>
+          {{ mdiRayStart }}
+        </v-icon>
+      </v-btn>
 
-    <v-btn
-      class="mx-2"
-      color="primary"
-      fab
-      small
-      :dark="startPointSet && !routeCalculated && !destPointSet"
-      :disabled="!startPointSet || destPointSet || routeCalculated"
-      @click="setEndPoint"
-    >
-      <v-icon dark>
-        {{ mdiRayEnd }}
-      </v-icon>
-    </v-btn>
+      <v-btn
+        class="mx-2"
+        color="primary"
+        fab
+        small
+        :dark="startPointSet && !routeCalculated && !destPointSet"
+        :disabled="!startPointSet || destPointSet || routeCalculated"
+        @click="setEndPoint"
+      >
+        <v-icon dark>
+          {{ mdiRayEnd }}
+        </v-icon>
+      </v-btn>
 
-    <v-btn
-      class="mx-2"
-      color="primary"
-      :dark="!routingLoading"
-      :disabled="routingLoading"
-      @click="clearRouting"
-    >
-      {{ $vuetify.lang.t('$vuetify.router.clearButton') }}
-    </v-btn>
+      <v-btn
+        class="mx-2"
+        color="primary"
+        :dark="!routingLoading"
+        :disabled="routingLoading"
+        @click="clearRouting"
+      >
+        {{ $vuetify.lang.t('$vuetify.router.clearButton') }}
+      </v-btn>
 
-    <v-btn
-      class="mx-2"
-      color="primary"
-      :dark="startPointSet && destPointSet && !routeCalculated"
-      :disabled="!startPointSet || !destPointSet || routeCalculated"
-      :loading="routingLoading"
-      @click="routeBetweenStartAndDest"
-    >
-      {{ $vuetify.lang.t('$vuetify.router.routeButton') }}
-    </v-btn>
+      <v-btn
+        class="mx-2"
+        color="primary"
+        :dark="startPointSet && destPointSet && !routeCalculated"
+        :disabled="!startPointSet || !destPointSet || routeCalculated"
+        :loading="routingLoading"
+        @click="routeBetweenStartAndDest"
+      >
+        {{ $vuetify.lang.t('$vuetify.router.routeButton') }}
+      </v-btn>
+    </div>
+
+    <div class="router-selectors">
+      <v-radio-group
+        v-model="routeData"
+        hide-details
+        class="ml-2 mr-5"
+      >
+        <v-radio
+          label="OSM"
+          value="osm">
+        </v-radio>
+        <v-radio
+          label="Digiroad"
+          value="digiroad">
+        </v-radio>
+      </v-radio-group>
+
+      <v-radio-group
+        v-model="routingType"
+        hide-details
+      >
+        <v-radio
+          label="Dijkstra"
+          value="dijkstra">
+        </v-radio>
+        <v-radio
+          label="K-Shorthest Path"
+          value="ksp">
+        </v-radio>
+      </v-radio-group>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.router {
+.router-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex: 1 0 auto;
   justify-content: center;
   align-items: center;
   position: absolute;
   left: .5rem;
   top: .5rem;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.router-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.router-selectors {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 </style>
 
@@ -80,10 +128,10 @@ import GeometryType from 'ol/geom/GeometryType';
 import {
   routingLocationLayer,
   // routingResultLayerWMS,
-  dijkstraRoutingResultLayerWFS,
-  // kspRoutingResultLayerWFS,
+  routingResultLayerWFS,
   defaultStyle,
 } from '../util/map/layer/pgrouting';
+import { RouteDataTypes, RoutingTypes } from '../types';
 
 export default Vue.extend({
   props: {
@@ -100,6 +148,8 @@ export default Vue.extend({
     destPointSet: false as boolean,
     routeCalculated: false as boolean,
     routingLoading: false as boolean,
+    routeData: 'osm' as RouteDataTypes,
+    routingType: 'dijkstra' as RoutingTypes,
     mdiRayStart,
     mdiRayEnd,
   }),
@@ -175,7 +225,12 @@ export default Vue.extend({
       // });
 
       // LOADER INDICATION FOR WFS
-      this.resultLayer = dijkstraRoutingResultLayerWFS(startCoord, destCoord);
+      this.resultLayer = routingResultLayerWFS(
+        startCoord,
+        destCoord,
+        this.routeData,
+        this.routingType,
+      );
 
       this.routingLoading = true;
       this.resultLayer.getSource().on('change', () => {
