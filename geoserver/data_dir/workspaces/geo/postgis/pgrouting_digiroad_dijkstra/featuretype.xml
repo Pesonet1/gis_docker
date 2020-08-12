@@ -1,7 +1,7 @@
 <featureType>
   <id>FeatureTypeInfoImpl--548ae14d:17396a4b400:-7f9f</id>
   <name>pgrouting_digiroad_dijkstra</name>
-  <nativeName>pgrouting_digiroad</nativeName>
+  <nativeName>pgrouting_digiroad_dijkstra</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--5b4f175d:172c1d4ae58:-7fe3</id>
   </namespace>
@@ -51,7 +51,7 @@
   <metadata>
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
-        <name>pgrouting_digiroad</name>
+        <name>pgrouting_digiroad_dijkstra</name>
         <sql>SELECT ROUND(SUM(route.cost) / 60) as total_cost_in_min, ST_MakeLine(route.geom)&#xd;
 FROM (&#xd;
     SELECT gid, cost, geom&#xd;

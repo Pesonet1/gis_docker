@@ -33,10 +33,24 @@ Container consists of following phases:
 Pgrouting can be used with Geoserver by using created pgrouting functions by creating following sql view layer.
 
 ```
-SELECT ST_MakeLine(route.geom)
+DIJKSTRA
+
+SELECT ROUND(SUM(route.cost)) as total_cost_in_min, ST_MakeLine(route.geom)
 FROM (
-  SELECT geom FROM wrk_fromAtoB_osm('vehicle_net', %x1%, %y1%, %x2%, %y2%
-) ORDER BY seq) AS route
+    SELECT gid, cost, geom
+    FROM wrk_dijkstra_fromAtoB_osm('vehicle_net', %x1%, %y1%, %x2%, %y2%)
+    ORDER BY seq
+) AS route
+
+K-SHORTHEST PATH
+
+SELECT DISTINCT ON (total_cost_in_min) route.path_id, ROUND(SUM(route.cost)) as total_cost_in_min, ST_MakeLine(route.geom)
+FROM (
+	SELECT gid, path_id, cost, geom
+	FROM wrk_ksp_fromAtoB_osm('vehicle_net', %x1%, %y1%, %x2%, %y2%)
+	ORDER BY path_id
+) AS route
+GROUP BY path_id
 ```
 
 Parameters
