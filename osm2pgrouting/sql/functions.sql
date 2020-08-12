@@ -16,8 +16,8 @@ $BODY$
         SELECT *
         FROM pgr_dijkstra(
             'SELECT gid AS id, target, source, cost, reverse_cost FROM ' || $1,
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3))
+            $2,
+            $3)
     ),
     get_geom AS (
         SELECT dijkstra.*, ways.name,
@@ -57,8 +57,8 @@ $BODY$
 		SELECT *
         FROM pgr_ksp(
             'SELECT gid AS id, target, source, cost, reverse_cost FROM ' || $1,
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $2),
-            (SELECT id FROM ways_vertices_pgr WHERE osm_id = $3),
+            $2,
+            $3,
             3,
             directed := 'true',
             heap_paths := 'false')
@@ -117,14 +117,14 @@ BEGIN
                     '%1$I',
                     -- source
                     (
-                        SELECT osm_id
+                        SELECT id
                         FROM vertices
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%2$s, %3$s), 3067)
                         LIMIT 1
                     ),
                     -- target
                     (
-                        SELECT osm_id
+                        SELECT id
                         FROM vertices
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%4$s, %5$s), 3067)
                         LIMIT 1
@@ -181,14 +181,14 @@ BEGIN
                     '%1$I',
                     -- source
                     (
-                        SELECT osm_id
+                        SELECT id
                         FROM vertices
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%2$s, %3$s), 3067)
                         LIMIT 1
                     ),
                     -- target
                     (
-                        SELECT osm_id
+                        SELECT id
                         FROM vertices
                         ORDER BY the_geom <-> ST_SetSRID(ST_Point(%4$s, %5$s), 3067)
                         LIMIT 1
