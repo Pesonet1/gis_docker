@@ -39,6 +39,7 @@ $ docker-compose -f docker-compose.dev.yaml up --build
 ```
 
 NOTE: nominatim container requires seperate steps to seed OSM data into database
+
 NOTE: digiroad2pgrouting & osm2pgrouting containers needs to be run seperately in order to make rotuing work
 
 ### Useful docker commands
