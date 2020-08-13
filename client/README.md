@@ -4,7 +4,7 @@
 
 ```
 $ yarn install
-$ yarnrun serve
+$ yarn run serve
 ```
 
 App is opened on localhost for port 8082

@@ -30,24 +30,29 @@ Nginx is used for proxying network traffic between containers. Currently it is u
 
 ## Installing and running containers
 
-First [install docker](https://docs.docker.com/compose/install/)
-
-Build and run Docker containers
+1. [install docker](https://docs.docker.com/compose/install/)
+2. Load OSM data for Nominatim & osm2pgrouting (instructions on seperate documentation under nominatim & osm2pgrouting folders)
+3. Load digiroad data for digiroad2pgrouting (instructions on seperate documentation under digiroad2pgrouting folder)
+4. Import OSM data into Nominatim (instructions on seperate documentation under nominatim folder)
+5. Run osm2pgrouting & digiroad2pgrouting containers
+6. Build and run rest of the Docker containers
 
 ```
 $ docker-compose -f docker-compose.dev.yaml up --build
 ```
 
-NOTE: nominatim container requires seperate steps to seed OSM data into database
-
-NOTE: digiroad2pgrouting & osm2pgrouting containers needs to be run seperately in order to make rotuing work
-
 ### Useful docker commands
 
-Build individual containers
+Build individual container
 
 ```
 $ docker-compose build <container-name>
+```
+
+Run individual container
+
+```
+$ docker-compose up <container-name>
 ```
 
 Start containers without build

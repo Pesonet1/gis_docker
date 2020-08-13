@@ -4,7 +4,7 @@ Docker container can be used for importing osm dataset into postgresql to be use
 
 This docker container is heavely based on [pgrouting workshop](https://workshop.pgrouting.org/2.6/en/index.html)
 
-## Running this container
+## Installation & running
 
 NOTE: Run this container after you have started other containers (database is needed)
 
@@ -30,7 +30,9 @@ Container consists of following phases:
 
 ## Using with Geoserver
 
-Pgrouting can be used with Geoserver by using created pgrouting functions by creating following sql view layer.
+Pgrouting can be used with Geoserver by using created pgrouting functions by creating following sql view layer:
+
+1. Create layer from a SQL view
 
 ```
 DIJKSTRA
@@ -53,13 +55,24 @@ FROM (
 GROUP BY path_id
 ```
 
-Parameters
+2. Quess parameters from SQL and set default value `0` and regular expression as `^-?[\d.]+$` to only accept numbers
+3. Refresh attributes and set geometry srid from `-1` as `3067`
+4. Bounding boxes -> `Compute from data` and `Compute from native bounds`
+5. Set styling according to your liking
+6. Test the layer with following request (change layer according to your naming)
 
-y1 -> 0 -> ^-?[\d.]+$
-y2 -> 0 -> ^-?[\d.]+$
-x1 -> 0 -> ^-?[\d.]+$
-x2 -> 0 -> ^-?[\d.]+$
-
-Attributes
-
-st_makeline -> Geometry -> 3067
+```
+http://localhost:8080/geoserver/geo/wms?
+  SERVICE=WMS
+  &VERSION=1.3.0
+  &REQUEST=GetMap
+  &FORMAT=image%2Fpng
+  &TRANSPARENT=true
+  &LAYERS=geo%3Apgrouting
+  &VIEWPARAMS=x1%3A385823.05%3By1%3A6671394.36%3Bx2%3A387362.01%3By2%3A6675332.38
+  &CRS=EPSG%3A3067
+  &STYLES=
+  &WIDTH=2043
+  &HEIGHT=1271
+  &BBOX=307582.7010787903%2C6625858.571753732%2C444939.67875173705%2C6711311.689043167
+```

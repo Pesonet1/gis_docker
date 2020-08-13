@@ -8,4 +8,4 @@ By default mapproxy seeding process is not run. It needs to be run manually with
 $ su $USER_NAME -c "mapproxy-seed -f mapproxy.yaml -s seed.yaml --progress-file .mapproxy_seed_progress"
 ```
 
-This will take several hours to complete. After this background should be available on client app.¨
+This will take several hours to complete. After this background layer should be available on client app.

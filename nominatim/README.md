@@ -1,6 +1,8 @@
 # Nominatim
 
-## Installation
+This container is used for importing OSM data into dev-database for geocoding. Additionally, this container acts as a [geocoder (api) for OSM data](https://nominatim.org/).
+
+## Installation & running
 
 First get some OSM data and place it under this folder (NOTE: currently Helsinki.osm.pbf is the hardcoded filename).
 
@@ -10,6 +12,8 @@ http://download.geofabrik.de/europe/finland.html
 NOTE: Run these commands inside nominatim folder (otherwise change relative paths)
 
 1. Start dev-database container
+
+`$ docker-compose up dev-database`
 
 2. Build nominatim container inside
 

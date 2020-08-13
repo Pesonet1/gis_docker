@@ -4,7 +4,7 @@ Docker container can be used for importing digiroad topology into postgresql to 
 
 This docker container is heavily based on this [blog post](https://www.paikkatietomies.fi/pgrouting_miehen_tiella_pitaa/).
 
-## Installation
+## Installation & running
 
 1. Download digiroad dataset (K) [from here](https://aineistot.vayla.fi/digiroad/latest/).
 
