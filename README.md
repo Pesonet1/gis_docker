@@ -89,7 +89,7 @@ Install server dependencies
 
 ```
 $ cd server
-$ npm install
+$ yarn install
 ```
 
 Run sequelize migrations and seeds (db container should be running by now)
@@ -102,7 +102,7 @@ $ npx sequelize-cli db:seed:all
 Start server
 
 ```
-$ npm run start
+$ yarn run start
 ```
 
 ### Client
