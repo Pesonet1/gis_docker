@@ -28,7 +28,7 @@ Nginx is used for proxying network traffic between containers. Currently it is u
 /nominatim/ -> nominatim:8100
 ```
 
-## Setup
+## Installing and running containers
 
 First [install docker](https://docs.docker.com/compose/install/)
 
@@ -37,6 +37,11 @@ Build and run Docker containers
 ```
 $ docker-compose -f docker-compose.dev.yaml up --build
 ```
+
+NOTE: nominatim container requires seperate steps to seed OSM data into database
+NOTE: digiroad2pgrouting & osm2pgrouting containers needs to be run seperately in order to make rotuing work
+
+### Useful docker commands
 
 Build individual containers
 
@@ -56,9 +61,45 @@ Shutdown containers
 $ docker-compose -f docker-compose.dev.yaml down
 ```
 
-Manually run server & client applications
+## Installing and running client & server applications
+
+Install [node](https://nodejs.org/en/)
+
+### Server
+
+Install server dependencies
 
 ```
-cd client -> yarn run serve
-cd server -> npm run start
+$ cd server
+$ npm install
+```
+
+Run sequelize migrations and seeds (db container should be running by now)
+
+```
+$ npx sequelize-cli db:migrate
+$ npx sequelize-cli db:seed:all
+```
+
+Start server
+
+```
+$ npm run start
+```
+
+### Client
+
+First install [yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
+
+Install client dependencies
+
+```
+$ cd client
+$ yarn install
+```
+
+Run client
+
+```
+$ yarn run serve
 ```
