@@ -207,8 +207,9 @@ $BODY$
 				FROM dijkstra INNER JOIN reititys.digiroad ON dijkstra.gid = reititys.digiroad.id;
 			$$, x1, y1, x2, y2);
 		RAISE notice '%', final_query;
-		RETURN QUERY EXECUTE final_query;
-  END;
+		RETURN QUERY
+        EXECUTE final_query;
+    END;
 $BODY$
 LANGUAGE 'plpgsql';
 
@@ -250,7 +251,8 @@ $BODY$
                 )
 			$$, x1, y1, x2, y2);
 		RAISE notice '%', final_query;
-		RETURN QUERY EXECUTE final_query;
-  END;
+		RETURN QUERY
+        EXECUTE final_query;
+    END;
 $BODY$
 LANGUAGE 'plpgsql';
