@@ -81,7 +81,7 @@ $ docker-compose -f docker-compose.dev.yaml down
 
 ## Installing and running client & server applications
 
-In order to run client & server applications [node](https://nodejs.org/en/) needs to be installed.
+In order to run client & server applications [node](https://nodejs.org/en/) and [yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable) needs to be installed (or yarn can be seen as optional ;)).
 
 ### Server
 
@@ -107,8 +107,6 @@ $ npm run start
 
 ### Client
 
-First install [yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
-
 Install client dependencies
 
 ```
@@ -116,7 +114,7 @@ $ cd client
 $ yarn install
 ```
 
-Run client
+Start client
 
 ```
 $ yarn run serve
