@@ -1,14 +1,16 @@
 # GIS Docker
 
-Main purpose for this repository is to act as a playground for testing different GIS related web technologies.
+Purpose for this repository is to act as a playground for testing different GIS related web technologies. Therefore, it cannot be considered as fully working application that can be deployed automatically. However, this repository contains some usefull examples that can be taken into other projecs.
 
-This repository contains containerized (Docker) parts of a GIS application that constructs a simple GIS application. 
-Additionally, pgrouting containers (osm2pgrouting & digiroad2pgrouting) are included for running osm2pgrouting tool for importing network data (osm & digiroad) into database for pgrouting.
+This repository contains containerized (Docker) parts of a GIS application e.g. different map layer protocols, routing, geocoding. Following can be considered as vital part of any GIS application. Additionally, this repository contains some utility containers (osm2pgrouting & digiroad2pgrouting) that are used for importing network data (osm & digiroad) into database for pgrouting.
 
-Running main containers (client & server currently disabled and need to be run manually)
+Individually run applications
 
-- Client 8082 (not dockerized)
-- Server 8085 (not dockerized)
+- Client 8082
+- Server 8085
+
+Docker containers
+
 - Database 5435:5432
 - Geoserver 8080:8080
 - Mapproxy 8083:8083
@@ -28,9 +30,19 @@ Nginx is used for proxying network traffic between containers. Currently it is u
 /nominatim/ -> nominatim:8100
 ```
 
+## Overview of repository elements
+
+- Client -> Main application for different GIS services (map layers, routing, geocoding)
+- Server -> Currently only used for authentication
+- Database -> Contains pgrouting related data. Additionally OIDC related stuff
+- Geoserver -> Serves map layers in different protocols (WMS, WMTS, WFS, WFS-T, VectorTile, WPS)
+- Mapproxy -> Serves background map for client (MML Taustakartta)
+- Nominatim -> Geocoder for client application
+- Nginx -> Proxy for proxying traffic between containers
+
 ## Installing and running containers
 
-1. [install docker](https://docs.docker.com/compose/install/)
+1. [Install docker](https://docs.docker.com/compose/install/)
 2. Load OSM data for Nominatim & osm2pgrouting (instructions on seperate documentation under nominatim & osm2pgrouting folders)
 3. Load digiroad data for digiroad2pgrouting (instructions on seperate documentation under digiroad2pgrouting folder)
 4. Import OSM data into Nominatim (instructions on seperate documentation under nominatim folder)
@@ -69,7 +81,7 @@ $ docker-compose -f docker-compose.dev.yaml down
 
 ## Installing and running client & server applications
 
-Install [node](https://nodejs.org/en/)
+In order to run client & server applications [node](https://nodejs.org/en/) needs to be installed.
 
 ### Server
 
