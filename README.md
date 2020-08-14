@@ -1,6 +1,6 @@
 # GIS Docker
 
-Purpose for this repository is to act as a playground for testing different GIS related web technologies. Therefore, it cannot be considered as fully working application that can be deployed automatically. However, this repository contains some usefull examples that can be taken into other projecs.
+Purpose for this repository is to act as a playground for testing different GIS related web technologies. Therefore, it cannot be considered as fully working application that can be automatically deployed into a server. However, this repository contains some useful examples that can be utilized in other projecs.
 
 This repository contains containerized (Docker) parts of a GIS application e.g. different map layer protocols, routing, geocoding. Following can be considered as vital part of any GIS application. Additionally, this repository contains some utility containers (osm2pgrouting & digiroad2pgrouting) that are used for importing network data (osm & digiroad) into database for pgrouting.
 
