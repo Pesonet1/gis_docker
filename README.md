@@ -34,7 +34,7 @@ Nginx is used for proxying network traffic between containers. Currently it is u
 
 - Client -> Main application for different GIS services (map layers, routing, geocoding)
 - Server -> Currently only used for authentication
-- Database -> Contains pgrouting related data. Additionally OIDC related stuff
+- Database -> Contains pgrouting and geocoding (nominatim) related data (osm, digiroad). Additionally OIDC related tables
 - Geoserver -> Serves map layers in different protocols (WMS, WMTS, WFS, WFS-T, VectorTile, WPS)
 - Mapproxy -> Serves background map for client (MML Taustakartta)
 - Nominatim -> Geocoder for client application
