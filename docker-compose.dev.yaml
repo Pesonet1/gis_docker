@@ -2,7 +2,6 @@ version: "3"
 
 services:
   dev-nginx:
-    container_name: dev-nginx
     build:
       context: ./nginx
     ports:
@@ -11,11 +10,32 @@ services:
     volumes:
       - ./client/public:/usr/share/nginx/html
     depends_on:
+      # - dev-client
+      # - dev-server
       - dev-mapproxy
       - dev-geoserver
+      - dev-nominatim
+
+  # dev-client:
+  #   build:
+  #     context: ./client
+  #   ports:
+  #     - 8082:8082
+  #   depends_on:
+  #     - dev-server
+  #     - dev-geoserver
+  #     - dev-mapproxy
+  #     - dev-nominatim
+
+  # dev-server:
+  #   build:
+  #     context: ./server
+  #   ports:
+  #     - 8085:8085
+  #   depends_on:
+  #     - dev-database
 
   dev-database:
-    container_name: dev-database
     image: kartoza/postgis:12.0
     restart: always
     environment:
@@ -31,7 +51,6 @@ services:
       - 5435:5432
 
   dev-geoserver:
-    container_name: dev-geoserver
     image: oscarfonts/geoserver
     ports:
       - 8080:8080
@@ -40,17 +59,21 @@ services:
       - ./geoserver/exts_dir:/var/local/geoserver-exts/
 
   dev-mapproxy:
-    container_name: dev-mapproxy
     build:
       context: ./mapproxy
     volumes:
       - ./mapproxy:/mapproxy
 
-  # NOTE THAT /app/init.sh needs to be run to get data into db
-  # see nominatim/README.md for more info
+  # mapproxy-seed:
+  #   build:
+  #     context: ./mapproxy
+  #   command: /bin/sh -c "seed.sh"
+  #   volumes:
+  #     - ./mapproxy:/mapproxy
+  #   depends-on:
+  #     - dev-mapproxy
 
   dev-nominatim:
-    container_name: dev-nominatim
     build:
       context: ./nominatim
     ports:
@@ -60,6 +83,18 @@ services:
     command: /bin/sh -c "/app/startapache.sh"
     depends_on:
       - dev-database
+      # - nominatim-initialization
+
+  # nominatim-initialization:
+  #   build:
+  #     context: ./nominatim
+  #   volumes:
+  #     - ./nominatim:/nominatim
+  #   command: >
+  #     sh -c "/app/setup-database &&
+  #            /app/init.sh"
+  #   depends_on:
+  #     - dev-database
 
 volumes:
   postgres_data:

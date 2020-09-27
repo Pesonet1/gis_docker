@@ -1,4 +1,5 @@
 #!/bin/bash
+
 USER_ID=`ls -lahn / | grep mapproxy | awk '{print $3}'`
 GROUP_ID=`ls -lahn / | grep mapproxy | awk '{print $4}'`
 USER_NAME=`ls -lah / | grep mapproxy | awk '{print $3}'`
@@ -11,10 +12,8 @@ if [ ! -f /mapproxy/mapproxy.yaml ]
 then
   su $USER_NAME -c "mapproxy-util create -t base-config mapproxy"
 fi
+
 cd /mapproxy
+
 su $USER_NAME -c "mapproxy-util create -t wsgi-app -f mapproxy.yaml /mapproxy/app.py"
 su $USER_NAME -c "mapproxy-util serve-develop -b 0.0.0.0:8083 mapproxy.yaml"
-
-# Manually start seeding from CLI
-
-# su $USER_NAME -c "mapproxy-seed -f mapproxy.yaml -s seed.yaml --progress-file .mapproxy_seed_progress"
