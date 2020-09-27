@@ -6,6 +6,7 @@ import WFS, { TransactionResponse } from 'ol/format/WFS';
 import GML from 'ol/format/GML';
 
 import { WFSTransactionType } from '@/types';
+import { GEOSERVER_URL } from '@/apiConfig';
 
 export default (type: WFSTransactionType, layer: VectorLayer, features: Feature[]): void => {
   const formatWFS: WFS = new WFS();
@@ -36,7 +37,7 @@ export default (type: WFSTransactionType, layer: VectorLayer, features: Feature[
 
   axios({
     method: 'post',
-    url: 'http://localhost:8080/geoserver/geo/wfs',
+    url: `${GEOSERVER_URL}/geo/wfs`,
     data: new XMLSerializer().serializeToString(node),
     headers: { 'content-type': 'text/xml' },
   }).then((data) => {

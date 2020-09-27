@@ -7,6 +7,8 @@ import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import { Coordinate } from 'ol/coordinate';
 
+import { NOMINATIM_URL } from '@/apiConfig';
+
 export const getMarkerLayer = () => {
   const layer = new VectorLayer({
     source: new VectorSource(),
@@ -32,7 +34,7 @@ export const getMarkerFeature = (
           color: 'black',
           scale: 1.2,
           imgSize: [20, 20],
-          src: `http://localhost:7070${iconSrc}`,
+          src: `${NOMINATIM_URL}${iconSrc}`,
         }),
       }),
     );

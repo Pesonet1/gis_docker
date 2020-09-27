@@ -1,6 +1,8 @@
 import TileLayer from 'ol/layer/Tile';
 import TileWMS from 'ol/source/TileWMS';
 
+import { GEOSERVER_URL } from '@/apiConfig';
+
 import mapProjection from '../mapProjection';
 
 export default (layerType: string, layerName: string): TileLayer => {
@@ -10,7 +12,7 @@ export default (layerType: string, layerName: string): TileLayer => {
     maxZoom: 15,
     extent: mapProjection.getExtent(),
     source: new TileWMS({
-      url: 'http://localhost/geoserver/geo/wms',
+      url: `${GEOSERVER_URL}/geo/wms`,
       params: {
         LAYERS: layerType,
         FORMAT: 'image/png8',

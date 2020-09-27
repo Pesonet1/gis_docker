@@ -13,9 +13,11 @@ import Fill from 'ol/style/Fill';
 import Text from 'ol/style/Text';
 import CircleStyle from 'ol/style/Circle';
 
+import { RouteDataTypes, RoutingTypes } from '@/types';
+import { GEOSERVER_URL } from '@/apiConfig';
+
 import mapProjection from '../mapProjection';
 import { getLabelText } from '../layerLabel';
-import { RouteDataTypes, RoutingTypes } from '../../../types';
 
 export const defaultStyle = () => (new Style({
   image: new CircleStyle({
@@ -77,7 +79,7 @@ export const routingResultLayerWMS = (startCoord: number[], destCoord: number[])
 
   const layer = new ImageLayer({
     source: new SourceWMS({
-      url: 'http://localhost/geoserver/geo/wms',
+      url: `${GEOSERVER_URL}/geo/wms`,
       params: {
         LAYERS: 'geo:pgrouting_digiroad_digiroad',
         FORMAT: 'image/png',
@@ -152,7 +154,7 @@ export const routingResultLayerWFS = (
     minZoom: 0,
     maxZoom: 15,
     source: new VectorSource({
-      url: 'http://localhost/geoserver/geo/wfs'
+      url: `${GEOSERVER_URL}/geo/wfs`
         + `?service=wfs&version=2.0.0&request=GetFeature&typeNames=geo:pgrouting_${routeData}_${routingType}`
         + `&outputFormat=application/json&viewparams=${viewparams.join(';')}`,
       format: new GeoJSON(),

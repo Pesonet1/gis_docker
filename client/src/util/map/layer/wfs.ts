@@ -4,6 +4,8 @@ import GeoJSON from 'ol/format/GeoJSON';
 
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
+import { GEOSERVER_URL } from '@/apiConfig';
+
 import mapProjection from '../mapProjection';
 import { getFeatureLabelStyle } from '../layerLabel';
 
@@ -16,7 +18,7 @@ export default (typeName: string, layerName: string): VectorLayer => {
     maxZoom: 15,
     source: new SourceVector({
       format: new GeoJSON(),
-      url: (extent) => ('http://localhost/geoserver/geo/wfs'
+      url: (extent) => (`${GEOSERVER_URL}/geo/wfs`
         + `?service=wfs&version=2.0.0&request=GetFeature&typeNames=${typeName}`
         + '&outputFormat=application/json'
         + `&bbox=${extent.join(',')}`

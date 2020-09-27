@@ -1,6 +1,8 @@
 import ImageLayer from 'ol/layer/Image';
 import SourceWMS from 'ol/source/ImageWMS';
 
+import { GEOSERVER_URL } from '@/apiConfig';
+
 import mapProjection from '../mapProjection';
 
 export default (layerType: string, layerName: string): ImageLayer => {
@@ -11,7 +13,7 @@ export default (layerType: string, layerName: string): ImageLayer => {
     minZoom: 0,
     maxZoom: 15,
     source: new SourceWMS({
-      url: 'http://localhost/geoserver/geo/wms',
+      url: `${GEOSERVER_URL}/geo/wms`,
       params: {
         LAYERS: layerType,
         TRANSPARENT: true,

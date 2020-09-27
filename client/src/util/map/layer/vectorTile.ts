@@ -5,6 +5,8 @@ import * as Extent from 'ol/extent';
 import MVT from 'ol/format/MVT';
 import Feature from 'ol/Feature';
 
+import { GEOSERVER_URL } from '@/apiConfig';
+
 import mapProjection from '../mapProjection';
 import { defaultStyle } from '../layerStyle';
 
@@ -26,7 +28,7 @@ export default (layerType: string, layerName: string): VectorTileLayer => {
         featureClass: Feature,
         geometryName: 'geom',
       }),
-      url: 'http://localhost/geoserver/geo/gwc/service/tms/1.0.0/'
+      url: `${GEOSERVER_URL}/geo/gwc/service/tms/1.0.0/`
         + `${layerType}`
         + '@JHS180'
         + '@pbf/{z}/{x}/{-y}.pbf',

@@ -102,7 +102,9 @@ import { fromLonLat } from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
 import { Coordinate } from 'ol/coordinate';
 
-import { NominatimSearchResponse } from '../types';
+import { NominatimSearchResponse } from '@/types';
+import { NOMINATIM_URL } from '@/apiConfig';
+
 import { getMarkerLayer, getMarkerFeature } from '../util/map/layer/searchMarker';
 
 export default Vue.extend({
@@ -162,7 +164,7 @@ export default Vue.extend({
           this.markerLayer = getMarkerLayer();
         }
 
-        const response: AxiosResponse = await axios.get(`http://localhost/nominatim/search?addressdetails=1&q=${searchValue}&format=json&polygon_geojson=1&limit=5`);
+        const response: AxiosResponse = await axios.get(`${NOMINATIM_URL}/search?addressdetails=1&q=${searchValue}&format=json&polygon_geojson=1&limit=5`);
         const { data }: { data: NominatimSearchResponse[] } = response;
 
         // @ts-ignore

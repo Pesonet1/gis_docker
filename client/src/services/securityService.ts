@@ -1,6 +1,7 @@
 import Oidc, { UserManager, User } from 'oidc-client';
 
 import store from '../store';
+import { SERVER_URL, CLIENT_URL } from '../apiConfig';
 
 export default class SecurityService {
   userManager: UserManager;
@@ -8,13 +9,13 @@ export default class SecurityService {
   constructor() {
     this.userManager = new Oidc.UserManager({
       userStore: new Oidc.WebStorageStateStore({}),
-      authority: 'http://localhost:8085/oidc/',
+      authority: `${SERVER_URL}/oidc/`,
       client_id: 'test_implicit_app',
-      redirect_uri: 'http://localhost:8082/static/callback.html',
+      redirect_uri: `${CLIENT_URL}/static/callback.html`,
       response_type: 'code',
       scope: 'openid profile',
-      post_logout_redirect_uri: 'http://localhost:8082',
-      silent_redirect_uri: 'http://localhost:8082/static/silent-renew.html',
+      post_logout_redirect_uri: CLIENT_URL,
+      silent_redirect_uri: `${CLIENT_URL}/static/silent-renew.html`,
       accessTokenExpiringNotificationTime: 10,
       automaticSilentRenew: true,
       filterProtocolClaims: true,

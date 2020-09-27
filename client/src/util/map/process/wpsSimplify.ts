@@ -5,6 +5,8 @@ import VectorLayer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorSource from 'ol/source/Vector';
 
+import { GEOSERVER_URL } from '@/apiConfig';
+
 const wpsSimplifyRequest = (
   typeName = 'geo:kunnat' as string,
   distance = 2000 as number,
@@ -46,7 +48,7 @@ const wpsSimplifyRequest = (
 export default (mapInstance: Map) => {
   axios({
     method: 'post',
-    url: 'http://localhost/geoserver/geo/ows',
+    url: `${GEOSERVER_URL}/geo/ows`,
     headers: {
       'Content-Type': 'text/xml',
     },

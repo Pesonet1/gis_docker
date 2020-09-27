@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 import { secService } from '../main';
+import { SERVER_URL } from '../apiConfig';
 
 let repository: AxiosInstance;
 
@@ -22,7 +23,7 @@ export const createRepository = async () => {
     headers: {
       Pragma: 'no-cache',
     },
-    baseURL: 'http://localhost:8085/api',
+    baseURL: `${SERVER_URL}/api`,
     withCredentials: true,
   });
 

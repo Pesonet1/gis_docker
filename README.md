@@ -99,10 +99,10 @@ $ npx sequelize-cli db:migrate
 $ npx sequelize-cli db:seed:all
 ```
 
-Start server
+Start server with nodemon
 
 ```
-$ npm run start
+$ npm run start-dev
 ```
 
 ### Client
