@@ -1,6 +1,6 @@
 # GIS Docker
 
-Purpose for this repository is to act as a playground for testing different GIS related web technologies. Therefore, it cannot be considered as fully working application that can be deployed automatically. However, this repository contains some usefull examples that can be taken into other projecs.
+Purpose for this repository is to act as a playground for testing different GIS related web technologies. Therefore, it cannot be considered as fully working application that can be automatically deployed into a server. However, this repository contains some useful examples that can be utilized in other projecs.
 
 This repository contains containerized (Docker) parts of a GIS application e.g. different map layer protocols, routing, geocoding. Following can be considered as vital part of any GIS application. Additionally, this repository contains some utility containers (osm2pgrouting & digiroad2pgrouting) that are used for importing network data (osm & digiroad) into database for pgrouting.
 
@@ -34,7 +34,7 @@ Nginx is used for proxying network traffic between containers. Currently it is u
 
 - Client -> Main application for different GIS services (map layers, routing, geocoding)
 - Server -> Currently only used for authentication
-- Database -> Contains pgrouting related data. Additionally OIDC related stuff
+- Database -> Contains pgrouting and geocoding (nominatim) related data (osm, digiroad). Additionally OIDC related tables
 - Geoserver -> Serves map layers in different protocols (WMS, WMTS, WFS, WFS-T, VectorTile, WPS)
 - Mapproxy -> Serves background map for client (MML Taustakartta)
 - Nominatim -> Geocoder for client application
@@ -81,7 +81,7 @@ $ docker-compose -f docker-compose.dev.yaml down
 
 ## Installing and running client & server applications
 
-In order to run client & server applications [node](https://nodejs.org/en/) needs to be installed.
+In order to run client & server applications [node](https://nodejs.org/en/) and [yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable) needs to be installed (or yarn can be seen as optional ;)).
 
 ### Server
 
@@ -89,7 +89,7 @@ Install server dependencies
 
 ```
 $ cd server
-$ npm install
+$ yarn install
 ```
 
 Run sequelize migrations and seeds (db container should be running by now)
@@ -102,12 +102,10 @@ $ npx sequelize-cli db:seed:all
 Start server with nodemon
 
 ```
-$ npm run start-dev
+$ yarn run start-dev
 ```
 
 ### Client
-
-First install [yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
 
 Install client dependencies
 
@@ -116,7 +114,7 @@ $ cd client
 $ yarn install
 ```
 
-Run client
+Start client
 
 ```
 $ yarn run serve
