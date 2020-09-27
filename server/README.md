@@ -6,7 +6,7 @@
 $ npm install
 $ npx sequelize-cli db:migrate
 $ npx sequelize-cli db:seed:all
-$ npm run start
+$ npm run start-dev
 ```
 
 Server listens to port 8085 on localhost. Server listens file changes automatically by using nodemon.
