@@ -47,12 +47,18 @@ Nginx is used for proxying network traffic between containers.
 
 Database container consists of two databases: gis & nominatim.
 
-"gis"-database contains three schemas: public, routing_digiroad & routing_osm. Helsinki.osm.pbf & Uusimaa Digiroad subset data "gis"-database consumes around 1.35 gigabytes.
+`gis`-database contains three schemas: public, routing_digiroad & routing_osm. Helsinki.osm.pbf & Uusimaa Digiroad subset data "gis"-database consumes around 1.35 gigabytes.
 - public -> contains OIDC related tables
 - routing_digiroad -> contains converted digiroad data for pgrouting
 - routing_osm -> contains converted osm data for pgrouting
 
-"nominatim"-database contains public schema that contains converted OSM data for nominatim geocoder. Helsinki.osm.pbf data consumes around 900 megabytes.
+`nominatim`-database contains public schema that contains converted OSM data for nominatim geocoder. Helsinki.osm.pbf data consumes around 900 megabytes. These can be checked with following sql queries.
+
+```
+SELECT pg_size_pretty(pg_database_size('gis'));
+SELECT pg_size_pretty(pg_database_size('nominatim'));
+SELECT pg_size_pretty(pg_total_relation_size('routing_osm.ways'));
+```
 
 ## Installing and running containers
 
