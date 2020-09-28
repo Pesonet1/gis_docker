@@ -15,11 +15,11 @@ NOTE: Run these commands inside nominatim folder (otherwise change relative path
 
 `$ docker-compose up dev-database`
 
-2. Build nominatim container inside
+2. Build nominatim container inside nominatim folder
 
 `$ docker build --tag nominatim -t nominatim .`
 
-3. Run the container just to copy `nomatim.so` file into `dev-database` container
+3. Run the container just to copy `nomatim.so` file from running nominatim container into `dev-database` container
 
 `$ docker run --name nominatim  --restart=always -p 7070:8100 -d -v /nominatim:/nominatim nominatim sh /app/startapache.sh`
 

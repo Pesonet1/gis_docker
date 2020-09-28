@@ -16,6 +16,3 @@ services:
     volumes:
       - ./data/digiroad_data:/digiroad_data
     network_mode: host
-
-volumes:
-  postgres_data:

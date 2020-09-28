@@ -9,5 +9,5 @@ chown -R nominatim:nominatim ./src && \
 chown -R postgres:postgres ./src && \
 chmod a+r ./src/build/module/nominatim.so && \
 chmod a+x ./src/build/module/nominatim.so && \
-./src/build/utils/setup.php --osm-file Helsinki.osm.pbf --all --threads 4 && \
+./src/build/utils/setup.php --osm-file osm_data/Helsinki.osm.pbf --all --threads 4 && \
 ./src/build/utils/check_import_finished.php

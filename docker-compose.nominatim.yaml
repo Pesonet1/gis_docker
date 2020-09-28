@@ -1,0 +1,14 @@
+version: "3"
+
+# NOTE: Database needs to be running in order to run following container
+
+services:
+  nominatim-setup:
+    build:
+      context: ./nominatim
+    volumes:
+      - ./data/osm_data:/osm_data
+      - ./nominatim:/nominatim
+    ports:
+      - 7070:8100
+    command: /bin/sh -c "/app/init.sh"
