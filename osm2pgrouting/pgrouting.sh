@@ -3,18 +3,17 @@
 # TODO .osm.pbf file as parameter to this script
 
 # Convert packed osm data into unpacked form
-osmconvert & osmconvert \
-  Helsinki.osm.pbf \
+osmconvert osm_data/Helsinki.osm.pbf \
   --drop-author \
   --drop-version \
   --out-osm \
   -o=pgrouting_data.osm
 
 # Create "routing_osm" schema that is also used by digiroad2pgrouting
-create_schema & PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis -tAc "CREATE SCHEMA IF NOT EXISTS routing_osm"
+PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis -tAc "CREATE SCHEMA IF NOT EXISTS routing_osm"
 
 # Run osm2pgrouting
-pgrouting & osm2pgrouting \
+osm2pgrouting \
   --f pgrouting_data.osm \
   --conf mapconfig.xml \
   --dbname gis \
@@ -26,12 +25,10 @@ pgrouting & osm2pgrouting \
   --clean
 
 # Converting osm data srid from ESPG:4326 into EPSG:3067
-srid_convert & PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < sql/srid_convert.sql
+PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < sql/srid_convert.sql
 
 # Creating views for routing functions
-create_views & PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < sql/views.sql
+PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < sql/views.sql
 
 # Creating routing functions
-create_functions & PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < sql/functions.sql
-
-exec create_schema && pgrouting && srid_convert && create_views && create_functions
+PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < sql/functions.sql

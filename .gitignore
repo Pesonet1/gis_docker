@@ -7,3 +7,9 @@
 *.shp
 *.geojson
 nominatim.so
+
+data/digiroad_data/*
+!data/digiroad_data/README.md
+
+data/osm_data/*
+!data/osm_data/README.md

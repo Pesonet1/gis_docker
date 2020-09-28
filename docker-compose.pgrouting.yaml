@@ -1,0 +1,21 @@
+version: "3"
+
+# NOTE: Database needs to be running in order to run following containers
+
+services:
+  osm2pgrouting:
+    build:
+      context: ./osm2pgrouting
+    volumes:
+      - ./data/osm_data:/osm_data
+    network_mode: host
+      
+  digiroad2pgrouting:
+    build:
+      context: ./digiroad2pgrouting
+    volumes:
+      - ./data/digiroad_data:/digiroad_data
+    network_mode: host
+
+volumes:
+  postgres_data:

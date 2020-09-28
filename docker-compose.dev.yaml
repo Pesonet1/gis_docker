@@ -62,15 +62,6 @@ services:
     volumes:
       - ./mapproxy:/mapproxy
 
-  # mapproxy-seed:
-  #   build:
-  #     context: ./mapproxy
-  #   command: /bin/sh -c "seed.sh"
-  #   volumes:
-  #     - ./mapproxy:/mapproxy
-  #   depends-on:
-  #     - dev-mapproxy
-
   dev-nominatim:
     build:
       context: ./nominatim
@@ -81,18 +72,6 @@ services:
     command: /bin/sh -c "/app/startapache.sh"
     depends_on:
       - dev-database
-      # - nominatim-initialization
-
-  # nominatim-initialization:
-  #   build:
-  #     context: ./nominatim
-  #   volumes:
-  #     - ./nominatim:/nominatim
-  #   command: >
-  #     sh -c "/app/setup-database &&
-  #            /app/init.sh"
-  #   depends_on:
-  #     - dev-database
 
 volumes:
   postgres_data:
