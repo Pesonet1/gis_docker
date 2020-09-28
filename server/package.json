@@ -9,10 +9,10 @@
   },
   "author": "",
   "license": "ISC",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start-dev": "nodemon server.js",
-    "start": "run-migrations.sh && node server.js"
+    "start-dev": "cross-env NODE_ENV=development nodemon server.js",
+    "start": "cross-env NODE_ENV=docker bash run-migrations.sh && cross-env NODE_ENV=docker node server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -27,6 +27,7 @@
     "uuid": "^8.1.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "sequelize-cli": "^5.5.1"
   }
 }

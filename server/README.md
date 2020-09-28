@@ -1,6 +1,35 @@
 # Server (Node + Express)
 
-## Running
+## Installation and running
+
+Before running set config.json file under config-folder. Add desired configuration for other enviromnets.
+
+```
+{
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "gis",
+    "host": "localhost",
+    "port": 5435,
+    "dialect": "postgres",
+    "operatorsAliases": false,
+    "logging": false
+  },
+  "docker": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "gis",
+    "host": "dev-database",
+    "port": 5435,
+    "dialect": "postgres",
+    "operatorsAliases": false,
+    "logging": false
+  }
+}
+```
+
+Install and run
 
 ```
 $ npm install

@@ -1,5 +1,8 @@
 FROM node:lts-alpine
 
+# Install bash for migration script
+RUN apk add --update bash
+
 WORKDIR /server
 
 COPY package*.json ./

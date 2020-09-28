@@ -6,10 +6,13 @@ module.exports = {
     grant_types: ['authorization_code', 'implicit'],
     response_types: ['code'],
     redirect_uris: [
+      'http://localhost:80/static/callback.html', // nginx proxy to client
+      'http://localhost:80/static/silent-renew.html', // nginx proxy to client
       'http://localhost:8082/static/callback.html',
       'http://localhost:8082/static/silent-renew.html',
     ],
     post_logout_redirect_uris: [
+      'http://localhost:80', // nginx proxy to client
       'http://localhost:8082',
     ],
     token_endpoint_auth_method: 'none'

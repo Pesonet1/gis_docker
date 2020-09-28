@@ -10,30 +10,25 @@ services:
     volumes:
       - ./client/public:/usr/share/nginx/html
     depends_on:
-      # - dev-client
-      # - dev-server
+      - dev-client
+      - dev-server
       - dev-mapproxy
       - dev-geoserver
       - dev-nominatim
 
-  # dev-client:
-  #   build:
-  #     context: ./client
-  #   ports:
-  #     - 8082:8082
-  #   depends_on:
-  #     - dev-server
-  #     - dev-geoserver
-  #     - dev-mapproxy
-  #     - dev-nominatim
+  dev-client:
+    build:
+      context: ./client
+    ports:
+      - 8082:8082
 
-  # dev-server:
-  #   build:
-  #     context: ./server
-  #   ports:
-  #     - 8085:8085
-  #   depends_on:
-  #     - dev-database
+  dev-server:
+    build:
+      context: ./server
+    ports:
+      - 8085:8085
+    depends_on:
+      - dev-database
 
   dev-database:
     image: kartoza/postgis:12.0
@@ -46,7 +41,8 @@ services:
       ALLOW_IP_RANGE: 0.0.0.0/0
     volumes:
       - postgres_data:/var/lib/postgresql
-      - ./database/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
+      # Uncomment this to allow initial sql scripts to be run on initial db setup
+      # - ./database/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
     ports:
       - 5435:5432
 
@@ -57,6 +53,8 @@ services:
     volumes:
       - ./geoserver/data_dir:/var/local/geoserver
       - ./geoserver/exts_dir:/var/local/geoserver-exts/
+    depends_on:
+      - dev-database
 
   dev-mapproxy:
     build:

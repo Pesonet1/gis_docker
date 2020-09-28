@@ -3,7 +3,7 @@ import SourceWMTS from 'ol/source/WMTS';
 import TileGridWMTS from 'ol/tilegrid/WMTS';
 import * as Extent from 'ol/extent';
 
-import { MAPSERVER_URL } from '@/apiConfig';
+import { MAPPROXY_URL } from '@/apiConfig';
 
 import mapProjection from '../mapProjection';
 
@@ -15,7 +15,7 @@ export default (): TileLayer => {
     maxZoom: 15,
     extent: mapProjection.getExtent(),
     source: new SourceWMTS({
-      url: `${MAPSERVER_URL}/service?`,
+      url: `${MAPPROXY_URL}/service?`,
       layer: 'Taustakartta',
       format: 'image/png',
       matrixSet: 'JHS180',

@@ -10,7 +10,7 @@ const app = express();
 const port = 8085;
 
 app.use(cors({
-  origin: 'http://localhost:8082',
+  origin: 'http://localhost:80',
   methods: ['GET', 'POST'],
   allowHeaders: ['Origin, Content-Type, Accept, Authorization, Cache'],
   exposedHeaders: ['X-Requested-With'],

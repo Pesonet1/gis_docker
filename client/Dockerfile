@@ -14,4 +14,4 @@ RUN npm run build
 
 EXPOSE 8082
 
-CMD ["http-server", "dist"]
+CMD ["http-server", "--port", "8082", "dist"]

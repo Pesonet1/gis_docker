@@ -1,8 +1,5 @@
-export const SERVER_URL = 'http://localhost:8085';
-export const CLIENT_URL = 'http://localhost:8082';
-
-// Following urls are proxied by NGINX
-
-export const NOMINATIM_URL = 'http://localhost:80/nominatim'; // localhost:7070
-export const GEOSERVER_URL = 'http://localhost:80/geoserver'; // localhost:8080
-export const MAPSERVER_URL = 'http://localhost:80/mapproxy'; // localhost:8083
+export const SERVER_URL = 'http://localhost:80'; // /api, /oidc, /interaction
+export const CLIENT_URL = 'http://localhost:80'; // /
+export const NOMINATIM_URL = 'http://localhost:80/nominatim';
+export const GEOSERVER_URL = 'http://localhost:80/geoserver';
+export const MAPPROXY_URL = 'http://localhost:80/mapproxy';
