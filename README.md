@@ -19,6 +19,18 @@ Utility containers
 - osm2pgrouting (run on demand)
 - digiroad2pgrouting (run on demand)
 
+## Overview of repository elements
+
+- Nginx -> Proxy for proxying traffic between containers
+- Client -> Main application for different GIS services (map layers, routing, geocoding)
+- Server -> Currently only used for authentication
+- Database -> Contains pgrouting and geocoding (nominatim) related data (osm, digiroad). Additionally OIDC related tables
+- Geoserver -> Serves map layers in different protocols (WMS, WMTS, WFS, WFS-T, VectorTile, WPS)
+- Mapproxy -> Serves background map for client (MML Taustakartta)
+- Nominatim -> Geocoder for client application
+
+### Nginx
+
 Nginx is used for proxying network traffic between containers.
 
 ```
@@ -31,15 +43,16 @@ Nginx is used for proxying network traffic between containers.
 /nominatim/ -> nominatim:8100/
 ```
 
-## Overview of repository elements
+### Database
 
-- Client -> Main application for different GIS services (map layers, routing, geocoding)
-- Server -> Currently only used for authentication
-- Database -> Contains pgrouting and geocoding (nominatim) related data (osm, digiroad). Additionally OIDC related tables
-- Geoserver -> Serves map layers in different protocols (WMS, WMTS, WFS, WFS-T, VectorTile, WPS)
-- Mapproxy -> Serves background map for client (MML Taustakartta)
-- Nominatim -> Geocoder for client application
-- Nginx -> Proxy for proxying traffic between containers
+Database container consists of two databases: gis & nominatim.
+
+"gis"-database contains three schemas: public, routing_digiroad & routing_osm. Helsinki.osm.pbf & Uusimaa Digiroad subset data "gis"-database consumes around 1.35 gigabytes.
+- public -> contains OIDC related tables
+- routing_digiroad -> contains converted digiroad data for pgrouting
+- routing_osm -> contains converted osm data for pgrouting
+
+"nominatim"-database contains public schema that contains converted OSM data for nominatim geocoder. Helsinki.osm.pbf data consumes around 900 megabytes.
 
 ## Installing and running containers
 

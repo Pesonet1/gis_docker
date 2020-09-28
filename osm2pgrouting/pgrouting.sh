@@ -10,11 +10,15 @@ osmconvert & osmconvert \
   --out-osm \
   -o=pgrouting_data.osm
 
+# Create "routing_osm" schema that is also used by digiroad2pgrouting
+create_schema & PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis -tAc "CREATE SCHEMA IF NOT EXISTS routing_osm"
+
 # Run osm2pgrouting
 pgrouting & osm2pgrouting \
   --f pgrouting_data.osm \
   --conf mapconfig.xml \
   --dbname gis \
+  --schema routing_osm \
   --host localhost \
   --port 5435 \
   --username postgres \
@@ -30,4 +34,4 @@ create_views & PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < s
 # Creating routing functions
 create_functions & PGPASSWORD=postgres psql -U postgres -h localhost -p 5435 gis < sql/functions.sql
 
-exec pgrouting && srid_convert && create_views && create_functions
+exec create_schema && pgrouting && srid_convert && create_views && create_functions
