@@ -57,15 +57,23 @@ Database container consists of two databases: gis & nominatim.
 ## Installing and running containers
 
 1. [Install docker](https://docs.docker.com/compose/install/)
-2. Load OSM data for Nominatim & osm2pgrouting (instructions on seperate documentation under nominatim & osm2pgrouting folders)
-3. Load digiroad data for digiroad2pgrouting (instructions on seperate documentation under digiroad2pgrouting folder)
-4. Import OSM data into Nominatim (instructions on seperate documentation under nominatim folder)
-5. Run osm2pgrouting & digiroad2pgrouting containers
-6. Build and run rest of the Docker containers
+2. Build and run Docker containers with:
 
 ```
 $ docker-compose -f docker-compose.dev.yaml up --build
 ```
+
+In order to pgrouting & nominatim to work properly we need to import some OSM & Digiroad data for the project.
+
+NOTE: Currently Helsinki.osm.pbf is hardcoded as OSM filename.
+
+1. Load OSM by [cities](https://download.bbbike.org/osm/bbbike/) or [countries and other regions](http://download.geofabrik.de/europe/finland.html)
+2. Load Digiroad data from [here](https://aineistot.vayla.fi/digiroad/latest/)
+3. Place loaded data under root data folder. This folder that premade folders for each data type.
+4. Import OSM & Digiroad data into database for pgrouting by running `pgrouting-database-setup.sh` script.
+5. Import OSM data into database for nominatim by running `nomatim-setup.sh` script.
+
+Additionally client provides by default to use Kapsi hosted Taustakartta as background map. In order to get background map working, we need to seed these tiles by using Mapproxy. Seeding can be started by running `mapproxy-seed.sh` script. This will take some time (approx. 1-2 hours). Leave it running on background.
 
 ### Useful docker commands
 
@@ -85,6 +93,12 @@ Start containers without build
 
 ```
 $ docker-compose -f docker-compose.dev.yaml up
+```
+
+Start containers with build
+
+```
+$ docker-compose -f docker-compose.dev.yaml up --build
 ```
 
 Shutdown containers
