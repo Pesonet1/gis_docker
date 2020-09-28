@@ -7,8 +7,6 @@ services:
     build:
       context: ./nominatim
     volumes:
-      - ./data/osm_data:/osm_data
+      - ./data/osm_data:/app/osm_data
       - ./nominatim:/nominatim
-    ports:
-      - 7070:8100
-    command: /bin/sh -c "/app/init.sh"
+    command: /bin/sh -c "/app/init.sh Helsinki.osm.pbf"

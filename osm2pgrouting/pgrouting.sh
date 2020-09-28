@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# TODO .osm.pbf file as parameter to this script
-
 # Convert packed osm data into unpacked form
-osmconvert osm_data/Helsinki.osm.pbf \
+osmconvert osm_data/$OSM_FILENAME_VARIABLE \
   --drop-author \
   --drop-version \
   --out-osm \

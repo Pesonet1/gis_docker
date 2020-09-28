@@ -1,5 +1,8 @@
 FROM debian:jessie
 
+ARG OSM_FILENAME
+ENV OSM_FILENAME_VARIABLE=$OSM_FILENAME
+
 RUN apt-get update
 
 # Install necessary packages e.g. psql client, osmconvert

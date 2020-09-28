@@ -65,7 +65,7 @@ $ docker-compose -f docker-compose.dev.yaml up --build
 
 In order to pgrouting & nominatim to work properly we need to import some OSM & Digiroad data for the project.
 
-NOTE: Currently Helsinki.osm.pbf is hardcoded as OSM filename.
+NOTE: Currently OSM filename is set on nominatim & pgrouting docker-compose files.
 
 1. Load OSM by [cities](https://download.bbbike.org/osm/bbbike/) or [countries and other regions](http://download.geofabrik.de/europe/finland.html)
 2. Load Digiroad data from [here](https://aineistot.vayla.fi/digiroad/latest/)
@@ -74,6 +74,8 @@ NOTE: Currently Helsinki.osm.pbf is hardcoded as OSM filename.
 5. Import OSM data into database for nominatim by running `nomatim-setup.sh` script.
 
 Additionally client provides by default to use Kapsi hosted Taustakartta as background map. In order to get background map working, we need to seed these tiles by using Mapproxy. Seeding can be started by running `mapproxy-seed.sh` script. This will take some time (approx. 1-2 hours). Leave it running on background.
+
+After starting containers the main application should be available from `http://localhost:80` address.
 
 ### Useful docker commands
 
