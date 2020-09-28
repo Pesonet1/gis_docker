@@ -2,8 +2,8 @@
 
 echo "Start database for data import"
 
-# docker-compose -f docker-compose.dev.yaml build dev-database
-docker-compose -f docker-compose.dev.yaml up dev-database
+# docker-compose -f docker-compose.dev.yaml build database
+docker-compose -f docker-compose.dev.yaml up database
 
 echo "Run digiroad & osm data import tools"
 

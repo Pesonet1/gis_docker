@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  dev-nginx:
+  nginx:
     build:
       context: ./nginx
     ports:
@@ -10,27 +10,27 @@ services:
     volumes:
       - ./client/public:/usr/share/nginx/html
     depends_on:
-      - dev-client
-      - dev-server
-      - dev-mapproxy
-      - dev-geoserver
-      - dev-nominatim
+      - client
+      - server
+      - mapproxy
+      - geoserver
+      - nominatim
 
-  dev-client:
+  client:
     build:
       context: ./client
     ports:
       - 8082:8082
 
-  dev-server:
+  server:
     build:
       context: ./server
     ports:
       - 8085:8085
     depends_on:
-      - dev-database
+      - database
 
-  dev-database:
+  database:
     image: kartoza/postgis:12.0
     restart: always
     environment:
@@ -47,7 +47,7 @@ services:
     ports:
       - 5435:5432
 
-  dev-geoserver:
+  geoserver:
     image: oscarfonts/geoserver
     ports:
       - 8080:8080
@@ -55,15 +55,15 @@ services:
       - ./geoserver/data_dir:/var/local/geoserver
       - ./geoserver/exts_dir:/var/local/geoserver-exts/
     depends_on:
-      - dev-database
+      - database
 
-  dev-mapproxy:
+  mapproxy:
     build:
       context: ./mapproxy
     volumes:
       - ./mapproxy:/mapproxy
 
-  dev-nominatim:
+  nominatim:
     build:
       context: ./nominatim
     ports:
@@ -73,7 +73,7 @@ services:
       - nominatim_config:/app/src/build/module
     command: /bin/sh -c "/app/startapache.sh"
     depends_on:
-      - dev-database
+      - database
 
 volumes:
   postgres_data:

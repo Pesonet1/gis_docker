@@ -1,6 +1,6 @@
 # Nominatim
 
-This container is used for importing OSM data into dev-database for geocoding. Additionally, this container acts as a [geocoder (api) for OSM data](https://nominatim.org/).
+This container is used for importing OSM data into database for geocoding. Additionally, this container acts as a [geocoder (api) for OSM data](https://nominatim.org/).
 
 ## Installation & running
 
@@ -11,24 +11,24 @@ http://download.geofabrik.de/europe/finland.html
 
 NOTE: Run these commands inside nominatim folder (otherwise change relative paths)
 
-1. Start dev-database container
+1. Start database container
 
-`$ docker-compose up dev-database`
+`$ docker-compose up database`
 
 2. Build nominatim container inside nominatim folder
 
 `$ docker build --tag nominatim -t nominatim .`
 
-3. Run the container just to copy `nomatim.so` file from running nominatim container into `dev-database` container
+3. Run the container just to copy `nomatim.so` file from running nominatim container into `database` container
 
 `$ docker run --name nominatim  --restart=always -p 7070:8100 -d -v /nominatim:/nominatim nominatim sh /app/startapache.sh`
 
-Copy nominatim.so file into dev-database container from nominatim container
+Copy nominatim.so file into database container from nominatim container
 
 ```
 $ docker cp nominatim:/app/src/build/module/nominatim.so nominatim.so
-$ docker exec -it dev-database mkdir –p app/src/build/module
-$ docker cp nominatim.so dev-database:/app/src/build/module/nominatim.so
+$ docker exec -it database mkdir –p app/src/build/module
+$ docker cp nominatim.so database:/app/src/build/module/nominatim.so
 ```
 
 Remove nominatim container after copy

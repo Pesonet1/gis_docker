@@ -23,9 +23,7 @@ EXPOSE 8083
 
 ADD uwsgi.conf /uwsgi.conf
 ADD start.sh /start.sh
-ADD seed.sh /seed.sh
 
-RUN chmod 0755 /seed.sh
 RUN chmod 0755 /start.sh
 
 CMD /start.sh

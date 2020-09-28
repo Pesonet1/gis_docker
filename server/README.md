@@ -20,7 +20,7 @@ Before running set config.json file under config-folder. Add desired configurati
     "username": "postgres",
     "password": "postgres",
     "database": "gis",
-    "host": "dev-database",
+    "host": "database",
     "port": 5435,
     "dialect": "postgres",
     "operatorsAliases": false,
