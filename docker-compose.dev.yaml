@@ -31,6 +31,7 @@ services:
       - dev-database
 
   dev-database:
+    container_name: dev-database
     image: kartoza/postgis:12.0
     restart: always
     environment:
@@ -43,6 +44,7 @@ services:
       - postgres_data:/var/lib/postgresql
       # Uncomment this to allow initial sql scripts to be run on initial db setup
       # - ./database/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
+      - nominatim_config2:/app/src/build/module
     ports:
       - 5435:5432
 
@@ -69,9 +71,11 @@ services:
       - 7070:8100
     volumes:
       - ./nominatim:/nominatim
+      - nominatim_config2:/app/src/build/module
     command: /bin/sh -c "/app/startapache.sh"
     depends_on:
       - dev-database
 
 volumes:
   postgres_data:
+  nominatim_config2:
