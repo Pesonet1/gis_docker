@@ -18,27 +18,16 @@ class BasicAuth():
     if not header:
       return False
 
-    credentials = self._readCreadentialsFromPassfile()
-
     _, encoded = header.split(None, 1)
     decoded = b64decode(encoded).decode('UTF-8')
+    username, password = decoded.split(':', 1)
 
-    headerUsername, headerPassword = decoded.split(':', 1)
-    username, password = credentials.split(':', 1)
-
-    return headerUsername == username and headerPassword == password
+    return os.environ['MAPPROXY_USERNAME'] == username and s.environ['MAPPROXY_PASSWORD'] == password
 
   def _login(self, environ, start_response):
     start_response('403 Forbidden',
       [('Content-Type', 'text/html'), ('WWW-Authenticate', 'Basic realm="Login"')])
     return
-
-  def _readCreadentialsFromPassfile(self):
-    passfile = open('/mapproxy/passfile', 'r')
-    credentials = passfile.readline()
-    passfile.close()
-    return credentials
-
 
 fileConfig(r'/mapproxy/log.ini', {'here': os.path.dirname(__file__)})
 
