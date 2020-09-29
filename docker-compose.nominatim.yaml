@@ -9,4 +9,4 @@ services:
     volumes:
       - ./data/osm_data:/app/osm_data
       - ./nominatim:/nominatim
-    command: /bin/sh -c "/app/init.sh Helsinki.osm.pbf"
+    command: /bin/sh -c "/app/init.sh ${OSM_FILENAME}"

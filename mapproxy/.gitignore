@@ -1,8 +1,8 @@
 # Taustakartta seeded tiles
 Taustakartta
 
-# Log file for seeding process
-.mapproxy_seed_progress
+# Log files
+mapproxy_seed_progress.log
+mapproxy.log
+source-requests.log
 
-# uwsgi generated server start file
-app.py

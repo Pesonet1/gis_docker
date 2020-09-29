@@ -7,7 +7,7 @@ services:
     build:
       context: ./osm2pgrouting
       args:
-        OSM_FILENAME: Helsinki.osm.pbf
+        OSM_FILENAME: ${OSM_FILENAME}
     volumes:
       - ./data/osm_data:/osm_data
     network_mode: host

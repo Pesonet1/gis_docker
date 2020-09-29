@@ -21,8 +21,10 @@ RUN pip install Shapely Pillow MapProxy uwsgi
 
 EXPOSE 8083
 
+ADD app.py /app.py
 ADD uwsgi.conf /uwsgi.conf
 ADD start.sh /start.sh
+ADD log.ini /log.ini
 
 RUN chmod 0755 /start.sh
 
