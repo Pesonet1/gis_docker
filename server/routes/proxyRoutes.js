@@ -51,7 +51,7 @@ module.exports = (proxyPath, app, provider) => {
   }));
 
   app.use(`${proxyPath}/nominatim`, createProxyMiddleware({
-    target: 'http://nominatim:7070',
+    target: 'http://nominatim:8100',
     auth: `${NOMINATIM_USERNAME}:${NOMINATIM_PASSWORD}`,
     changeOrigin: true,
     pathRewrite: {

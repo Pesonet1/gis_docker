@@ -87,8 +87,6 @@ services:
       - ./nominatim:/nominatim
       # - nominatim_config:/app/src/build/module
     command: /bin/sh -c "/app/startapache.sh"
-    depends_on:
-      - database
 
 volumes:
   postgres_data:
