@@ -21,7 +21,7 @@ Utility containers
 
 ## Overview of repository elements
 
-- Nginx -> Proxy for proxying traffic between containers
+- Nginx -> Proxy for proxying traffic for client & server containers
 - Client -> Main application for different GIS services (map layers, routing, geocoding)
 - Server -> Currently only used for authentication
 - Database -> Contains pgrouting and geocoding (nominatim) related data (osm, digiroad). Additionally OIDC related tables
@@ -29,18 +29,24 @@ Utility containers
 - Mapproxy -> Serves background map for client (MML Taustakartta)
 - Nominatim -> Geocoder for client application
 
-### Nginx
+### Proxying (Nginx & Server)
 
 Nginx is used for proxying network traffic between containers.
 
 ```
 / -> client:8082
 /api -> server:8085/api
+/proxy -> server:8085/proxy
 /oidc -> server:8085/oidc
 /interaction -> server:8085/interaction
-/geoserver -> geoserver:8080/geoserver
-/mapproxy -> mapproxy:8083/mapproxy
-/nominatim/ -> nominatim:8100/
+```
+
+Server has another proxy that handles integration between other containers that are being called from client. Purpose is to check client session on each request to prevent unauthorized requests. Additionally, it adds basic authentication header for requests. These credentials are stored on env variables that are given to each container. Exception is Geoserver where credentials are manually set for "gis_infra"-user
+
+```
+/proxy/geoserver -> http://geoserver:8080/geoserver (basic auth header added for request)
+/proxy/mapproxy -> http://mapproxy:8083/mapproxy (basic auth header added for request)
+/proxy/nominatim -> http://nominatim:7070 (basic auth header added for request)
 ```
 
 ### Database
@@ -52,7 +58,9 @@ Database container consists of two databases: gis & nominatim.
 - routing_digiroad -> contains converted digiroad data for pgrouting
 - routing_osm -> contains converted osm data for pgrouting
 
-`nominatim`-database contains public schema that contains converted OSM data for nominatim geocoder. Helsinki.osm.pbf data consumes around 900 megabytes. These can be checked with following sql queries.
+`nominatim`-database contains public schema that contains converted OSM data for nominatim geocoder. Helsinki.osm.pbf data consumes around 900 megabytes.
+
+Database and table sizes can be checked with following sql queries.
 
 ```
 SELECT pg_size_pretty(pg_database_size('gis'));
