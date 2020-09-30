@@ -4,7 +4,7 @@ const router = express.Router();
 
 const SequelizeModels = require('../models').sequelize.models;
 
-module.exports = (apiPrefix, app, provider) => {
+module.exports = (apiPath, app, provider) => {
   router.get('/users', async (req, res, next) => {
     const sessionActive = await isUserSessionActive(provider, req, res);
     if (!sessionActive) res.sendStatus(403);
@@ -16,5 +16,5 @@ module.exports = (apiPrefix, app, provider) => {
     });
   });
 
-  app.use(apiPrefix, router);
+  app.use(apiPath, router);
 }

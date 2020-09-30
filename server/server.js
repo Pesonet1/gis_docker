@@ -10,7 +10,7 @@ const app = express();
 const port = 8085;
 
 app.use(cors({
-  origin: 'http://localhost:80',
+  origin: process.env.NODE_ENV === 'development' ? 'http://localhost:8082' : 'http://localhost:80',
   methods: ['GET', 'POST'],
   allowHeaders: ['Origin, Content-Type, Accept, Authorization, Cache'],
   exposedHeaders: ['X-Requested-With'],
@@ -31,10 +31,11 @@ const run = async () => {
   const adapter = require('./oidc/adapter');
   await adapter.connect();
 
-  const apiPrefix = '/api';
-  const authPrefix = '/oidc';
+  const proxyPath = '/proxy';
+  const apiPath = '/api';
+  const authPath = '/oidc';
 
-  const provider = new Provider(`http://localhost:${port}${authPrefix}`, { adapter, ...configuration });
+  const provider = new Provider(`http://localhost:${port}${authPath}`, { adapter, ...configuration });
 
   /**
    * REMOVE THIS ON PRODUCTION ENVIRONMENT. THIS ONLY DISABLES FORCE USE OF HTTPS ON LOCALHOST
@@ -51,14 +52,16 @@ const run = async () => {
     orig.call(this, message);
   };
 
+  const proxyRoutes = require('./routes/proxyRoutes');
   const appRoutes = require('./routes/appRoutes');
   const oidcRoutes = require('./routes/oidcRoutes');
 
-  appRoutes(apiPrefix, app, provider);
-  oidcRoutes(authPrefix, app, provider);
+  proxyRoutes(proxyPath, app, provider);
+  appRoutes(apiPath, app, provider);
+  oidcRoutes(authPath, app, provider);
 
   app.listen(port, () => {
-    console.log(`oidc-provider listening on port ${port}, check http://localhost:${port}${authPrefix}/.well-known/openid-configuration`);
+    console.log(`oidc-provider listening on port ${port}, check http://localhost:${port}${authPath}/.well-known/openid-configuration`);
   });
 };
 

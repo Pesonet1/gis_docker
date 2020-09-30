@@ -3,6 +3,11 @@ FROM ubuntu:focal
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG C.UTF-8
 
+ARG NOMINATIM_USERNAME
+ARG NOMINATIM_PASSWORD
+ENV NOMINATIM_USERNAME=$NOMINATIM_USERNAME
+ENV NOMINATIM_PASSWORD=$NOMINATIM_PASSWORD
+
 RUN apt-get -y update -qq && \
     apt-get -y install locales && \
     locale-gen en_US.UTF-8 && \
@@ -20,12 +25,14 @@ RUN apt-get -y update -qq && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/* /var/tmp/*
 
+RUN apt-get install apache2-utils
+
 WORKDIR /app
 
 # Osmium install to run continuous updates
 RUN pip3 install osmium
 
-# Nominatim install
+# Nominatim & osm2pgsql install
 ENV NOMINATIM_VERSION v3.5.1
 RUN git clone --recursive https://github.com/openstreetmap/Nominatim ./src
 RUN cd ./src && git checkout tags/$NOMINATIM_VERSION && git submodule update --recursive --init && \
@@ -33,15 +40,17 @@ RUN cd ./src && git checkout tags/$NOMINATIM_VERSION && git submodule update --r
 
 # Apache configure
 COPY local.php /app/src/build/settings/local.php
-COPY nominatim.conf /etc/apache2/sites-enabled/000-default.conf
+COPY apache.conf /etc/apache2/sites-enabled/000-default.conf
 
 # Set apache to run different port than default 80
 RUN sed -i '/Listen 80/c\Listen 8000' /etc/apache2/ports.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Load initial data
+# Load country osm data for dashboard view
 RUN curl http://www.nominatim.org/data/country_grid.sql.gz > /app/src/data/country_osm_grid.sql.gz
 RUN chmod o=rwx /app/src/build
+
+RUN htpasswd -b -c /etc/apache2/.htpasswd $NOMINATIM_USERNAME $NOMINATIM_PASSWORD
 
 EXPOSE 8100
 

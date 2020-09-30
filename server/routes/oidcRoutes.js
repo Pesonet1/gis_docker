@@ -4,7 +4,7 @@ const SequelizeModels = require('../models').sequelize.models;
 
 const body = urlencoded({ extended: false });
 
-module.exports = (authPrefix, app, provider) => {
+module.exports = (authPath, app, provider) => {
   const { constructor: { errors: { SessionNotFound } } } = provider;
 
   function setNoCache(req, res, next) {
@@ -123,5 +123,5 @@ module.exports = (authPrefix, app, provider) => {
     next(err);
   });
 
-  app.use(authPrefix, provider.callback);
+  app.use(authPath, provider.callback);
 };

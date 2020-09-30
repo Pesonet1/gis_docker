@@ -3,6 +3,7 @@
     <id>SettingsInfoImpl--7ad3d874:172db6f43ac:-8000</id>
     <contact>
       <id>contact</id>
+      <contactOrganization>gis-infra-docker</contactOrganization>
     </contact>
     <charset>UTF-8</charset>
     <numDecimals>4</numDecimals>
@@ -59,7 +60,7 @@
     <queueType>UNBOUNDED</queueType>
     <imageIOCacheThreshold>10240</imageIOCacheThreshold>
   </coverageAccess>
-  <updateSequence>372</updateSequence>
+  <updateSequence>396</updateSequence>
   <featureTypeCacheSize>0</featureTypeCacheSize>
   <globalServices>true</globalServices>
   <useHeadersProxyURL>false</useHeadersProxyURL>

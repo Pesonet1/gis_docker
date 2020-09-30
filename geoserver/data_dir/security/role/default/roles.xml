@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><roleRegistry xmlns="http://www.geoserver.org/security/roles" version="1.0">
 <roleList>
 <role id="ADMIN"/>
+<role id="GIS_INFRA"/>
 <role id="GROUP_ADMIN"/>
 </roleList>
 <userList>
 <userRoles username="admin">
 <roleRef roleID="ADMIN"/>
+</userRoles>
+<userRoles username="gis_infra">
+<roleRef roleID="GIS_INFRA"/>
 </userRoles>
 </userList>
 <groupList/>

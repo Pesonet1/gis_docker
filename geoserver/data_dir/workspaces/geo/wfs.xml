@@ -1,5 +1,5 @@
 <wfs>
-  <id>WFSInfoImpl--548ae14d:17396a4b400:-7ffa</id>
+  <id>WFSInfoImpl-2af61bcf:174d83c15e9:-7ffa</id>
   <workspace>
     <id>WorkspaceInfoImpl--5b4f175d:172c1d4ae58:-7fe4</id>
   </workspace>
@@ -19,7 +19,17 @@
   <citeCompliant>false</citeCompliant>
   <schemaBaseURL>http://schemas.opengis.net</schemaBaseURL>
   <verbose>false</verbose>
+  <metadata>
+    <entry key="SHAPE-ZIP_DEFAULT_PRJ_IS_ESRI">false</entry>
+  </metadata>
   <gml>
+    <entry>
+      <version>V_10</version>
+      <gml>
+        <srsNameStyle>XML</srsNameStyle>
+        <overrideGMLAttributes>true</overrideGMLAttributes>
+      </gml>
+    </entry>
     <entry>
       <version>V_11</version>
       <gml>
@@ -34,15 +44,8 @@
         <overrideGMLAttributes>false</overrideGMLAttributes>
       </gml>
     </entry>
-    <entry>
-      <version>V_10</version>
-      <gml>
-        <srsNameStyle>XML</srsNameStyle>
-        <overrideGMLAttributes>true</overrideGMLAttributes>
-      </gml>
-    </entry>
   </gml>
-  <serviceLevel>COMPLETE</serviceLevel>
+  <serviceLevel>TRANSACTIONAL</serviceLevel>
   <maxFeatures>1000000</maxFeatures>
   <featureBounding>true</featureBounding>
   <canonicalSchemaLocation>false</canonicalSchemaLocation>

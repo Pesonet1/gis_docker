@@ -20,6 +20,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
+    "http-proxy-middleware": "^1.0.5",
     "nodemon": "^2.0.3",
     "oidc-provider": "^6.26.1",
     "pg-promise": "^10.5.2",

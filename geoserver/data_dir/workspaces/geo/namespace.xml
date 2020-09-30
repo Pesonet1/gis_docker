@@ -2,5 +2,5 @@
   <id>NamespaceInfoImpl--5b4f175d:172c1d4ae58:-7fe3</id>
   <prefix>geo</prefix>
   <uri>http://localhost:8082</uri>
-  <isolated>false</isolated>
+  <isolated>true</isolated>
 </namespace>

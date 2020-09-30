@@ -22,7 +22,10 @@ class BasicAuth():
     decoded = b64decode(encoded).decode('UTF-8')
     username, password = decoded.split(':', 1)
 
-    return os.environ['MAPPROXY_USERNAME'] == username and s.environ['MAPPROXY_PASSWORD'] == password
+    envUsername = os.environ['MAPPROXY_USERNAME']
+    envPassword = os.environ['MAPPROXY_PASSWORD']
+
+    return envUsername == username and envPassword == password
 
   def _login(self, environ, start_response):
     start_response('403 Forbidden',

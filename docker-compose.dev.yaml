@@ -9,12 +9,12 @@ services:
       - 443:443
     volumes:
       - ./client/public:/usr/share/nginx/html
-    depends_on:
-      - client
-      - server
-      - mapproxy
-      - geoserver
-      - nominatim
+    # depends_on:
+    #   - client
+    #   - server
+    #   - mapproxy
+    #   - geoserver
+    #   - nominatim
 
   client:
     build:
@@ -25,6 +25,13 @@ services:
   server:
     build:
       context: ./server
+    environment:
+      GEOSERVER_USERNAME: ${GEOSERVER_USERNAME}
+      GEOSERVER_PASSWORD: ${GEOSERVER_PASSWORD}
+      MAPPROXY_USERNAME: ${MAPPROXY_USERNAME}
+      MAPPROXY_PASSWORD: ${MAPPROXY_PASSWORD}
+      NOMINATIM_USERNAME: ${NOMINATIM_USERNAME}
+      NOMINATIM_PASSWORD: ${NOMINATIM_PASSWORD}
     ports:
       - 8085:8085
     depends_on:
@@ -71,6 +78,9 @@ services:
   nominatim:
     build:
       context: ./nominatim
+      args:
+        NOMINATIM_USERNAME: ${NOMINATIM_USERNAME}
+        NOMINATIM_PASSWORD: ${NOMINATIM_PASSWORD}
     ports:
       - 7070:8100
     volumes:
