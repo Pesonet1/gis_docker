@@ -26,9 +26,9 @@ NOTE: Run these commands inside nominatim folder (otherwise change relative path
 Copy nominatim.so file into database container from nominatim container
 
 ```
-$ docker cp nominatim:/app/src/build/module/nominatim.so nominatim.so
-$ docker exec -it database mkdir –p app/src/build/module
-$ docker cp nominatim.so database:/app/src/build/module/nominatim.so
+$ docker cp gis_infra_docker_nominatim_1:/app/src/build/module/nominatim.so nominatim.so
+$ docker exec -it gis_infra_docker_database_1 sh -c 'mkdir -p app/src/build/module'
+$ docker cp nominatim.so gis_infra_docker_database_1:/app/src/build/module/nominatim.so
 ```
 
 Remove nominatim container after copy

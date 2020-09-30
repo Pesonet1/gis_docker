@@ -5,8 +5,6 @@ ENV LANG C.UTF-8
 
 ARG NOMINATIM_USERNAME
 ARG NOMINATIM_PASSWORD
-ENV NOMINATIM_USERNAME=$NOMINATIM_USERNAME
-ENV NOMINATIM_PASSWORD=$NOMINATIM_PASSWORD
 
 RUN apt-get -y update -qq && \
     apt-get -y install locales && \
@@ -50,7 +48,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN curl http://www.nominatim.org/data/country_grid.sql.gz > /app/src/data/country_osm_grid.sql.gz
 RUN chmod o=rwx /app/src/build
 
-RUN htpasswd -b -c /etc/apache2/.htpasswd $NOMINATIM_USERNAME $NOMINATIM_PASSWORD
+RUN htpasswd -b -c /etc/apache2/.htpasswd "${NOMINATIM_USERNAME}" "${NOMINATIM_PASSWORD}"
 
 EXPOSE 8100
 
