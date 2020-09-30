@@ -9,12 +9,12 @@ services:
       - 443:443
     volumes:
       - ./client/public:/usr/share/nginx/html
-    # depends_on:
-    #   - client
-    #   - server
-    #   - mapproxy
-    #   - geoserver
-    #   - nominatim
+    depends_on:
+      - client
+      - server
+      - mapproxy
+      - geoserver
+      - nominatim
 
   client:
     build:
@@ -50,7 +50,7 @@ services:
       - postgres_data:/var/lib/postgresql
       # Uncomment this to allow initial sql scripts to be run on initial db setup
       # - ./database/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
-      - nominatim_config:/app/src/build/module
+      # - nominatim_config:/app/src/build/module
     ports:
       - 5435:5432
 
@@ -85,11 +85,11 @@ services:
       - 7070:8100
     volumes:
       - ./nominatim:/nominatim
-      - nominatim_config:/app/src/build/module
+      # - nominatim_config:/app/src/build/module
     command: /bin/sh -c "/app/startapache.sh"
     depends_on:
       - database
 
 volumes:
   postgres_data:
-  nominatim_config:
+  # nominatim_config:
