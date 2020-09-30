@@ -21,11 +21,15 @@ module.exports = (proxyPath, app, provider) => {
     ? localPassword : process.env.NOMINATIM_PASSWORD;
 
   app.use(proxyPath, async(req, res, next) => {
-    if (await isUserSessionActive(provider, req, res)) {
-      next();
-    } else {
-      res.sendStatus(403);
+    if (process.env.NODE_ENV === 'development') {
+      return next();
     }
+
+    if (await isUserSessionActive(provider, req, res)) {
+      return next();
+    }
+
+    res.sendStatus(403);
   });
 
   app.use(`${proxyPath}/mapproxy`, createProxyMiddleware({
