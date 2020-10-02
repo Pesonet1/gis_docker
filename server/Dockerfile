@@ -1,7 +1,9 @@
-FROM node:lts-alpine
+FROM node:12-alpine
 
 # Install bash for migration script
-RUN apk add --update bash
+RUN apk add --no-cache --update \
+  bash \
+  rm -rf /var/cache/apk/*
 
 WORKDIR /server
 

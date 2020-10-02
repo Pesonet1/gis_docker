@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:12-alpine
 
 RUN npm install -g http-server
 
@@ -11,6 +11,9 @@ RUN npm install
 COPY . .
 
 RUN npm run build
+
+# remove development dependencies
+RUN npm prune --production
 
 EXPOSE 8082
 
