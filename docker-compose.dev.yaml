@@ -41,7 +41,7 @@ services:
     image: kartoza/postgis:12.0
     restart: always
     environment:
-      POSTGRES_DBNAME: gis
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_MULTIPLE_EXTENSIONS: postgis,pgrouting

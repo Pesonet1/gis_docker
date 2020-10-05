@@ -6,8 +6,13 @@ services:
   osm2pgrouting:
     build:
       context: ./osm2pgrouting
-      args:
-        OSM_FILENAME: ${OSM_FILENAME}
+    environment:
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: 5435
+      POSTGRES_IMPORT_SCHEMA: "routing_osm"
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./data/osm_data:/osm_data
     network_mode: host
@@ -15,6 +20,13 @@ services:
   digiroad2pgrouting:
     build:
       context: ./digiroad2pgrouting
+    environment:
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: 5435
+      POSTGRES_IMPORT_SCHEMA: "routing_digiroad"
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./data/digiroad_data:/digiroad_data
     network_mode: host
