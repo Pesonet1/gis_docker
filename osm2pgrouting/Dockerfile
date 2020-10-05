@@ -1,8 +1,5 @@
 FROM ubuntu:bionic
 
-ARG OSM_FILENAME
-
-ENV OSM_FILENAME_VARIABLE=$OSM_FILENAME
 ENV OSM_2_PGROUTING_VERSION=2.3.6
 
 # Install necessary packages e.g. psql client, osmconvert

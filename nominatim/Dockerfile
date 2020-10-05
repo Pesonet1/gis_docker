@@ -1,29 +1,42 @@
 FROM ubuntu:focal
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV LANG C.UTF-8
-
 ARG NOMINATIM_USERNAME
 ARG NOMINATIM_PASSWORD
 
-RUN apt-get -y update -qq && \
-    apt-get -y install locales && \
-    locale-gen en_US.UTF-8 && \
-    update-locale LANG=en_US.UTF-8 && \
-    apt-get install -o APT::Install-Recommends="false" -o APT::Install-Suggests="false" -y \
-    build-essential cmake g++ libboost-dev libboost-system-dev \
-    libboost-filesystem-dev libexpat1-dev zlib1g-dev \
-    libbz2-dev libpq-dev libproj-dev \
-    postgresql-server-dev-12 postgresql-12-postgis-3 \
-    postgresql-contrib postgresql-12-postgis-3-scripts \
-    apache2 php php-pgsql libapache2-mod-php \
-    php-intl python3-setuptools python3-dev python3-pip \
-    python3-psycopg2 python3-tidylib git curl sudo && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/* /var/tmp/*
+ENV DEBIAN_FRONTEND noninteractive
+ENV LANG C.UTF-8
+ENV NOMINATIM_VERSION v3.5.1
 
-RUN apt-get install apache2-utils
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    build-essential \
+    cmake \
+    g++ \
+    libboost-dev \
+    libboost-system-dev \
+    libboost-filesystem-dev \
+    libexpat1-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libpq-dev \
+    libproj-dev \
+    postgresql-server-dev-12 \
+    postgresql-12-postgis-3 \
+    postgresql-contrib \
+    postgresql-12-postgis-3-scripts \
+    apache2 \
+    apache2-utils \
+    php \
+    php-pgsql \
+    libapache2-mod-php \
+    php-intl \
+    python3-setuptools \
+    python3-dev \
+    python3-pip \
+    python3-psycopg2 \
+    python3-tidylib \
+    git \
+    curl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* /var/tmp/*
 
 WORKDIR /app
 
@@ -31,7 +44,6 @@ WORKDIR /app
 RUN pip3 install osmium
 
 # Nominatim & osm2pgsql install
-ENV NOMINATIM_VERSION v3.5.1
 RUN git clone --recursive https://github.com/openstreetmap/Nominatim ./src
 RUN cd ./src && git checkout tags/$NOMINATIM_VERSION && git submodule update --recursive --init && \
     mkdir build && cd build && cmake .. && make -j`nproc`
@@ -45,11 +57,16 @@ RUN sed -i '/Listen 80/c\Listen 8000' /etc/apache2/ports.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Load country osm data for dashboard view
-RUN curl http://www.nominatim.org/data/country_grid.sql.gz > /app/src/data/country_osm_grid.sql.gz
+RUN if [ "$TYPE" = "setup" ]; then \
+    curl http://www.nominatim.org/data/country_grid.sql.gz > /app/src/data/country_osm_grid.sql.gz \
+else \
+    echo "Running nominatim. No need to download country OSM data" \
+fi
+
 RUN chmod o=rwx /app/src/build
 
 RUN htpasswd -b -c /etc/apache2/.htpasswd "${NOMINATIM_USERNAME}" "${NOMINATIM_PASSWORD}"
 
 EXPOSE 8100
 
-COPY . /app
+COPY . .

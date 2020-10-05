@@ -89,7 +89,7 @@ NOTE: Currently OSM filename is set on nominatim & pgrouting docker-compose file
 
 Additionally client provides by default to use Kapsi hosted Taustakartta as background map. In order to get background map working, we need to seed these tiles by using Mapproxy. Seeding can be started by running `mapproxy-seed.sh` script. This will take some time (approx. 1-2 hours). Leave it running on background.
 
-After starting containers the main application should be available from `http://localhost:80` address.
+After starting containers the main application should be available from `http://localhost:80` address. Test user is `testi@testi.com` -> `testi`.
 
 ### Useful docker commands
 

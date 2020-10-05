@@ -79,8 +79,15 @@ services:
     build:
       context: ./nominatim
       args:
-        NOMINATIM_USERNAME: ${NOMINATIM_USERNAME}
-        NOMINATIM_PASSWORD: ${NOMINATIM_PASSWORD}
+        NOMINATIM_USERNAME: ${NOMINATIM_USERNAME} # Used For api basic auth
+        NOMINATIM_PASSWORD: ${NOMINATIM_PASSWORD} # Used For api basic auth
+        TYPE: "run"
+    environment:
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
+      POSTGRES_HOST: "host.docker.internal"
+      POSTGRES_PORT: 5435
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 7070:8100
     volumes:

@@ -6,7 +6,17 @@ services:
   nominatim-setup:
     build:
       context: ./nominatim
+      args:
+        NOMINATIM_USERNAME: ${NOMINATIM_USERNAME}
+        NOMINATIM_PASSWORD: ${NOMINATIM_PASSWORD}
+        TYPE: "setup"
+    environment:
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
+      POSTGRES_HOST: "host.docker.internal"
+      POSTGRES_PORT: 5435
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./data/osm_data:/app/osm_data
       - ./nominatim:/nominatim
-    command: /bin/sh -c "/app/init.sh ${OSM_FILENAME}"
+    command: /bin/sh -c "/app/init.sh"
