@@ -33,7 +33,7 @@ module.exports = (proxyPath, app, provider) => {
   });
 
   app.use(`${proxyPath}/mapproxy`, createProxyMiddleware({
-    target: 'http://mapproxy:8083',
+    target: process.env.NODE_ENV === 'development' ? 'http://localhost:8083' : 'http://mapproxy:8083',
     auth: `${MAPPROXY_USERNAME}:${MAPPROXY_PASSWORD}`,
     changeOrigin: true,
     pathRewrite: {
@@ -42,7 +42,7 @@ module.exports = (proxyPath, app, provider) => {
   }));
 
   app.use(`${proxyPath}/geoserver`, createProxyMiddleware({
-    target: 'http://geoserver:8080',
+    target: process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : 'http://geoserver:8080',
     auth: `${GEOSERVER_USERNAME}:${GEOSERVER_PASSWORD}`,
     changeOrigin: true,
     pathRewrite: {
@@ -51,7 +51,7 @@ module.exports = (proxyPath, app, provider) => {
   }));
 
   app.use(`${proxyPath}/nominatim`, createProxyMiddleware({
-    target: 'http://nominatim:8100',
+    target: process.env.NODE_ENV === 'development' ? 'http://localhost:8100' : 'http://nominatim:8100',
     auth: `${NOMINATIM_USERNAME}:${NOMINATIM_PASSWORD}`,
     changeOrigin: true,
     pathRewrite: {
